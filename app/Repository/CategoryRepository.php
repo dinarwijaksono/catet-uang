@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Models\Category;
+use App\RepositoryInterface\CategoryRepositoryInterface;
 
-class CategoryRepository
+class CategoryRepository implements CategoryRepositoryInterface
 {
     public function create(int $userId, string $code, string $name, string $type): ?Category
     {
