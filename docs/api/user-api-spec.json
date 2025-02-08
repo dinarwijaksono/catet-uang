@@ -3,10 +3,10 @@
     "info": {
         "title": "Aplikasi catet-uang",
         "version": "1.0.0",
-        "description": "API untuk catet-uang, open api user"
+        "description": "API untuk catet-uang, api spec user"
     },
     "paths": {
-        "/register": {
+        "/api/register": {
             "post": {
                 "summary": "Pembuatan user baru",
                 "requestBody": {
@@ -27,7 +27,13 @@
                                     "password_confirm": {
                                         "type": "string"
                                     }
-                                }
+                                },
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password",
+                                    "password_confirm"
+                                ]
                             }
                         }
                     }
@@ -40,17 +46,22 @@
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "name": {
-                                            "type": "string"
-                                        },
-                                        "email": {
-                                            "type": "string"
-                                        },
-                                        "password": {
-                                            "type": "string"
-                                        },
-                                        "password_confirm": {
-                                            "type": "string"
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "api_token": {
+                                                    "type": "string"
+                                                },
+                                                "expired_token": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "type": "string"
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -58,23 +69,53 @@
                         }
                     },
                     "400": {
+                        "description": "User gagal di registrasi, email duplikat",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object",
+                                            "properties": {
+                                                "general": {
+                                                    "type": "string",
+                                                    "example": "Email tidak tersedia."
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
                         "description": "User gagal di registrasi, error validasi.",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "name": {
-                                            "type": "string"
-                                        },
-                                        "email": {
-                                            "type": "string"
-                                        },
-                                        "password": {
-                                            "type": "string"
-                                        },
-                                        "password_confirm": {
-                                            "type": "string"
+                                        "errors": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Pesan error"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "Pesan error"
+                                                },
+                                                "password": {
+                                                    "type": "string",
+                                                    "example": "Pesan error"
+                                                },
+                                                "password_confirm": {
+                                                    "type": "string",
+                                                    "example": "Pesan error"
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -82,25 +123,9 @@
                         }
                     }
                 }
-            },
-            "get": {
-                "summary": "Menampilkan halaman register",
-                "responses": {
-                    "200": {
-                        "description": "Halaman register berhasil di tampilkan."
-                    }
-                }
             }
         },
-        "/login": {
-            "get": {
-                "summary": "Menampilkan halaman login",
-                "responses": {
-                    "200": {
-                        "description": "halaman login berhasil ditampilkan."
-                    }
-                }
-            },
+        "/api/login": {
             "post": {
                 "summary": "Melakukan login",
                 "requestBody": {
@@ -115,7 +140,11 @@
                                     "password": {
                                         "type": "string"
                                     }
-                                }
+                                },
+                                "required": [
+                                    "email",
+                                    "password"
+                                ]
                             }
                         }
                     }
@@ -128,8 +157,68 @@
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "email": {
-                                            "type": "string"
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "api_token": {
+                                                    "type": "string"
+                                                },
+                                                "expired_token": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "login gagal, karena email tidak ada di database atau password salah",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object",
+                                            "properties": {
+                                                "general": {
+                                                    "type": "string",
+                                                    "example": "Email atau password salah."
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "login gagal, error validasi",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object",
+                                            "properties": {
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Pesan error"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "Pesan error"
+                                                }
+                                            }
                                         }
                                     }
                                 }

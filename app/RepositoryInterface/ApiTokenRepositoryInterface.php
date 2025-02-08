@@ -2,10 +2,10 @@
 
 namespace App\RepositoryInterface;
 
-use App\Models\ApiToken;
 use Carbon\Carbon;
+use stdClass;
 
 interface ApiTokenRepositoryInterface
 {
-    public function create(int $userId, string $token, Carbon $expiredAt): ?ApiToken;
+    public function create(int $userId, string $token, Carbon $expiredAt): ?stdClass;
 }
