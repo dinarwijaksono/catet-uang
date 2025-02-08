@@ -16,5 +16,8 @@ abstract class TestCase extends BaseTestCase
         DB::delete('delete from users');
         DB::delete('delete from sessions');
         DB::delete('delete from api_tokens');
+        DB::delete('delete from periods');
+        DB::delete('delete from categories');
+        DB::delete('delete from transactions');
     }
 }

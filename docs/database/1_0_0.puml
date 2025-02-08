@@ -1,0 +1,67 @@
+@startuml
+
+entity users {
+    * id INT <<PK>>
+    --
+    * email VARCHAR(255)
+    * name VARCHAR(100)
+    * password VARCHAR(255)
+    * created_at BIGINT
+    * updated_at BIGINT 
+}
+
+entity api_tokens {
+    * id INT <<PK>>
+    * user_id INT [fk]
+    --
+    * token VARCHAR(32)
+    * expired_at DATE
+    * created_at DATE
+    * updated_at DATE 
+}
+
+entity categories {
+    * id INT <<PK>>
+    * user_id FORGNID
+    --
+    * code VARCHAR(10)
+    * name VARCHAR(100)
+    * type enum([income, spending])
+    * created_at DATE
+    * updated_at DATE
+}
+
+entity periods {
+    * id INT <<PK>>
+    * user_id FORGNID
+    --
+    * code VARCHAR(10)
+    * period_date DATE
+    * period_name VARCHAR(20)
+    * is_close BOOL
+    * created_at DATE
+    * updated_at DATE
+}
+
+entity transactions {
+    * id INT <<PK>>
+    * user_id FORGNID
+    * period_id FORGNID
+    * category_id FORGNID
+    --  
+    * code VARCHAR(10)
+    * date DATE
+    * desctiption VARCHAR(100)
+    * spending int
+    * income int
+    * created_at DATE
+    * updated_at DATE 
+}
+
+users }o--|| api_tokens
+users }o--|| categories
+users }o--|| periods
+users }o--|| transactions
+periods }o--|| transactions
+
+@enduml
