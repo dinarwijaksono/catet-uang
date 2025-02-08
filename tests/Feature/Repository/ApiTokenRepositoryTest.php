@@ -74,4 +74,14 @@ class ApiTokenRepositoryTest extends TestCase
 
         $this->assertNull($response);
     }
+
+    public function test_find_by_token_success()
+    {
+        $this->seed(CreateUserWithTokenSeeder::class);
+        $user = ApiToken::first();
+
+        $response = $this->apiTokenRepository->findByToken($user->token);
+
+        $this->assertInstanceOf(stdClass::class, $response);
+    }
 }

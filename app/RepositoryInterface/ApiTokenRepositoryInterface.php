@@ -9,5 +9,7 @@ interface ApiTokenRepositoryInterface
 {
     public function create(int $userId, string $token, Carbon $expiredAt): ?stdClass;
 
-    public function findByid(int $userId): ?stdClass;
+    public function findById(int $userId): ?stdClass;
+
+    public function findByToken(string $token): ?stdClass;
 }

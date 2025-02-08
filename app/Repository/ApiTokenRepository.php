@@ -51,4 +51,21 @@ class ApiTokenRepository implements ApiTokenRepositoryInterface
             ->where('users.id', $userId)
             ->first();
     }
+
+    public function findByToken(string $token): ?stdClass
+    {
+        return DB::table('api_tokens')
+            ->join('users', 'users.id', '=', 'api_tokens.user_id')
+            ->select(
+                'api_tokens.token',
+                'api_tokens.expired_at',
+                'users.id as user_id',
+                'users.name',
+                'users.email',
+                'users.created_at',
+                'users.updated_at'
+            )
+            ->where('api_tokens.token', $token)
+            ->first();
+    }
 }
