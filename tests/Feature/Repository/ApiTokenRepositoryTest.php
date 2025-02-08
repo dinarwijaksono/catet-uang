@@ -7,6 +7,7 @@ use App\Models\User;
 use App\RepositoryInterface\ApiTokenRepositoryInterface;
 use App\RepositoryInterface\UserRepositoryInterface;
 use Carbon\Carbon;
+use Database\Seeders\CreateUserWithTokenSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Collection;
@@ -53,5 +54,24 @@ class ApiTokenRepositoryTest extends TestCase
         $this->assertEquals($response->expired_at, $expiredAt);
         $this->assertEquals($response->name, $user->name);
         $this->assertEquals($response->email, $user->email);
+    }
+
+    public function test_find_by_id_return_success()
+    {
+        $this->seed(CreateUserWithTokenSeeder::class);
+
+        $user = User::first();
+
+        $response = $this->apiTokenRepository->findById($user->id);
+
+        $this->assertInstanceOf(stdClass::class, $response);
+        $this->assertEquals($user->name, $response->name);
+    }
+
+    public function test_find_by_id_resturn_null()
+    {
+        $response = $this->apiTokenRepository->findById(1);
+
+        $this->assertNull($response);
     }
 }
