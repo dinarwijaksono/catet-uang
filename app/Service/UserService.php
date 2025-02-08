@@ -6,6 +6,7 @@ use App\RepositoryInterface\ApiTokenRepositoryInterface;
 use App\RepositoryInterface\UserRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use stdClass;
@@ -49,6 +50,39 @@ class UserService
                 'email' => $apiToken->email,
                 'token' => $apiToken->token,
                 'message' => $e->getMessage()
+            ]);
+
+            return null;
+        }
+    }
+
+    public function loginForApi(string $email, string $passowrd): ?stdClass
+    {
+        try {
+            $user = $this->userRepository->findByEmail($email);
+
+            if (!Hash::check($passowrd, $user->password)) {
+                Log::error('login for api failed', [
+                    'email' => $email,
+                    'message' => 'Password salah'
+                ]);
+
+                return null;
+            }
+
+            $this->apiTokenRepository->create($user->id, Str::random(32), Carbon::now()->addDays(3));
+
+            $apiToken = $this->apiTokenRepository->findById($user->id);
+
+            Log::info('login success', [
+                'email' => $email
+            ]);
+
+            return $apiToken;
+        } catch (\Throwable $th) {
+            Log::error('login gagal', [
+                'email' => $email,
+                'message' => $th->getMessage()
             ]);
 
             return null;

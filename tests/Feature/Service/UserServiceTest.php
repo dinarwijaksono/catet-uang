@@ -2,7 +2,10 @@
 
 namespace Tests\Feature\Service;
 
+use App\Models\User;
 use App\Service\UserService;
+use Database\Seeders\CreateUserSeeder;
+use Database\Seeders\CreateUserWithTokenSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use stdClass;
@@ -32,5 +35,27 @@ class UserServiceTest extends TestCase
         $this->assertEquals($email, $response->email);
         $this->assertObjectHasProperty('token', $response);
         $this->assertObjectHasProperty('expired_at', $response);
+    }
+
+    public function test_login_for_api_success()
+    {
+        $this->seed(CreateUserSeeder::class);
+        $user = User::first();
+
+        $response = $this->userService->loginForApi($user->email, 'rahasia1234');
+
+        $this->assertInstanceOf(stdClass::class, $response);
+        $this->assertObjectHasProperty('token', $response);
+        $this->assertObjectHasProperty('name', $response);
+    }
+
+    public function test_login_for_api_return_null_because_password_is_wrong()
+    {
+        $this->seed(CreateUserSeeder::class);
+        $user = User::first();
+
+        $response = $this->userService->loginForApi($user->email, 'rahasia');
+
+        $this->assertNull($response);
     }
 }
