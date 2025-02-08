@@ -88,4 +88,25 @@ class UserService
             return null;
         }
     }
+
+    public function findByToken(string $token): ?stdClass
+    {
+        try {
+            $user = $this->apiTokenRepository->findByToken($token);
+
+            Log::info('find by token success', [
+                'token' => $token,
+                'email' => $user->email
+            ]);
+
+            return $user;
+        } catch (\Throwable $th) {
+            Log::info('find by token failed', [
+                'token' => $token,
+                'message' => $th->getMessage()
+            ]);
+
+            return null;
+        }
+    }
 }

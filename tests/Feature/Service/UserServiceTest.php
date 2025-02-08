@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Service;
 
+use App\Models\ApiToken;
 use App\Models\User;
 use App\Service\UserService;
 use Database\Seeders\CreateUserSeeder;
@@ -57,5 +58,22 @@ class UserServiceTest extends TestCase
         $response = $this->userService->loginForApi($user->email, 'rahasia');
 
         $this->assertNull($response);
+    }
+
+    public function test_find_by_token_success()
+    {
+        $this->seed(CreateUserWithTokenSeeder::class);
+        $api = ApiToken::first();
+
+        $user = $this->userService->findByToken($api->token);
+
+        $this->assertInstanceOf(stdClass::class, $user);
+    }
+
+    public function test_find_by_token_return_null()
+    {
+        $user = $this->userService->findByToken('token-tidak-ada');
+
+        $this->assertNull($user);
     }
 }
