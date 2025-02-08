@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use stdClass;
 
 class UserService
 {
@@ -20,7 +21,7 @@ class UserService
         $this->apiTokenRepository = $apiTokenRepository;
     }
 
-    public function registerForApi(string $name, string $email, string $password)
+    public function registerForApi(string $name, string $email, string $password): ?stdClass
     {
         try {
             DB::beginTransaction();
@@ -50,7 +51,7 @@ class UserService
                 'message' => $e->getMessage()
             ]);
 
-            throw $e;
+            return null;
         }
     }
 }
