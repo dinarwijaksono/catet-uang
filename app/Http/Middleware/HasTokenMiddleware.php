@@ -19,6 +19,18 @@ class HasTokenMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (is_null($request->header('api-token'))) {
+            Log::warning('token tidak valid', [
+                'token' => $request->header('api-token')
+            ]);
+
+            return response()->json([
+                'errors' => [
+                    'general' => 'Token tidak ada.'
+                ]
+            ], 403);
+        }
+
         $userService = App::make(UserService::class);
 
         $apiToken = $userService->findByToken($request->header('api-token'));

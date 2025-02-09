@@ -87,4 +87,19 @@ class CategoryControllerTest extends TestCase
         $response->assertJsonStructure(['errors' => ['general']]);
         $response->assertJsonPath('errors.general', "Token sudah expired.");
     }
+
+    public function test_create_but_token_is_null()
+    {
+        $name = 'makanan';
+        $type = 'spending';
+
+        $response = $this->post('/api/category', [
+            'name' => $name,
+            'type' => $type
+        ]);
+
+        $response->assertStatus(403);
+        $response->assertJsonStructure(['errors' => ['general']]);
+        $response->assertJsonPath('errors.general', "Token tidak ada.");
+    }
 }
