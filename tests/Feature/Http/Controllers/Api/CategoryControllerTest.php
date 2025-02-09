@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers\Api;
 
 use App\Models\ApiToken;
+use Carbon\Carbon;
 use Database\Seeders\CreateUserWithTokenSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -50,5 +51,40 @@ class CategoryControllerTest extends TestCase
 
         $response->assertStatus(422);
         $response->assertJsonStructure(['errors' => ['name', 'type']]);
+    }
+
+    public function test_create_return_token_not_valid(): void
+    {
+        $name = 'makanan';
+        $type = 'spending';
+
+        $response = $this->withHeader('api-token', "thistokeninvalid")
+            ->post('/api/category', [
+                'name' => $name,
+                'type' => $type
+            ]);
+
+        $response->assertStatus(403);
+        $response->assertJsonStructure(['errors' => ['general']]);
+        $response->assertJsonPath('errors.general', "Token tidak valid.");
+    }
+
+    public function test_create_return_token_is_expired()
+    {
+        $name = 'makanan';
+        $type = 'spending';
+
+        ApiToken::where('token', $this->user->token)
+            ->update(['expired_at' => Carbon::createFromDate('2025-01-01')]);
+
+        $response = $this->withHeader('api-token', $this->user->token)
+            ->post('/api/category', [
+                'name' => $name,
+                'type' => $type
+            ]);
+
+        $response->assertStatus(403);
+        $response->assertJsonStructure(['errors' => ['general']]);
+        $response->assertJsonPath('errors.general', "Token sudah expired.");
     }
 }
