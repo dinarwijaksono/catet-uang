@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Models\Category;
 use App\RepositoryInterface\CategoryRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
 class CategoryRepository implements CategoryRepositoryInterface
@@ -23,5 +24,17 @@ class CategoryRepository implements CategoryRepositoryInterface
         return Category::select('code', 'name', 'type', 'created_at', 'updated_at')
             ->where('user_id', $userId)
             ->get();
+    }
+
+    public function update(int $userId, string $code, string $name): ?Category
+    {
+        Category::where('code', $code)
+            ->where('user_id', $userId)
+            ->update([
+                'name' => $name,
+                'updated_at' => Carbon::now()
+            ]);
+
+        return Category::where('code', $code)->first();
     }
 }

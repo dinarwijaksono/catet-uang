@@ -5,6 +5,7 @@ namespace Tests\Feature\Repository;
 use App\Models\Category;
 use App\Models\User;
 use App\RepositoryInterface\CategoryRepositoryInterface;
+use Carbon\Carbon;
 use Database\Seeders\CreateCategorySeeder;
 use Database\Seeders\CreateUserSeeder;
 use Illuminate\Database\Eloquent\Collection;
@@ -86,5 +87,17 @@ class CategoryRepositoryTest extends TestCase
 
         $this->assertInstanceOf(Collection::class, $response);
         $this->assertEquals($response->count(), 0);
+    }
+
+    public function test_update_success()
+    {
+        $this->seed(CreateCategorySeeder::class);
+
+        $category = Category::first();
+
+        $response = $this->categoryRepository->update($this->user->id, $category->code, 'test-001');
+
+        $this->assertInstanceOf(Category::class, $response);
+        $this->assertEquals($response->name, 'test-001');
     }
 }
