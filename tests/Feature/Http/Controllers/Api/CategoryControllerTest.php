@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers\Api;
 
 use App\Models\ApiToken;
 use Carbon\Carbon;
+use Database\Seeders\CreateCategorySeeder;
 use Database\Seeders\CreateUserWithTokenSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -101,5 +102,33 @@ class CategoryControllerTest extends TestCase
         $response->assertStatus(403);
         $response->assertJsonStructure(['errors' => ['general']]);
         $response->assertJsonPath('errors.general', "Token tidak ada.");
+    }
+
+    public function test_get_all_success()
+    {
+        $this->seed(CreateCategorySeeder::class);
+
+        $response = $this->withHeader('api-token', $this->user->token)
+            ->get('/api/category/get-all');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [['code', 'name', 'type', 'created_at', 'updated_at']],
+            'category_count'
+        ]);
+        $response->assertJsonPath('category_count', 2);
+    }
+
+    public function test_get_all_return_0()
+    {
+        $response = $this->withHeader('api-token', $this->user->token)
+            ->get('/api/category/get-all');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [],
+            'category_count'
+        ]);
+        $response->assertJsonPath('category_count', 0);
     }
 }

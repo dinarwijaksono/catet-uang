@@ -14,3 +14,4 @@ Route::post('/login', [AuthController::class, 'login'])->middleware(MissingToken
 
 // CategoryController
 Route::post('/category', [CategoryController::class, 'create'])->middleware([HasTokenMiddleware::class]);
+Route::get('/category/get-all', [CategoryController::class, 'getAll'])->middleware([HasTokenMiddleware::class]);

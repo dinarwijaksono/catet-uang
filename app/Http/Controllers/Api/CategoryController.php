@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Service\CategoryService;
 use App\Service\UserService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -55,5 +56,17 @@ class CategoryController extends Controller
                 'type' => $result->type,
             ]
         ], 201);
+    }
+
+    public function getAll(Request $request): JsonResponse
+    {
+        $token = $this->userService->findByToken($request->header('api-token'));
+
+        $categories = $this->categoryService->getAll($token->user_id);
+
+        return response()->json([
+            'data' => $categories->toArray(),
+            'category_count' => $categories->count()
+        ], 200);
     }
 }
