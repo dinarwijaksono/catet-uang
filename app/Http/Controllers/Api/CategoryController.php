@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryUpdateRequest;
 use App\Http\Requests\CreateCategoryRequest;
 use App\Service\CategoryService;
 use App\Service\UserService;
@@ -67,6 +68,34 @@ class CategoryController extends Controller
         return response()->json([
             'data' => $categories->toArray(),
             'category_count' => $categories->count()
+        ], 200);
+    }
+
+    public function update(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(), (new CategoryUpdateRequest())->rules());
+
+        $apiToken = $this->userService->findByToken($request->header('api-token'));
+
+        if ($validator->fails()) {
+            Log::warning('update category failed', [
+                'user_id' => $apiToken->user_id,
+                'message' => 'validasi error'
+            ]);
+
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $category = $this->categoryService->update($apiToken->user_id, $request->code, $request->name);
+
+        return response()->json([
+            'data' => [
+                'code' => $category->code,
+                'name' => $category->name,
+                'type' => $category->type
+            ]
         ], 200);
     }
 }

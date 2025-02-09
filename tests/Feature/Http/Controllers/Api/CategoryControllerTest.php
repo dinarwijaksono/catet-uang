@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers\Api;
 
 use App\Models\ApiToken;
+use App\Models\Category;
 use Carbon\Carbon;
 use Database\Seeders\CreateCategorySeeder;
 use Database\Seeders\CreateUserWithTokenSeeder;
@@ -130,5 +131,33 @@ class CategoryControllerTest extends TestCase
             'category_count'
         ]);
         $response->assertJsonPath('category_count', 0);
+    }
+
+    public function test_update_success()
+    {
+        $this->seed(CreateCategorySeeder::class);
+        $category = Category::first();
+
+        $response = $this->withHeader('api-token', $this->user->token)
+            ->put('/api/category/', [
+                'code' => $category->code,
+                'name' => 'test-update-controller'
+            ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['data' => ['code', 'name', 'type']]);
+        $response->assertJsonPath('data.name', 'test-update-controller');
+    }
+
+    public function test_update_return_error_validate()
+    {
+        $response = $this->withHeader('api-token', $this->user->token)
+            ->put('/api/category/', [
+                'code' => '',
+                'name' => ''
+            ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure(['errors' => ['code', 'name']]);
     }
 }
