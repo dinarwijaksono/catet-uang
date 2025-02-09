@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Models\Category;
 use App\RepositoryInterface\CategoryRepositoryInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -41,6 +42,24 @@ class CategoryService
             ]);
 
             return null;
+        }
+    }
+
+    public function getAll(int $userId): Collection
+    {
+        try {
+            Log::info('get all category success', [
+                'user_id' => $userId
+            ]);
+
+            return $this->categoryRepository->getAll($userId);
+        } catch (\Throwable $th) {
+            Log::error('get all category failed', [
+                'user_id' => $userId,
+                'message' => $th->getMessage()
+            ]);
+
+            return collect();
         }
     }
 }
