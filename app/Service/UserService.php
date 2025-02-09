@@ -70,9 +70,10 @@ class UserService
                 return null;
             }
 
-            $this->apiTokenRepository->create($user->id, Str::random(32), Carbon::now()->addDays(3));
+            $token = Str::random(32);
+            $this->apiTokenRepository->create($user->id, $token, Carbon::now()->addDays(3));
 
-            $apiToken = $this->apiTokenRepository->findById($user->id);
+            $apiToken = $this->apiTokenRepository->findByToken($token);
 
             Log::info('login success', [
                 'email' => $email
