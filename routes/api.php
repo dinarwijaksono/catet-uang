@@ -3,12 +3,13 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Middleware\HasTokenMiddleware;
+use App\Http\Middleware\MissingTokenMiddelware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // AuthController
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register'])->middleware(MissingTokenMiddelware::class);
+Route::post('/login', [AuthController::class, 'login'])->middleware(MissingTokenMiddelware::class);
 
 
 // CategoryController

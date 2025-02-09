@@ -2,8 +2,11 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
+use App\Models\ApiToken;
 use App\Models\User;
+use Carbon\Carbon;
 use Database\Seeders\CreateUserSeeder;
+use Database\Seeders\CreateUserWithTokenSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Hash;
@@ -115,5 +118,43 @@ class AuthControllerTest extends TestCase
         $response->assertStatus(400);
         $response->assertJsonStructure(['errors' => ['general']]);
         $response->assertJsonPath('errors.general', "Email atau password salah.");
+    }
+
+    public function test_login_but_has_token_and_not_expired()
+    {
+        $this->seed(CreateUserWithTokenSeeder::class);
+        $user = User::first();
+
+        $apiToken = ApiToken::first();
+
+        $response = $this->withHeader('api-token', $apiToken->token)->post('/api/login', [
+            'email' => $user->email,
+            'password' => 'rahasia1234'
+        ]);
+
+        $response->assertStatus(403);
+        $response->assertJsonStructure(['errors' => ['general']]);
+        $response->assertJsonPath('errors.general', "Token belum expired.");
+    }
+
+    public function test_login_but_has_token_is_expired()
+    {
+        $this->seed(CreateUserWithTokenSeeder::class);
+        $user = User::first();
+
+        $apiToken = ApiToken::first();
+        ApiToken::where('token', $apiToken->token)
+            ->update(['expired_at' => Carbon::createFromDate('2025-01-01')]);
+
+        $apiToken = ApiToken::first();
+
+        $response = $this->withHeader('api-token', $apiToken->token)->post('/api/login', [
+            'email' => $user->email,
+            'password' => 'rahasia1234'
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['data' => ['api_token', 'expired_token', 'name', 'email']]);
+        $response->assertJsonPath('data.name', $user->name);
     }
 }
