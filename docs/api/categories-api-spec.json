@@ -192,26 +192,16 @@
                     }
                 },
                 "responses": {
-                    "200": {
+                    "204": {
                         "description": "kategori berhasil di hapus.",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "data": {
-                                            "type": "object",
-                                            "properties": {
-                                                "code": {
-                                                    "type": "string"
-                                                },
-                                                "name": {
-                                                    "type": "string"
-                                                },
-                                                "type": {
-                                                    "type": "string"
-                                                }
-                                            }
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kategori berhasil dihapus"
                                         }
                                     }
                                 }

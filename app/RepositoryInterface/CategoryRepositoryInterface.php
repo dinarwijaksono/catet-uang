@@ -12,4 +12,6 @@ interface CategoryRepositoryInterface
     public function getAll(int $userId): Collection;
 
     public function update(int $userId, string $code, string $name): ?Category;
+
+    public function delete(int $userId, string $code): void;
 }

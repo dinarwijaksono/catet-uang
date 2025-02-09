@@ -37,4 +37,11 @@ class CategoryRepository implements CategoryRepositoryInterface
 
         return Category::where('code', $code)->first();
     }
+
+    public function delete(int $userId, string $code): void
+    {
+        Category::where('user_id', $userId)
+            ->where('code', $code)
+            ->delete();
+    }
 }

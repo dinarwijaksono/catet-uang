@@ -100,4 +100,16 @@ class CategoryRepositoryTest extends TestCase
         $this->assertInstanceOf(Category::class, $response);
         $this->assertEquals($response->name, 'test-001');
     }
+
+    public function test_delete_success()
+    {
+        $this->seed(CreateCategorySeeder::class);
+        $category = Category::first();
+
+        $this->categoryRepository->delete($this->user->id, $category->code);
+
+        $this->assertDatabaseMissing('categories', [
+            'code' => $category->code
+        ]);
+    }
 }
