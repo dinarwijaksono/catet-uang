@@ -62,4 +62,24 @@ class CategoryService
             return collect();
         }
     }
+
+    public function update(int $userId, string $code, string $name): ?Category
+    {
+        try {
+            $result = $this->categoryRepository->update($userId, $code, $name);
+
+            Log::info('update category success', [
+                'user_id' => $userId
+            ]);
+
+            return $result;
+        } catch (\Throwable $th) {
+            Log::error('update category failed', [
+                'user_id' => $userId,
+                'message' => $th->getMessage()
+            ]);
+
+            return null;
+        }
+    }
 }

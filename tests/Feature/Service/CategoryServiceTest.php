@@ -76,4 +76,22 @@ class CategoryServiceTest extends TestCase
         $this->assertInstanceOf(Collection::class, $response);
         $this->assertEquals($response->count(), 0);
     }
+
+    public function test_update_success()
+    {
+        $this->seed(CreateCategorySeeder::class);
+
+        $category = Category::first();
+
+        $response = $this->categoryService->update($this->user->id, $category->code, "test-update");
+
+        $this->assertInstanceOf(Category::class, $response);
+        $this->assertEquals($response->name, 'test-update');
+
+        $this->assertDatabaseHas('categories', [
+            'user_id' => $this->user->id,
+            'code' => $category->code,
+            'name' => 'test-update',
+        ]);
+    }
 }
