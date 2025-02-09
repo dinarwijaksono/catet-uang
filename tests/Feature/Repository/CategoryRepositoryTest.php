@@ -5,7 +5,9 @@ namespace Tests\Feature\Repository;
 use App\Models\Category;
 use App\Models\User;
 use App\RepositoryInterface\CategoryRepositoryInterface;
+use Database\Seeders\CreateCategorySeeder;
 use Database\Seeders\CreateUserSeeder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
@@ -64,5 +66,25 @@ class CategoryRepositoryTest extends TestCase
             'name' => $name,
             'type' => $type,
         ]);
+    }
+
+    public function test_get_all_success()
+    {
+        $this->seed(CreateCategorySeeder::class);
+        $this->seed(CreateCategorySeeder::class);
+        $this->seed(CreateCategorySeeder::class);
+
+        $response = $this->categoryRepository->getAll($this->user->id);
+
+        $this->assertInstanceOf(Collection::class, $response);
+        $this->assertEquals($response->count(), 6);
+    }
+
+    public function test_get_all_return_null()
+    {
+        $response = $this->categoryRepository->getAll($this->user->id);
+
+        $this->assertInstanceOf(Collection::class, $response);
+        $this->assertEquals($response->count(), 0);
     }
 }
