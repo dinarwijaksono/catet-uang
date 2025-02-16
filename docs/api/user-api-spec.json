@@ -227,6 +227,84 @@
                     }
                 }
             }
+        },
+        "/api/user": {
+            "summary": "Cari user berdasarkan api-token",
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "Cari user berdasarkan token berhasil",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "api_token": {
+                                                    "type": "string"
+                                                },
+                                                "expired_token": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Cari user berdasarkan token gagal, token sudah expired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object",
+                                            "properties": {
+                                                "general": {
+                                                    "type": "string",
+                                                    "example": "Token sudah expired"
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Cari user berdasarkan token gagal, token tidak ada di database",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object",
+                                            "properties": {
+                                                "general": {
+                                                    "type": "string",
+                                                    "example": "Token tidak valid."
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

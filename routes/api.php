@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 // AuthController
 Route::post('/register', [AuthController::class, 'register'])->middleware(MissingTokenMiddelware::class);
 Route::post('/login', [AuthController::class, 'login'])->middleware(MissingTokenMiddelware::class);
-
+Route::get('/user', [AuthController::class, 'findByToken'])->middleware([HasTokenMiddleware::class]);
 
 // CategoryController
 Route::post('/category', [CategoryController::class, 'create'])->middleware([HasTokenMiddleware::class]);

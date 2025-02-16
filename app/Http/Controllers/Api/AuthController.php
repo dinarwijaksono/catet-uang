@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Service\UserService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -102,6 +103,20 @@ class AuthController extends Controller
                 'expired_token' => $result->expired_at,
                 'name' => $result->name,
                 'email' => $result->email
+            ]
+        ], 200);
+    }
+
+    public function findByToken(Request $request): ?JsonResponse
+    {
+        $user = $this->userService->findByToken($request->header('api-token'));
+
+        return response()->json([
+            'data' => [
+                'api_token' => $user->token,
+                'expired_token' => $user->expired_at,
+                'name' => $user->name,
+                'email' => $user->email
             ]
         ], 200);
     }
