@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="business">
+<html lang="en" data-theme="night">
 
 <head>
     <meta charset="UTF-8">
@@ -37,9 +37,7 @@
         @endphp
         <ul class="menu bg-base-200 menu-horizontal rounded-box">
             <li>
-                <a href="/" @class([
-                    'active' => $path == '',
-                ])>
+                <a href="/" @class(['active' => $path == ''])>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -50,7 +48,7 @@
             </li>
 
             <li>
-                <a>
+                <a href="/report" @class(['active' => $path == 'report'])>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -61,9 +59,7 @@
             </li>
 
             <li>
-                <a href="/setting" @class([
-                    'active' => $path == 'setting',
-                ])>Pengaturan</a>
+                <a href="/setting" @class(['active' => $path == 'setting'])>Pengaturan</a>
             </li>
         </ul>
     </div>

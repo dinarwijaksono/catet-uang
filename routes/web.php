@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,3 +15,6 @@ Route::get('/', [HomeController::class, 'index']);
 
 // SettingController
 Route::get('/setting', [SettingController::class, 'index']);
+
+// ReportController
+Route::get('/report', [ReportController::class, 'index']);
