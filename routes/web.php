@@ -11,7 +11,7 @@ Route::get('/login', [AuthController::class, 'login'])->name('login')->middlewar
 Route::get('/register', [AuthController::class, 'register'])->middleware('guest');
 
 // HomeController
-Route::get('/', [HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index'])->middleware('auth');
 
 // SettingController
 Route::get('/setting', [SettingController::class, 'index']);
