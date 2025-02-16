@@ -1786,6 +1786,33 @@ html {
   justify-content: center;
 }
 
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  transition-duration: 200ms;
+  height: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  width: -moz-fit-content;
+  width: fit-content;
+  padding-left: 0.563rem;
+  padding-right: 0.563rem;
+  border-radius: var(--rounded-badge, 1.9rem);
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: var(--fallback-b2,oklch(var(--b2)/var(--tw-border-opacity)));
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-b1,oklch(var(--b1)/var(--tw-bg-opacity)));
+  --tw-text-opacity: 1;
+  color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
+}
+
 @media (hover:hover) {
   .label a:hover {
     --tw-text-opacity: 1;
@@ -2181,6 +2208,32 @@ html {
   color: var(--fallback-erc,oklch(var(--erc)/var(--tw-text-opacity)));
   --alert-bg: var(--fallback-er,oklch(var(--er)/1));
   --alert-bg-mix: var(--fallback-b1,oklch(var(--b1)/1));
+}
+
+.badge-success {
+  border-color: transparent;
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-su,oklch(var(--su)/var(--tw-bg-opacity)));
+  --tw-text-opacity: 1;
+  color: var(--fallback-suc,oklch(var(--suc)/var(--tw-text-opacity)));
+}
+
+.badge-error {
+  border-color: transparent;
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-er,oklch(var(--er)/var(--tw-bg-opacity)));
+  --tw-text-opacity: 1;
+  color: var(--fallback-erc,oklch(var(--erc)/var(--tw-text-opacity)));
+}
+
+.badge-outline.badge-success {
+  --tw-text-opacity: 1;
+  color: var(--fallback-su,oklch(var(--su)/var(--tw-text-opacity)));
+}
+
+.badge-outline.badge-error {
+  --tw-text-opacity: 1;
+  color: var(--fallback-er,oklch(var(--er)/var(--tw-text-opacity)));
 }
 
 .btm-nav > *:where(.active) {
@@ -2932,6 +2985,10 @@ html {
   width: 33.333333%;
 }
 
+.w-1\/12 {
+  width: 8.333333%;
+}
+
 .max-w-sm {
   max-width: 24rem;
 }
@@ -2998,6 +3055,10 @@ html {
   padding: 0.5rem;
 }
 
+.p-3 {
+  padding: 0.75rem;
+}
+
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -3011,6 +3072,11 @@ html {
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
+}
+
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .pt-10 {
@@ -3038,6 +3104,22 @@ html {
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
+}
+
+.text-\[10px\] {
+  font-size: 10px;
+}
+
+.text-\[14px\] {
+  font-size: 14px;
+}
+
+.text-\[12px\] {
+  font-size: 12px;
+}
+
+.text-\[13px\] {
+  font-size: 13px;
 }
 
 .italic {
@@ -3069,4 +3151,15 @@ html {
 .shadow-base-100 {
   --tw-shadow-color: var(--fallback-b1,oklch(var(--b1)/1));
   --tw-shadow: var(--tw-shadow-colored);
+}
+
+.hover\:bg-base-300:hover {
+  --tw-bg-opacity: 1;
+  background-color: var(--fallback-b3,oklch(var(--b3)/var(--tw-bg-opacity, 1)));
+}
+
+@media (min-width: 768px) {
+  .md\:block {
+    display: block;
+  }
 }

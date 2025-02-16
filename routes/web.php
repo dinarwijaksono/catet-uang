@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 
 // AuthController
@@ -10,3 +11,6 @@ Route::get('/register', [AuthController::class, 'register'])->middleware('guest'
 
 // HomeController
 Route::get('/', [HomeController::class, 'index']);
+
+// SettingController
+Route::get('/setting', [SettingController::class, 'index']);
