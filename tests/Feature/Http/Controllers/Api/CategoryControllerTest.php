@@ -160,4 +160,27 @@ class CategoryControllerTest extends TestCase
         $response->assertStatus(422);
         $response->assertJsonStructure(['errors' => ['code', 'name']]);
     }
+
+    public function test_delete_return_success()
+    {
+        $this->seed(CreateCategorySeeder::class);
+        $category = Category::first();
+
+        $response = $this->withHeader('api-token', $this->user->token)
+            ->delete('/api/category', [
+                'code' => $category->code
+            ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['message']);
+    }
+
+    public function test_delete_return_validate_error()
+    {
+        $response = $this->withHeader('api-token', $this->user->token)
+            ->delete('/api/category');
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure(['errors' => ['code']]);
+    }
 }

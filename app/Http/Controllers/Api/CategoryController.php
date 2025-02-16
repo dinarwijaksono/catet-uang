@@ -98,4 +98,37 @@ class CategoryController extends Controller
             ]
         ], 200);
     }
+
+    public function delete(Request $request): ?JsonResponse
+    {
+        $token = $this->userService->findByToken($request->header('api-token'));
+
+        $validator = Validator::make($request->all(), [
+            'code' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            Log::warning("DELETE /api/category failed", [
+                'user_id' => $token->user_id,
+                'message' => 'Validate error'
+            ]);
+
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $this->categoryService->delete($token->user_id, $request->code);
+
+        Log::info("DELETE /api/category success", [
+            'user_id' => $token->user_id,
+            'data' => [
+                'category_code' => $request->code,
+            ]
+        ]);
+
+        return response()->json([
+            'message' => ["Kategori berhasil di hapus"]
+        ], 200);
+    }
 }
