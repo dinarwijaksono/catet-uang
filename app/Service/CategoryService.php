@@ -82,4 +82,26 @@ class CategoryService
             return null;
         }
     }
+
+    public function delete(int $userId, string $code): void
+    {
+        try {
+            $this->categoryRepository->delete($userId, $code);
+
+            Log::info('delete category success', [
+                'user_id' => $userId,
+                'data' => [
+                    'category_code' => $code
+                ]
+            ]);
+        } catch (\Throwable $th) {
+            Log::error('delete category failed', [
+                'user_id' => $userId,
+                'data' => [
+                    'category_code' => $code
+                ],
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
 }

@@ -94,4 +94,18 @@ class CategoryServiceTest extends TestCase
             'name' => 'test-update',
         ]);
     }
+
+    public function test_delete_success()
+    {
+        $this->seed(CreateCategorySeeder::class);
+
+        $category = Category::first();
+
+        $this->categoryService->delete($this->user->id, $category->code);
+
+        $this->assertDatabaseMissing('categories', [
+            'user_id' => $this->user->id,
+            'code' => $category->code
+        ]);
+    }
 }
