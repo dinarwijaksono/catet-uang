@@ -2,9 +2,11 @@
 
 namespace App\Service;
 
+use App\Models\User;
 use App\RepositoryInterface\ApiTokenRepositoryInterface;
 use App\RepositoryInterface\UserRepositoryInterface;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -83,6 +85,46 @@ class UserService
         } catch (\Throwable $th) {
             Log::error('login gagal', [
                 'email' => $email,
+                'message' => $th->getMessage()
+            ]);
+
+            return null;
+        }
+    }
+
+    public function login(string $email, string $passowrd): ?User
+    {
+        try {
+            $user = $this->userRepository->findByEmail($email);
+
+            if (!$user) {
+                Log::warning('login failed, email is wrong', [
+                    'user_email' => $email,
+                    'message' => 'email is wrong'
+                ]);
+
+                return null;
+            }
+
+            if (!Hash::check($passowrd, $user->password)) {
+                Log::warning('login failed, password is wrong', [
+                    'user_email' => $email,
+                    'message' => 'password is wrong'
+                ]);
+
+                return null;
+            }
+
+            Auth::login($user, true);
+
+            Log::info('login success', [
+                'user_email' => $email,
+            ]);
+
+            return $user;
+        } catch (\Throwable $th) {
+            Log::warning('login failed.', [
+                'user_email' => $email,
                 'message' => $th->getMessage()
             ]);
 

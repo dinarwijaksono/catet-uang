@@ -60,6 +60,35 @@ class UserServiceTest extends TestCase
         $this->assertNull($response);
     }
 
+    public function test_login_success()
+    {
+        $this->seed(CreateUserSeeder::class);
+        $user = User::first();
+
+        $response = $this->userService->login($user->email, 'rahasia1234');
+
+        $this->assertInstanceOf(User::class, $response);
+        $this->assertEquals(auth()->user()->email, $user->email);
+        $this->assertEquals(auth()->user()->name, $user->name);
+    }
+
+    public function test_login_but_password_is_wrong()
+    {
+        $this->seed(CreateUserSeeder::class);
+        $user = User::first();
+
+        $response = $this->userService->login($user->email, 'password-salah');
+
+        $this->assertNull($response);
+    }
+
+    public function test_login_but_email_is_wrong()
+    {
+        $response = $this->userService->login('example@gmail.com', 'password-salah');
+
+        $this->assertNull($response);
+    }
+
     public function test_find_by_token_success()
     {
         $this->seed(CreateUserWithTokenSeeder::class);
