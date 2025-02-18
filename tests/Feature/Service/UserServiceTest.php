@@ -38,6 +38,37 @@ class UserServiceTest extends TestCase
         $this->assertObjectHasProperty('expired_at', $response);
     }
 
+    public function test_register_success()
+    {
+        $name = 'test';
+        $email = 'test@gmail.com';
+        $password = 'rahasia';
+
+        $response = $this->userService->register($name, $email, $password);
+
+        $this->assertInstanceOf(User::class, $response);
+        $this->assertEquals($response->name, $name);
+        $this->assertDatabaseHas('users', [
+            'name' => $name,
+            'email' => $email
+        ]);
+
+        $this->assertEquals(auth()->user()->name, $name);
+        $this->assertEquals(auth()->user()->email, $email);
+    }
+
+    public function test_register_but_the_email_is_already_there()
+    {
+        $this->seed(CreateUserSeeder::class);
+        $user = User::first();
+
+        $response = $this->userService->register('coba', $user->email, "rahasia1234");
+
+        $this->assertNull($response);
+        $this->assertDatabaseCount('users', 1);
+        $this->assertNull(auth()->user());
+    }
+
     public function test_login_for_api_success()
     {
         $this->seed(CreateUserSeeder::class);

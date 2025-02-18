@@ -58,6 +58,54 @@ class UserService
         }
     }
 
+    public function register(string $name, string $email, string $password): ?User
+    {
+        try {
+
+            $start = microtime(true);
+            $findByEmail = $this->userRepository->findByEmail($email);
+            if (!is_null($findByEmail)) {
+                Log::alert('register failed', [
+                    'message' => 'duplicate email'
+                ]);
+
+                return null;
+            }
+            $executionTime = round((microtime(true) - $start) * 1000);
+            if ($executionTime > 2000) {
+                Log::warning("Execution of UserRepository->findByEmail is slow", [
+                    'execution_time' => $executionTime
+                ]);
+            }
+
+            $start = microtime(true);
+            $user = $this->userRepository->create($name, $email, $password);
+            $executionTime = round((microtime(true) - $start) * 1000);
+            if ($executionTime > 2000) {
+                Log::warning("Execution of UserRepository->create is slow", [
+                    'user_id' => $user->id,
+                    'execution_time' => $executionTime
+                ]);
+            }
+
+            if ($user) {
+                Auth::login($user, true);
+            }
+
+            Log::info('register success', [
+                'user_id' => $user->id,
+            ]);
+
+            return $user;
+        } catch (\Throwable $th) {
+            Log::error('register failed', [
+                'message' => $th->getMessage()
+            ]);
+
+            return null;
+        }
+    }
+
     public function loginForApi(string $email, string $passowrd): ?stdClass
     {
         try {
