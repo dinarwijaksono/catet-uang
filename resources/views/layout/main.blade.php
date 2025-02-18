@@ -12,20 +12,18 @@
 
     <nav class="navbar bg-base-100">
         <div class="flex-1">
-            <a class="btn btn-ghost text-xl">Catat keuangan</a>
+            <a class="btn btn-ghost text-xl">{{ env('APP_NAME') }}</a>
         </div>
 
         <div class="flex-none">
             <ul class="menu menu-horizontal px-1">
-                <li><a>{{ session()->get('user-name') }}</a></li>
-                <li>
-                    <form action="/logout" method="post">
-                        @csrf
-                        @method('delete')
-
+                <li class="mr-2"><a class="btn btn-sm">{{ auth()->user()->name }}</a></li>
+                <form action="/logout" method="post">
+                    @csrf
+                    <li>
                         <button type="submit" class="btn btn-sm btn-error">Logout</button>
-                    </form>
-                </li>
+                    </li>
+                </form>
             </ul>
         </div>
     </nav>

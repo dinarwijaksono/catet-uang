@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 // AuthController
 Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::get('/register', [AuthController::class, 'register'])->middleware('guest');
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
 // HomeController
 Route::get('/', [HomeController::class, 'index'])->middleware('auth');
