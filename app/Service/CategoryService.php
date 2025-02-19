@@ -21,8 +21,19 @@ class CategoryService
     {
         try {
 
+            $start = microtime(true);
+
             $code = Str::random(10);
             $category = $this->categoryRepository->create($userId, $code, $name, $type);
+
+            $executionTime = round((microtime(true) - $start) * 1000);
+
+            if ($executionTime > 2000) {
+                Log::warning("Execution of CategoryRepository->create is slow", [
+                    'user_id' => $userId,
+                    'execution_time' => $executionTime
+                ]);
+            }
 
             Log::info('create category success', [
                 'user_id' => $userId,
@@ -48,11 +59,24 @@ class CategoryService
     public function getAll(int $userId): Collection
     {
         try {
+            $start = microtime(true);
+
+            $result = $this->categoryRepository->getAll($userId);
+
+            $executionTime = round((microtime(true) - $start) * 1000);
+
+            if ($executionTime > 2000) {
+                Log::warning("Execution of CategoryRepository->create is slow", [
+                    'user_id' => $userId,
+                    'execution_time' => $executionTime
+                ]);
+            }
+
             Log::info('get all category success', [
                 'user_id' => $userId
             ]);
 
-            return $this->categoryRepository->getAll($userId);
+            return $result;
         } catch (\Throwable $th) {
             Log::error('get all category failed', [
                 'user_id' => $userId,
