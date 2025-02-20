@@ -35,7 +35,6 @@ entity periods {
     * id INT <<PK>>
     * user_id FORGNID
     --
-    * code VARCHAR(10)
     * period_date DATE
     * period_name VARCHAR(20)
     * is_close BOOL

@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('periods', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->string('code', 10)->unique();
-            $table->timestamp('period_date');
+            $table->bigInteger('period_date');
             $table->string('period_name', 20);
             $table->boolean('is_close');
             $table->timestamps();
