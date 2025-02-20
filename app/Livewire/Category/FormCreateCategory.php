@@ -3,6 +3,7 @@
 namespace App\Livewire\Category;
 
 use App\Http\Requests\CreateCategoryRequest;
+use App\Livewire\Component\AlertSuccess;
 use App\Service\CategoryService;
 use Livewire\Component;
 
@@ -51,6 +52,7 @@ class FormCreateCategory extends Component
     public function save()
     {
         $this->validate();
+        $this->dispatch('do-hide')->to(AlertSuccess::class);
 
         $result = $this->categoryService->create(auth()->user()->id, $this->name, $this->type);
 
@@ -58,7 +60,11 @@ class FormCreateCategory extends Component
         $this->type = "spending";
 
         $this->dispatch('do-hide')->self();
-        $this->dispatch('do-refresh')->to(BoxListCategory::class);
+
+        if (!is_null($result)) {
+            $this->dispatch('do-refresh')->to(BoxListCategory::class);
+            $this->dispatch('do-show', "Kategori berhasil dibuat.")->to(AlertSuccess::class);
+        }
     }
 
     public function render()
