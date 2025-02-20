@@ -3,6 +3,7 @@
 namespace Tests\Feature\Livewire\Category;
 
 use App\Livewire\Category\BoxListCategory;
+use App\Livewire\Category\FormCreateCategory;
 use App\Models\User;
 use Database\Seeders\CreateCategorySeeder;
 use Database\Seeders\CreateUserSeeder;
@@ -37,5 +38,12 @@ class BoxListCategoryTest extends TestCase
 
         Livewire::test(BoxListCategory::class)
             ->assertStatus(200);
+    }
+
+    public function test_to_show_form_create_category()
+    {
+        Livewire::test(BoxListCategory::class)
+            ->call('toShowFormCreateCategory')
+            ->assertDispatchedTo(FormCreateCategory::class, 'do-show');
     }
 }

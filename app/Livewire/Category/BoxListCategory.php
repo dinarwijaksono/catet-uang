@@ -15,7 +15,19 @@ class BoxListCategory extends Component
     {
         $this->categoryService = app()->make(CategoryService::class);
 
-        $this->listCategory = $this->categoryService->getAll(auth()->user()->id);
+        $this->listCategory = $this->categoryService->getAll(auth()->user()->id)->sortBy('name');
+    }
+
+    public function getListeners()
+    {
+        return [
+            'do-refresh' => 'render'
+        ];
+    }
+
+    public function toShowFormCreateCategory()
+    {
+        $this->dispatch('do-show')->to(FormCreateCategory::class);
     }
 
     public function render()

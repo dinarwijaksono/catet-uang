@@ -3,8 +3,8 @@
         <h1 class="text-xl mb-4">List Kategori</h1>
 
         <div class="flex justify-end py-4">
-            <button type="button" wire:click="toShowBoxCreateCategory" class="btn btn-sm btn-primary w-2/12">Buat kategori
-                baru</button>
+            <button type="button" wire:click="toShowFormCreateCategory" class="btn btn-sm btn-primary w-2/12">Buat
+                kategori baru</button>
         </div>
 
         <table class="table mb-4">
