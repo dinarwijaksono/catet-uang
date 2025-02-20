@@ -41,11 +41,16 @@
                                 </div>
 
                                 <div class="basis-6/12">
-                                    <button wire:target="delete('')" type="button" wire:click="delete('')"
+                                    <button wire:target="deleteCategory('{{ $category['code'] }}')" type="button"
+                                        wire:click="deleteCategory('{{ $category['code'] }}')"
                                         class="btn btn-sm w-full btn-error">
-                                        {{-- <span wire:loading wire:target="delete('')"
-                                    class="loading loading-dots loading-md"></span> --}}
-                                        <span wire:loading.class="hidden" wire:target="delete('')">Hapus</span></button>
+
+                                        <span wire:loading wire:target="deleteCategory('{{ $category['code'] }}')"
+                                            class="loading loading-dots loading-md"></span>
+
+                                        <span wire:loading.class="hidden"
+                                            wire:target="deleteCategory('{{ $category['code'] }}')">Hapus</span>
+                                    </button>
                                 </div>
 
                             </div>

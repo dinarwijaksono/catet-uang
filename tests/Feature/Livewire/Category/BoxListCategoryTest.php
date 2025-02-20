@@ -4,6 +4,8 @@ namespace Tests\Feature\Livewire\Category;
 
 use App\Livewire\Category\BoxListCategory;
 use App\Livewire\Category\FormCreateCategory;
+use App\Livewire\Component\AlertSuccess;
+use App\Models\Category;
 use App\Models\User;
 use Database\Seeders\CreateCategorySeeder;
 use Database\Seeders\CreateUserSeeder;
@@ -45,5 +47,22 @@ class BoxListCategoryTest extends TestCase
         Livewire::test(BoxListCategory::class)
             ->call('toShowFormCreateCategory')
             ->assertDispatchedTo(FormCreateCategory::class, 'do-show');
+    }
+
+    public function test_delete_category_success()
+    {
+        $this->seed(CreateCategorySeeder::class);
+        $this->seed(CreateCategorySeeder::class);
+
+        $category = Category::first();
+
+        Livewire::test(BoxListCategory::class)
+            ->call('deleteCategory', $category->first()->code)
+            ->assertDispatchedTo(AlertSuccess::class, 'do-show');
+
+        $this->assertDatabaseMissing('categories', [
+            'user_id' => $this->user->id,
+            'code' => $category->code
+        ]);
     }
 }

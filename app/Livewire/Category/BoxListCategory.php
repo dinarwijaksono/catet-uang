@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Category;
 
+use App\Livewire\Component\AlertSuccess;
 use App\Service\CategoryService;
 use Livewire\Component;
 
@@ -28,6 +29,16 @@ class BoxListCategory extends Component
     public function toShowFormCreateCategory()
     {
         $this->dispatch('do-show')->to(FormCreateCategory::class);
+    }
+
+    public function deleteCategory(string $code)
+    {
+        $this->dispatch('do-hide')->to(AlertSuccess::class);
+
+        $this->categoryService->delete(auth()->user()->id, $code);
+
+        $this->dispatch('do-refresh')->self();
+        $this->dispatch('do-show', "Kategori berhasil dihapus.")->to(AlertSuccess::class);
     }
 
     public function render()
