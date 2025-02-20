@@ -4,6 +4,7 @@ namespace Tests\Feature\Livewire\Category;
 
 use App\Livewire\Category\BoxListCategory;
 use App\Livewire\Category\FormCreateCategory;
+use App\Livewire\Component\AlertSuccess;
 use App\Models\User;
 use Database\Seeders\CreateUserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -37,7 +38,9 @@ class FormCreateCategoryTest extends TestCase
             ->set('type', 'spending')
             ->call('save')
             ->assertDispatched('do-hide')
-            ->assertDispatchedTo(BoxListCategory::class, 'do-refresh');
+            ->assertDispatchedTo(AlertSuccess::class, 'do-hide')
+            ->assertDispatchedTo(BoxListCategory::class, 'do-refresh')
+            ->assertDispatchedTo(AlertSuccess::class, 'do-show');
 
         $this->assertDatabaseHas('categories', [
             'user_id' => $this->user->id,

@@ -3515,8 +3515,16 @@ html {
   fill: var(--fallback-su,oklch(var(--su)/1));
 }
 
+.fill-error {
+  fill: var(--fallback-er,oklch(var(--er)/1));
+}
+
 .stroke-success {
   stroke: var(--fallback-su,oklch(var(--su)/1));
+}
+
+.stroke-error {
+  stroke: var(--fallback-er,oklch(var(--er)/1));
 }
 
 .p-2 {
