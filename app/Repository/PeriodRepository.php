@@ -18,4 +18,19 @@ class PeriodRepository implements PeriodRepositoryInterface
             'is_close' => false
         ]);
     }
+
+    public function findOrCreate(int $userId, int $month, int $year): ?Period
+    {
+        $date = strtotime("$year-$month-01");
+
+        $period = Period::where('user_id', $userId)
+            ->where('period_date', $date)
+            ->first();
+
+        if (is_null($period)) {
+            $period = self::create($userId, $month, $year);
+        }
+
+        return $period;
+    }
 }

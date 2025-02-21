@@ -41,4 +41,37 @@ class PeriodRepositoryTest extends TestCase
             'period_name' => date("F Y", $date)
         ]);
     }
+
+    public function test_find_or_create_when_period_has_database()
+    {
+        $month = 11;
+        $year = 2000;
+
+        $date = strtotime("$year-$month-01");
+
+        Period::create([
+            'user_id' => $this->user->id,
+            'period_date' => $date,
+            'period_name' => date("F Y", $date),
+            'is_close' => false
+        ]);
+
+        $response = $this->periodRepository->findOrCreate($this->user->id, $month, $year);
+
+        $this->assertInstanceOf(Period::class, $response);
+        $this->assertDatabaseCount('periods', 1);
+    }
+
+    public function test_find_or_create_when_period_missing_in_database()
+    {
+        $month = 11;
+        $year = 2000;
+
+        $date = strtotime("$year-$month-01");
+
+        $response = $this->periodRepository->findOrCreate($this->user->id, $month, $year);
+
+        $this->assertInstanceOf(Period::class, $response);
+        $this->assertDatabaseCount('periods', 1);
+    }
 }
