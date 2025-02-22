@@ -95,6 +95,37 @@ class TransactionService
         }
     }
 
+    public function findByCode(int $userId, string $code): ?Transaction
+    {
+        try {
+            $start = microtime(true);
+            $transaction = $this->transactionRepository->findByCode($userId, $code);
+
+            $executionTime = round((microtime(true) - $start) * 1000);
+            if ($executionTime > 2000) {
+                Log::warning("Execution of transactionRepository->findByCode is slow", [
+                    'user_id' => $userId,
+                    'execution_time' => $executionTime,
+                ]);
+            }
+
+            Log::info('find by code transaction success', [
+                'user_id' => $userId,
+                'code' => $code
+            ]);
+
+            return $transaction;
+        } catch (\Throwable $th) {
+            Log::error('find by code transaction failed', [
+                'user_id' => $userId,
+                'code' => $code,
+                'message' => $th->getMessage()
+            ]);
+
+            return null;
+        }
+    }
+
     public function getByDate(int $userId, Carbon $date): ?Collection
     {
         try {
@@ -129,7 +160,7 @@ class TransactionService
         try {
             DB::beginTransaction();
 
-            $dateCarbon = Carbon::createFromFormat('Y-m-y', $date)->setTime(0, 0, 0, 0);
+            $dateCarbon = Carbon::createFromFormat('Y-m-d', $date)->setTime(0, 0, 0, 0);
 
             $period = $this->periodRepository->findOrCreate($userId, $dateCarbon->month, $dateCarbon->year);
 

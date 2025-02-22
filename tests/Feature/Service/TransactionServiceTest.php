@@ -69,6 +69,18 @@ class TransactionServiceTest extends TestCase
         ]);
     }
 
+    public function test_find_by_code_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $transaction = Transaction::first();
+
+        $response = $this->transactionService->findByCode($this->user->id, $transaction->code);
+
+        $this->assertInstanceOf(Transaction::class, $response);
+        $this->assertEquals($response, $transaction);
+        $this->assertEquals($response->description, $transaction->description);
+    }
+
     public function test_get_by_date_success()
     {
         $this->seed(CreateTransactionSeeder::class);
