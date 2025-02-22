@@ -123,4 +123,30 @@ class TransactionService
             return null;
         }
     }
+
+    public function delete(int $userId, string $code): void
+    {
+        try {
+            $start = microtime(true);
+            $this->transactionRepository->delete($userId, $code);
+            $executionTime = round((microtime(true) - $start) * 1000);
+            if ($executionTime > 2000) {
+                Log::warning("Execution of transactionRepository->delete is slow", [
+                    'user_id' => $userId,
+                    'execution_time' => $executionTime,
+                ]);
+            }
+
+            Log::info('delete transaction success', [
+                'user_id' => $userId,
+                'code' => $code
+            ]);
+        } catch (\Throwable $th) {
+            Log::error('delete transaction failed', [
+                'user_id' => $userId,
+                'code' => $code,
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
 }

@@ -79,4 +79,24 @@ class TransactionServiceTest extends TestCase
         $this->assertInstanceOf(Collection::class, $response);
         $this->assertEquals($response->count(), 1);
     }
+
+    public function test_delete_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+
+        $transaction = Transaction::first();
+
+        $this->assertDatabaseHas('transactions', [
+            'code' => $transaction->code
+        ]);
+
+        $this->transactionService->delete($this->user->id, $transaction->code);
+
+        $this->assertDatabaseMissing('transactions', [
+            'code' => $transaction->code
+        ]);
+        $this->assertDatabaseCount('transactions', 2);
+    }
 }
