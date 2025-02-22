@@ -27,7 +27,7 @@ class TransactionService
         try {
             DB::beginTransaction();
 
-            $dateCarbon = Carbon::createFromFormat('Y/m/d', $date);
+            $dateCarbon = Carbon::createFromFormat('Y-m-d', $date)->setTime(0, 0, 0, 0);
 
             $start = microtime(true);
             $period = $this->periodRepository->findOrCreate($userId, $dateCarbon->month, $dateCarbon->year);

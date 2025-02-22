@@ -34,7 +34,7 @@ class TransactionServiceTest extends TestCase
 
     public function test_create_spending_success()
     {
-        $response = $this->transactionService->create($this->user->id, $this->category->id, "2024/05/01", "makan siang", 0, 15000);
+        $response = $this->transactionService->create($this->user->id, $this->category->id, "2024-05-28", "makan siang", 0, 15000);
 
         $this->assertInstanceOf(Transaction::class, $response);
         $this->assertDatabaseCount('periods', 1);
@@ -51,7 +51,7 @@ class TransactionServiceTest extends TestCase
 
     public function test_create_income_success()
     {
-        $response = $this->transactionService->create($this->user->id, $this->category->id, "2024/05/28", "Gaji", 2000000, 0);
+        $response = $this->transactionService->create($this->user->id, $this->category->id, "2024-05-28", "Gaji", 2000000, 0);
 
         $this->assertInstanceOf(Transaction::class, $response);
         $this->assertDatabaseCount('periods', 1);

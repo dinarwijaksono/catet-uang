@@ -21,7 +21,14 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function getAll(int $userId): Collection
     {
-        return Category::select('code', 'name', 'type', 'created_at', 'updated_at')
+        return Category::select(
+            'id',
+            'code',
+            'name',
+            'type',
+            'created_at',
+            'updated_at'
+        )
             ->where('user_id', $userId)
             ->get();
     }
