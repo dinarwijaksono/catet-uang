@@ -34,6 +34,11 @@ class BoxTransactionInDate extends Component
         $this->dispatch('do-show')->to(FormCreateTransaction::class);
     }
 
+    public function doShowFormUpdateTransaction($code)
+    {
+        $this->dispatch('do-show', $code)->to(FormUpdateTransaction::class);
+    }
+
     public function delete(string $code)
     {
         $this->dispatch('do-hide')->to(AlertSuccess::class);

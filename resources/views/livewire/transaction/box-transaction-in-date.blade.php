@@ -27,7 +27,8 @@
                         </td>
                         <td class="flex gap-2">
                             <div class="basis-6/12">
-                                <button class="btn btn-sm btn-primary w-full">Edit</button>
+                                <button wire:click="doShowFormUpdateTransaction('{{ $transaction->code }}')"
+                                    class="btn btn-sm btn-primary w-full">Edit</button>
                             </div>
 
                             <div class="basis-6/12">
