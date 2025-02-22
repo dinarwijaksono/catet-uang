@@ -25,6 +25,13 @@ class TransactionRepository implements TransactionRepositoryInterface
         ]);
     }
 
+    public function findByCode(int $userId, string $code): ?Transaction
+    {
+        return Transaction::where('user_id', $userId)
+            ->where('code', $code)
+            ->first();
+    }
+
     public function getByDate(int $userId, Carbon $date): ?Collection
     {
         return DB::table('transactions')

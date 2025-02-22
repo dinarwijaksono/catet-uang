@@ -11,6 +11,8 @@ interface TransactionRepositoryInterface
 {
     public function create(TransactionDomain $transaction): ?Transaction;
 
+    public function findByCode(int $userId, string $code): ?Transaction;
+
     public function getByDate(int $userId, Carbon $date): ?Collection;
 
     public function update(TransactionDomain $transaction): ?Transaction;

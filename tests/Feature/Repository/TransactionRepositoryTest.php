@@ -73,6 +73,19 @@ class TransactionRepositoryTest extends TestCase
         ]);
     }
 
+    public function test_find_by_code_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $transaction = Transaction::first();
+
+        $response = $this->transactionRepository->findByCode($this->user->id, $transaction->code);
+
+        $this->assertInstanceOf(Transaction::class, $response);
+        $this->assertEquals($transaction->description, $response->description);
+        $this->assertEquals($transaction->income, $response->income);
+        $this->assertEquals($transaction->spending, $response->spending);
+    }
+
     public function test_find_by_date_success()
     {
         $this->seed(CreateTransactionSeeder::class);
