@@ -6,10 +6,13 @@ use App\Models\Category;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Service\TransactionService;
+use Carbon\Carbon;
 use Database\Seeders\CreateCategorySeeder;
+use Database\Seeders\CreateTransactionSeeder;
 use Database\Seeders\CreateUserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 class TransactionServiceTest extends TestCase
@@ -64,5 +67,16 @@ class TransactionServiceTest extends TestCase
             'income' => 2000000,
             'spending' => 0
         ]);
+    }
+
+    public function test_get_by_date_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $transaction = Transaction::first();
+
+        $response = $this->transactionService->getByDate($this->user->id, Carbon::create($transaction->date));
+
+        $this->assertInstanceOf(Collection::class, $response);
+        $this->assertEquals($response->count(), 1);
     }
 }

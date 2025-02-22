@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\RepositoryInterface\PeriodRepositoryInterface;
 use App\RepositoryInterface\TransactionRepositoryInterface;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -88,6 +89,26 @@ class TransactionService
                     'income' => $income,
                     'spending' => $spending
                 ]
+            ]);
+
+            return null;
+        }
+    }
+
+    public function getByDate(int $userId, Carbon $date): ?Collection
+    {
+        try {
+            $transaction = $this->transactionRepository->getByDate($userId, $date->setTime(0, 0, 0, 0));
+
+            Log::info('get by date transaction success', [
+                'user_id' => $userId
+            ]);
+
+            return $transaction;
+        } catch (\Throwable $th) {
+            Log::error('get by date transaction failed', [
+                'user_id' => $userId,
+                'message' => $th->getMessage()
             ]);
 
             return null;
