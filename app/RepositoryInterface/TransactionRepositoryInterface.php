@@ -12,4 +12,6 @@ interface TransactionRepositoryInterface
     public function create(TransactionDomain $transaction): ?Transaction;
 
     public function getByDate(int $userId, Carbon $date): ?Collection;
+
+    public function delete(int $userId, string $code): void;
 }

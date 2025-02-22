@@ -48,4 +48,11 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->where('transactions.date', $date)
             ->get();
     }
+
+    public function delete(int $userId, string $code): void
+    {
+        Transaction::where('user_id', $userId)
+            ->where('code', $code)
+            ->delete();
+    }
 }

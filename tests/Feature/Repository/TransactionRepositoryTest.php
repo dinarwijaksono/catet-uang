@@ -85,4 +85,14 @@ class TransactionRepositoryTest extends TestCase
         $this->assertInstanceOf(Collection::class, $response);
         $this->assertEquals($response->count(), 3);
     }
+
+    public function test_delete_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $transaction = Transaction::first();
+
+        $this->transactionRepository->delete($this->user->id, $transaction->code);
+
+        $this->assertDatabaseCount('transactions', 0);
+    }
 }
