@@ -1,5 +1,5 @@
 <section class="bg-base-200 py-2 px-4 m-4 rounded shadow-xl">
-    <p class="text-end text-sm">Senin, 10 November 2023</p>
+    <p class="text-end text-sm">{{ date('j F Y', strtotime($date)) }}</p>
 
     <div class="overflow-x-auto mb-4">
         <table class="table">
@@ -13,36 +13,29 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- row 1 -->
-                <tr class="bg-base-200">
-                    <td><a class="link link-success">Makanan</a></td>
-                    <td>Makan siang</td>
-                    <td class="text-end text-error">10.000</td>
-                    <td class="flex gap-2">
-                        <div class="basis-6/12">
-                            <button class="btn btn-sm btn-primary w-full">Edit</button>
-                        </div>
 
-                        <div class="basis-6/12">
-                            <button class="btn btn-sm btn-error w-full">Hapus</button>
-                        </div>
-                    </td>
-                </tr>
+                @foreach ($listTransaction as $transaction)
+                    <tr class="bg-base-200">
+                        <td class="text-success">{{ $transaction->category_name }}</td>
+                        <td>{{ $transaction->description }}</td>
+                        <td @class([
+                            'text-end',
+                            'text-error' => $transaction->spending != 0,
+                            'text-success' => $transaction->income != 0,
+                        ])>
+                            {{ number_format($transaction->income == 0 ? $transaction->spending : $transaction->income) }}
+                        </td>
+                        <td class="flex gap-2">
+                            <div class="basis-6/12">
+                                <button class="btn btn-sm btn-primary w-full">Edit</button>
+                            </div>
 
-                <tr class="bg-base-200">
-                    <td><a class="link link-success">Dikasih</a></td>
-                    <td>Bapa</td>
-                    <td class="text-end text-success">100.000</td>
-                    <td class="flex gap-2">
-                        <div class="basis-6/12">
-                            <button class="btn btn-sm btn-primary w-full">Edit</button>
-                        </div>
-
-                        <div class="basis-6/12">
-                            <button class="btn btn-sm btn-error w-full">Hapus</button>
-                        </div>
-                    </td>
-                </tr>
+                            <div class="basis-6/12">
+                                <button class="btn btn-sm btn-error w-full">Hapus</button>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
 
             </tbody>
         </table>

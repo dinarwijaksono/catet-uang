@@ -6,7 +6,7 @@
 
     @livewire('transaction.form-create-transaction', ['date' => date('Y-m-d')])
 
-    @livewire('transaction.box-transaction-in-date')
+    @livewire('transaction.box-transaction-in-date', ['date' => date('Y-m-d')])
 
     <section>
         @for ($i = 0; $i < 10; $i++)
