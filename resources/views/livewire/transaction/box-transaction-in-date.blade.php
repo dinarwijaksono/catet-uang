@@ -31,7 +31,15 @@
                             </div>
 
                             <div class="basis-6/12">
-                                <button class="btn btn-sm btn-error w-full">Hapus</button>
+                                <button wire:click="delete('{{ $transaction->code }}')"
+                                    class="btn btn-sm btn-error w-full">
+                                    <span wire:loading wire:target="delete('{{ $transaction->code }}')"
+                                        class="loading loading-dots loading-md"></span>
+
+                                    <span wire:loading.class="hidden"
+                                        wire:target="delete('{{ $transaction->code }}')">Hapus</span>
+
+                                </button>
                             </div>
                         </td>
                     </tr>
