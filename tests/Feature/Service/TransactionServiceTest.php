@@ -80,6 +80,31 @@ class TransactionServiceTest extends TestCase
         $this->assertEquals($response->count(), 1);
     }
 
+    public function test_update_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+
+        $transaction = Transaction::first();
+
+        $response = $this->transactionService->update(
+            $this->user->id,
+            $transaction->code,
+            $this->category->id,
+            '2025-10-10',
+            'example-name',
+            $this->category->type == 'income' ? 25000 : 0,
+            $this->category->type == 'spending' ? 25000 : 0,
+        );
+
+        $this->assertInstanceOf(Transaction::class, $response);
+        $this->assertDatabaseHas('transactions', [
+            'code' => $transaction->code,
+            'description' => 'example-name'
+        ]);
+    }
+
     public function test_delete_success()
     {
         $this->seed(CreateTransactionSeeder::class);

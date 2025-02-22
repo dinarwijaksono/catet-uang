@@ -124,6 +124,69 @@ class TransactionService
         }
     }
 
+    public function update(int $userId, string $code, int $categoryId, string $date, string $description, int $income, int $spending): ?Transaction
+    {
+        try {
+            DB::beginTransaction();
+
+            $dateCarbon = Carbon::createFromFormat('Y-m-y', $date)->setTime(0, 0, 0, 0);
+
+            $period = $this->periodRepository->findOrCreate($userId, $dateCarbon->month, $dateCarbon->year);
+
+            $update = new TransactionDomain();
+            $update->userId = $userId;
+            $update->code = $code;
+            $update->periodId = $period->id;
+            $update->categoryId = $categoryId;
+            $update->date = $dateCarbon;
+            $update->description = $description;
+            $update->income = $income;
+            $update->spending = $spending;
+
+            $start = microtime(true);
+            $transaction = $this->transactionRepository->update($update);
+
+            $executionTime = round((microtime(true) - $start) * 1000);
+            if ($executionTime > 2000) {
+                Log::warning("Execution of transactionRepository->update is slow", [
+                    'user_id' => $userId,
+                    'execution_time' => $executionTime,
+                ]);
+            }
+
+            DB::commit();
+
+            Log::info('update transacrion success', [
+                'user_id' => $userId,
+                'data' => [
+                    'category_id' => $categoryId,
+                    'date' => $date,
+                    'description' => $description,
+                    'income' => $income,
+                    'spending' => $spending
+                ],
+            ]);
+
+            return $transaction;
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            Log::error('update transaction failed', [
+                'user_id' => $userId,
+                'data' => [
+                    'category_id' => $categoryId,
+                    'date' => $date,
+                    'description' => $description,
+                    'income' => $income,
+                    'spending' => $spending
+                ],
+                'message' => $th->getMessage()
+            ]);
+
+            return null;
+        }
+    }
+
     public function delete(int $userId, string $code): void
     {
         try {
