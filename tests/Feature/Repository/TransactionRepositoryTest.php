@@ -86,6 +86,32 @@ class TransactionRepositoryTest extends TestCase
         $this->assertEquals($response->count(), 3);
     }
 
+    public function test_update_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+        $transaction = Transaction::first();
+
+        $input = new TransactionDomain();
+        $input->userId = $this->user->id;
+        $input->code = $transaction->code;
+        $input->periodId = $transaction->period_id;
+        $input->categoryId = $transaction->category_id;
+        $input->date = Carbon::create($transaction->date);
+        $input->description = 'contoh-nama';
+        $input->income = $transaction->income == 0 ? 0 : 50000;
+        $input->spending = $transaction->spending == 0 ? 0 : 50000;
+
+        $response = $this->transactionRepository->update($input);
+
+        $this->assertInstanceOf(Transaction::class, $response);
+        $this->assertDatabaseHas('transactions', [
+            'code' => $transaction->code,
+            'description' => 'contoh-nama'
+        ]);
+    }
+
     public function test_delete_success()
     {
         $this->seed(CreateTransactionSeeder::class);

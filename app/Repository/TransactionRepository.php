@@ -49,6 +49,22 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->get();
     }
 
+    public function update(TransactionDomain $transaction): ?Transaction
+    {
+        Transaction::where('code', $transaction->code)
+            ->update([
+                'period_id' => $transaction->periodId,
+                'category_id' => $transaction->categoryId,
+                'date' => $transaction->date,
+                'description' => $transaction->description,
+                'income' => $transaction->income,
+                'spending' => $transaction->spending,
+                'updated_at' => Carbon::now()
+            ]);
+
+        return Transaction::where('code', $transaction->code)->first();
+    }
+
     public function delete(int $userId, string $code): void
     {
         Transaction::where('user_id', $userId)
