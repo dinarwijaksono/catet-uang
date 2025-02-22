@@ -10,7 +10,9 @@ use App\Models\User;
 use App\RepositoryInterface\TransactionRepositoryInterface;
 use Carbon\Carbon;
 use Database\Seeders\CreateCategorySeeder;
+use Database\Seeders\CreateTransactionSeeder;
 use Database\Seeders\CreateUserSeeder;
+use Illuminate\Support\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
@@ -57,7 +59,7 @@ class TransactionRepositoryTest extends TestCase
         $input->income = 0;
         $input->spending = 15000;
 
-        $response = $this->transactionRepository->creatE($input);
+        $response = $this->transactionRepository->create($input);
 
         $this->assertInstanceOf(Transaction::class, $response);
         $this->assertDatabaseCount('transactions', 1);
@@ -69,5 +71,18 @@ class TransactionRepositoryTest extends TestCase
             'income' => 0,
             'spending' => 15000,
         ]);
+    }
+
+    public function test_find_by_date_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+        $transaction = Transaction::first();
+
+        $response = $this->transactionRepository->getByDate($this->user->id, Carbon::create($transaction->date));
+
+        $this->assertInstanceOf(Collection::class, $response);
+        $this->assertEquals($response->count(), 3);
     }
 }
