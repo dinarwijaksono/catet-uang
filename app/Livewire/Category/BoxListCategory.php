@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Category;
 
+use App\Livewire\Component\AlertDanger;
 use App\Livewire\Component\AlertSuccess;
 use App\Service\CategoryService;
 use Livewire\Component;
@@ -34,6 +35,17 @@ class BoxListCategory extends Component
     public function deleteCategory(string $code)
     {
         $this->dispatch('do-hide')->to(AlertSuccess::class);
+        $this->dispatch('do-hide')->to(AlertDanger::class);
+
+        $category = $this->categoryService->findByCode(auth()->user()->id, $code);
+        $check = !$category ? true : $this->categoryService->checkIsStillUse(auth()->user()->id, $category->id);
+
+        if ($check) {
+            $this->dispatch('do-show', "Kategori gagal dihapus, karena kategori digunakan pada transaksi.")
+                ->to(AlertDanger::class);
+
+            return;
+        }
 
         $this->categoryService->delete(auth()->user()->id, $code);
 

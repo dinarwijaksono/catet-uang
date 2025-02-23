@@ -4,10 +4,12 @@ namespace Tests\Feature\Livewire\Category;
 
 use App\Livewire\Category\BoxListCategory;
 use App\Livewire\Category\FormCreateCategory;
+use App\Livewire\Component\AlertDanger;
 use App\Livewire\Component\AlertSuccess;
 use App\Models\Category;
 use App\Models\User;
 use Database\Seeders\CreateCategorySeeder;
+use Database\Seeders\CreateTransactionSeeder;
 use Database\Seeders\CreateUserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -64,5 +66,29 @@ class BoxListCategoryTest extends TestCase
             'user_id' => $this->user->id,
             'code' => $category->code
         ]);
+    }
+
+    public function test_delete_category_but_category_still_use()
+    {
+        $this->seed(CreateCategorySeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+
+        $category = Category::first();
+
+        Livewire::test(BoxListCategory::class)
+            ->call('deleteCategory', $category->first()->code)
+            ->assertDispatchedTo(AlertDanger::class, 'do-show', "Kategori gagal dihapus, karena kategori digunakan pada transaksi.");
+
+        $this->assertDatabaseHas('categories', [
+            'user_id' => $this->user->id,
+            'code' => $category->code
+        ]);
+    }
+
+    public function test_delete_categorY_but_category_noting_in_database()
+    {
+        Livewire::test(BoxListCategory::class)
+            ->call('deleteCategory', 'category-code')
+            ->assertDispatchedTo(AlertDanger::class, 'do-show', "Kategori gagal dihapus, karena kategori digunakan pada transaksi.");
     }
 }
