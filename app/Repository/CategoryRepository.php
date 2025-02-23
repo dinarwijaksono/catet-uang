@@ -30,6 +30,21 @@ class CategoryRepository implements CategoryRepositoryInterface
         return !$transaction->isEmpty();
     }
 
+    public function findByCode(int $userId, string $code): ?Category
+    {
+        return Category::select(
+            'id',
+            'code',
+            'name',
+            'type',
+            'created_at',
+            'updated_at'
+        )
+            ->where('user_id', $userId)
+            ->where('code', $code)
+            ->first();
+    }
+
     public function getAll(int $userId): Collection
     {
         return Category::select(

@@ -11,6 +11,8 @@ interface CategoryRepositoryInterface
 
     public function checkIsStillUse(int $userId, int $categoryId): bool;
 
+    public function findByCode(int $userId, string $code): ?Category;
+
     public function getAll(int $userId): Collection;
 
     public function update(int $userId, string $code, string $name): ?Category;
