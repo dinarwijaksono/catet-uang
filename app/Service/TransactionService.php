@@ -155,6 +155,36 @@ class TransactionService
         }
     }
 
+    public function getSummaryIncomeSpending(int $userId): ?Collection
+    {
+        try {
+
+            $start = microtime(true);
+            $result = $this->transactionRepository->getSummaryIncomeSpending($userId);
+
+            $executionTime = round((microtime(true) - $start) * 1000);
+            if ($executionTime > 2000) {
+                Log::warning("Execution of transactionRepository->getSummaryIncomeSpending is slow", [
+                    'user_id' => $userId,
+                    'execution_time' => $executionTime,
+                ]);
+            }
+
+            Log::info('get summary income spending success', [
+                'user_id' => $userId
+            ]);
+
+            return $result;
+        } catch (\Throwable $th) {
+            Log::error('get summary income spending failed', [
+                'user_id' => $userId,
+                'message' => $th->getMessage()
+            ]);
+
+            return null;
+        }
+    }
+
     public function update(int $userId, string $code, int $categoryId, string $date, string $description, int $income, int $spending): ?Transaction
     {
         try {
