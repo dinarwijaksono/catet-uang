@@ -87,6 +87,35 @@ class CategoryService
         }
     }
 
+    public function findByCode(int $userId, string $code): ?Category
+    {
+        try {
+            $start = microtime(true);
+            $category = $this->categoryRepository->findByCode($userId, $code);
+
+            $executionTime = round((microtime(true) - $start) * 1000);
+            if ($executionTime > 2000) {
+                Log::warning("Execution of CategoryRepository->findByCode is slow", [
+                    'user_id' => $userId,
+                    'execution_time' => $executionTime
+                ]);
+            }
+
+            Log::info('find category by code success', [
+                'user_id' => $userId
+            ]);
+
+            return $category;
+        } catch (\Throwable $th) {
+            Log::error('find category by code failed', [
+                'user_id' => $userId,
+                'message' => $th->getMessage()
+            ]);
+
+            return null;
+        }
+    }
+
     public function getAll(int $userId): Collection
     {
         try {

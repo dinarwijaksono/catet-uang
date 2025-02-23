@@ -80,7 +80,24 @@ class CategoryServiceTest extends TestCase
         $this->assertFalse($response);
     }
 
-    public function test_get_category_success()
+    public function test_find_by_code_success()
+    {
+        $this->seed(CreateCategorySeeder::class);
+        $category = Category::first();
+
+        $response = $this->categoryService->findByCode($this->user->id, $category->code);
+
+        $this->assertInstanceOf(Category::class, $response);
+    }
+
+    public function test_find_by_code_return_null()
+    {
+        $response = $this->categoryService->findByCode($this->user->id, 'category-code');
+
+        $this->assertNull($response);
+    }
+
+    public function test_get_all_category_success()
     {
         $this->seed(CreateCategorySeeder::class);
         $this->seed(CreateCategorySeeder::class);
