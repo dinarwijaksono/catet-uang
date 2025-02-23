@@ -16,6 +16,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Str;
+use stdClass;
 use Tests\TestCase;
 
 class TransactionRepositoryTest extends TestCase
@@ -97,6 +98,19 @@ class TransactionRepositoryTest extends TestCase
 
         $this->assertInstanceOf(Collection::class, $response);
         $this->assertEquals($response->count(), 3);
+    }
+
+    public function test_get_summary_total_income_spending_all_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+
+        $response = $this->transactionRepository->getSummaryTotalIncomeSpendingAll($this->user->id);
+
+        $this->assertInstanceOf(stdClass::class, $response);
+        $this->assertObjectHasProperty('total_income', $response);
+        $this->assertObjectHasProperty('total_spending', $response);
     }
 
     public function test_get_summary_income_spending_success()

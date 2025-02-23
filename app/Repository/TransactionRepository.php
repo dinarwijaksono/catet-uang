@@ -8,6 +8,7 @@ use App\RepositoryInterface\TransactionRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use stdClass;
 use Termwind\Components\Raw;
 
 class TransactionRepository implements TransactionRepositoryInterface
@@ -55,6 +56,14 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->where('transactions.user_id', $userId)
             ->where('transactions.date', $date)
             ->get();
+    }
+
+    public function getSummaryTotalIncomeSpendingAll(int $userId): ?stdClass
+    {
+        return DB::table('transactions')
+            ->select(DB::raw('sum(income) as total_income'), DB::raw('sum(spending) as total_spending'))
+            ->where('user_id', $userId)
+            ->first();
     }
 
     public function getSummaryIncomeSpending(int $userId): ?Collection
