@@ -5,14 +5,17 @@
         <div class="flex mb-4 gap-2 p-2">
             <div class="basis-10/12">
 
-                <select class="select select-sm select-primary w-full ">
-                    <option>Semua (periode)</option>
-                    <option>Februari 2025</option>
+                <select wire:model="period" class="select select-sm select-primary w-full ">
+                    <option value="all">Semua (periode)</option>
+
+                    @foreach ($listPeriod as $key)
+                        <option value="{{ $key->id }}">{{ $key->period_name }}</option>
+                    @endforeach
                 </select>
             </div>
 
             <div class="basis-2/12">
-                <button class="btn btn-sm btn-primary w-full">Cari</button>
+                <button wire:click="doChangePeriod" class="btn btn-sm btn-primary w-full">Cari</button>
             </div>
         </div>
 
