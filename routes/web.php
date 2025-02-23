@@ -13,9 +13,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
 // HomeController
 Route::get('/', [HomeController::class, 'index'])->middleware('auth');
+Route::get("/home/detail-transaction/{date}", [HomeController::class, 'detailTransactionInDate'])->middleware('auth');
 
 // SettingController
-Route::get('/setting', [SettingController::class, 'index']);
+Route::get('/setting', [SettingController::class, 'index'])->middleware('auth');
 
 // ReportController
-Route::get('/report', [ReportController::class, 'index']);
+Route::get('/report', [ReportController::class, 'index'])->middleware('auth');

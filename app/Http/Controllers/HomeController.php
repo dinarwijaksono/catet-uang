@@ -10,4 +10,11 @@ class HomeController extends Controller
     {
         return view('Home.index');
     }
+
+    public function detailTransactionInDate(int $date)
+    {
+        $data['date'] = $date;
+
+        return view('Home.detail-transaction-in-date', $data);
+    }
 }
