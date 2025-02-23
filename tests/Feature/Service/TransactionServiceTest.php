@@ -13,6 +13,7 @@ use Database\Seeders\CreateUserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Collection;
+use stdClass;
 use Tests\TestCase;
 
 class TransactionServiceTest extends TestCase
@@ -90,6 +91,19 @@ class TransactionServiceTest extends TestCase
 
         $this->assertInstanceOf(Collection::class, $response);
         $this->assertEquals($response->count(), 1);
+    }
+
+    public function tesT_get_total_summary_income_spending_all_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+
+        $response = $this->transactionService->getSummaryTotalIncomeSpendingAll($this->user->id);
+
+        $this->assertInstanceOf(stdClass::class, $response);
+        $this->assertObjectHasProperty('total_income', $response);
+        $this->assertObjectHasProperty('total_spending', $response);
     }
 
     public function test_get_summary_income_spending()

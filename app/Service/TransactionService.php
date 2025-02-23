@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use stdClass;
 
 class TransactionService
 {
@@ -147,6 +148,35 @@ class TransactionService
             return $transaction;
         } catch (\Throwable $th) {
             Log::error('get by date transaction failed', [
+                'user_id' => $userId,
+                'message' => $th->getMessage()
+            ]);
+
+            return null;
+        }
+    }
+
+    public function getSummaryTotalIncomeSpendingAll(int $userId): ?stdClass
+    {
+        try {
+            $start = microtime(true);
+            $result = $this->transactionRepository->getSummaryTotalIncomeSpendingAll($userId);
+
+            $executionTime = round((microtime(true) - $start) * 1000);
+            if ($executionTime > 2000) {
+                Log::warning("Execution of transactionRepository->getSummaryTotalIncomeSpendingAll is slow", [
+                    'user_id' => $userId,
+                    'execution_time' => $executionTime,
+                ]);
+            }
+
+            Log::info('get summary total income spending all success', [
+                'user_id' => $userId
+            ]);
+
+            return $result;
+        } catch (\Throwable $th) {
+            Log::error('get summary total income spending all failed', [
                 'user_id' => $userId,
                 'message' => $th->getMessage()
             ]);
