@@ -215,6 +215,35 @@ class TransactionService
         }
     }
 
+    public function getSummaryTotalIncomeSpendingByPeriod(int $userId, int $periodId): ?stdClass
+    {
+        try {
+            $start = microtime(true);
+            $result = $this->transactionRepository->getSummaryTotalIncomeSpendingByPeriod($userId, $periodId);
+
+            $executionTime = round((microtime(true) - $start) * 1000);
+            if ($executionTime > 2000) {
+                Log::warning("Execution of transactionRepository->getSummaryTotalIncomeSpendingbyPeriod is slow", [
+                    'user_id' => $userId,
+                    'execution_time' => $executionTime,
+                ]);
+            }
+
+            Log::error('get summary total income spending by period success', [
+                'user_id' => $userId
+            ]);
+
+            return $result;
+        } catch (\Throwable $th) {
+            Log::error('get summary total income spending by period failed', [
+                'user_id' => $userId,
+                'message' => $th->getMessage()
+            ]);
+
+            return null;
+        }
+    }
+
     public function getSummaryIncomeSpending(int $userId): ?Collection
     {
         try {

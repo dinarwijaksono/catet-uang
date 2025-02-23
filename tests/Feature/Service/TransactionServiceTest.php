@@ -139,6 +139,22 @@ class TransactionServiceTest extends TestCase
         $this->assertObjectHasProperty('total_spending', $response);
     }
 
+    public function tesT_get_total_summary_income_spending_by_period_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+
+        $transaction = Transaction::first();
+
+        $response = $this->transactionService
+            ->getSummaryTotalIncomeSpendingByPeriod($this->user->id, $transaction->id);
+
+        $this->assertInstanceOf(stdClass::class, $response);
+        $this->assertObjectHasProperty('total_income', $response);
+        $this->assertObjectHasProperty('total_spending', $response);
+    }
+
     public function test_get_summary_income_spending()
     {
         $this->seed(CreateTransactionSeeder::class);
