@@ -96,6 +96,36 @@ class TransactionService
         }
     }
 
+    public function getAllPeriod(int $userId): ?Collection
+    {
+        try {
+            $start = microtime(true);
+            $period = $this->periodRepository->getAll($userId);
+
+            $executionTime = round((microtime(true) - $start) * 1000);
+            if ($executionTime > 2000) {
+                Log::warning("Execution of PeriodRepository->getAll is slow", [
+                    'user_id' => $userId,
+                    'execution_time' => $executionTime,
+                ]);
+            }
+
+            Log::info('get all period success', [
+                'user_id' => $userId
+            ]);
+
+            return $period;
+        } catch (\Throwable $th) {
+
+            Log::error('get all period success', [
+                'user_id' => $userId,
+                'message' => $th->getMessage()
+            ]);
+
+            return null;
+        }
+    }
+
     public function findByCode(int $userId, string $code): ?Transaction
     {
         try {

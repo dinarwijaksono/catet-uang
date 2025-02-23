@@ -3,6 +3,7 @@
 namespace Tests\Feature\Service;
 
 use App\Models\Category;
+use App\Models\Period;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Service\TransactionService;
@@ -68,6 +69,38 @@ class TransactionServiceTest extends TestCase
             'income' => 2000000,
             'spending' => 0
         ]);
+    }
+
+    public function test_get_all_period_success()
+    {
+        $date = strtotime('2024-01-10');
+        Period::create([
+            'user_id' => $this->user->id,
+            'period_date' => $date,
+            'period_name' => date("F Y", $date),
+            'is_close' => false
+        ]);
+
+        $date = strtotime('2024-02-15');
+        Period::create([
+            'user_id' => $this->user->id,
+            'period_date' => $date,
+            'period_name' => date("F Y", $date),
+            'is_close' => false
+        ]);
+
+        $response = $this->transactionService->getAllPeriod($this->user->id);
+
+        $this->assertInstanceOf(Collection::class, $response);
+        $this->assertEquals($response->count(), 2);
+    }
+
+    public function test_get_all_period_return_null()
+    {
+        $response = $this->transactionService->getAllPeriod($this->user->id);
+
+        $this->assertInstanceOf(Collection::class, $response);
+        $this->assertEquals($response->count(), 0);
     }
 
     public function test_find_by_code_success()
