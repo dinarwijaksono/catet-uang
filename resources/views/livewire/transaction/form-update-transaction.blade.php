@@ -43,8 +43,12 @@
             <select wire:model="category" class="select select-bordered select-sm w-full my-2">
                 <option selected>--- Pilih kategori ---</option>
 
-                @foreach ($listCategory as $category)
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @foreach ($listCategory as $key)
+                    @if ($key->id == $category)
+                        <option selected value="{{ $key->id }}">{{ $key->name }}</option>
+                    @else
+                        <option value="{{ $key->id }}">{{ $key->name }}</option>
+                    @endif
                 @endforeach
 
             </select>

@@ -52,6 +52,7 @@ class FormUpdateTransaction extends Component
         return [
             'do-hide' => 'doHide',
             'do-show' => 'doShow',
+            'do-refresh' => 'render'
         ];
     }
 
@@ -62,12 +63,19 @@ class FormUpdateTransaction extends Component
 
     public function doShow(string $code)
     {
+        $this->dispatch('do-refresh')->self();
+
         $this->hidden = false;
         $this->code = $code;
 
         $data = $this->transactionService->findByCode(auth()->user()->id, $this->code);
-        $this->date = date('Y-m-d', strtotime($data->date));
         $this->type = $data->income == 0 ? 'spending' : 'income';
+
+        $this->listCategory = $this->categoryService->getAll(auth()->user()->id)
+            ->where('type', $this->type)
+            ->sortBy('name');
+
+        $this->date = date('Y-m-d', strtotime($data->date));
         $this->category = $data->category_id;
         $this->value = $data->income == 0 ? $data->spending : $data->income;
         $this->description = $data->description;
