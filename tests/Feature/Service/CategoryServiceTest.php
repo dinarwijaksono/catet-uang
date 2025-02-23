@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\User;
 use App\Service\CategoryService;
 use Database\Seeders\CreateCategorySeeder;
+use Database\Seeders\CreateTransactionSeeder;
 use Database\Seeders\CreateUserSeeder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -56,6 +57,27 @@ class CategoryServiceTest extends TestCase
 
         $response = $this->categoryService->create($this->user->id, $name, $type);
         $this->assertNull($response);
+    }
+
+    public function test_check_is_still_use_return_true()
+    {
+        $this->seed(CreateCategorySeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+        $category = Category::first();
+
+        $response = $this->categoryService->checkIsStillUse($this->user->id, $category->id);
+
+        $this->assertTrue($response);
+    }
+
+    public function test_check_is_still_use_return_false()
+    {
+        $this->seed(CreateCategorySeeder::class);
+        $category = Category::first();
+
+        $response = $this->categoryService->checkIsStillUse($this->user->id, $category->id);
+
+        $this->assertFalse($response);
     }
 
     public function test_get_category_success()

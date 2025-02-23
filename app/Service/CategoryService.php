@@ -56,6 +56,37 @@ class CategoryService
         }
     }
 
+    public function checkIsStillUse(int $userId, int $categoryId): bool
+    {
+        try {
+            $start = microtime(true);
+
+            $result = $this->categoryRepository->checkIsStillUse($userId, $categoryId);
+
+            $executionTime = round((microtime(true) - $start) * 1000);
+
+            if ($executionTime > 2000) {
+                Log::warning("Execution of CategoryRepository->checkIsStillUse is slow", [
+                    'user_id' => $userId,
+                    'execution_time' => $executionTime
+                ]);
+            }
+
+            Log::info('check is still use success', [
+                'user_id' => $userId
+            ]);
+
+            return $result;
+        } catch (\Throwable $th) {
+            Log::error('check is still use failed', [
+                'user_id' => $userId,
+                'message' => $th->getMessage()
+            ]);
+
+            return false;
+        }
+    }
+
     public function getAll(int $userId): Collection
     {
         try {
@@ -66,7 +97,7 @@ class CategoryService
             $executionTime = round((microtime(true) - $start) * 1000);
 
             if ($executionTime > 2000) {
-                Log::warning("Execution of CategoryRepository->create is slow", [
+                Log::warning("Execution of CategoryRepository->getAll is slow", [
                     'user_id' => $userId,
                     'execution_time' => $executionTime
                 ]);
