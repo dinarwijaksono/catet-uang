@@ -66,6 +66,15 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->first();
     }
 
+    public function getSummaryTotalIncomeSpendingByPeriod(int $userId, int $periodId): ?stdClass
+    {
+        return DB::table('transactions')
+            ->select(DB::raw('sum(income) as total_income'), DB::raw('sum(spending) as total_spending'))
+            ->where('user_id', $userId)
+            ->where('period_id', $periodId)
+            ->first();
+    }
+
     public function getSummaryIncomeSpending(int $userId): ?Collection
     {
         return DB::table('transactions')

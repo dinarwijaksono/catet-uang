@@ -18,6 +18,8 @@ interface TransactionRepositoryInterface
 
     public function getSummaryTotalIncomeSpendingAll(int $userId): ?stdClass;
 
+    public function getSummaryTotalIncomeSpendingByPeriod(int $userId, int $periodId): ?stdClass;
+
     public function getSummaryIncomeSpending(int $userId): ?Collection;
 
     public function update(TransactionDomain $transaction): ?Transaction;
