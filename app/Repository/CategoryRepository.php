@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\RepositoryInterface\CategoryRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
@@ -17,6 +18,16 @@ class CategoryRepository implements CategoryRepositoryInterface
             'name' => strtolower($name),
             'type' => strtolower($type)
         ]);
+    }
+
+    public function checkIsStillUse(int $userId, int $categoryId): bool
+    {
+        $transaction = DB::table('transactions')
+            ->where('user_id', $userId)
+            ->where('category_id', $categoryId)
+            ->get();
+
+        return !$transaction->isEmpty();
     }
 
     public function getAll(int $userId): Collection

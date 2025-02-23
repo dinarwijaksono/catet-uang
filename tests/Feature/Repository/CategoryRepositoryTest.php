@@ -7,6 +7,7 @@ use App\Models\User;
 use App\RepositoryInterface\CategoryRepositoryInterface;
 use Carbon\Carbon;
 use Database\Seeders\CreateCategorySeeder;
+use Database\Seeders\CreateTransactionSeeder;
 use Database\Seeders\CreateUserSeeder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -67,6 +68,29 @@ class CategoryRepositoryTest extends TestCase
             'name' => $name,
             'type' => $type,
         ]);
+    }
+
+    public function test_check_is_still_use_return_true()
+    {
+        $this->seed(CreateCategorySeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+
+        $category = Category::first();
+
+        $response = $this->categoryRepository->checkIsStillUse($this->user->id, $category->id);
+
+        $this->assertTrue($response);
+    }
+
+    public function test_check_is_still_use_return_false()
+    {
+        $this->seed(CreateCategorySeeder::class);
+
+        $category = Category::first();
+
+        $response = $this->categoryRepository->checkIsStillUse($this->user->id, $category->id);
+
+        $this->assertFalse($response);
     }
 
     public function test_get_all_success()
