@@ -9,5 +9,7 @@
 
     @livewire('transaction.box-transaction-in-date', ['date' => date('Y-m-d')])
 
+    <div class="divider px-4">***</div>
+
     @livewire('transaction.box-summary-income-spending')
 @endsection

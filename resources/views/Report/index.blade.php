@@ -1,46 +1,9 @@
 @extends('../layout/main')
 
 @section('main')
-    <section class="bg-base-200 py-2 px-4 m-4 rounded shadow">
-        <div class="overflow-x-auto">
-            <h1 class="text-xl mb-4">Rincian pemasukan / pengeluaran</h1>
+    @livewire('report.box-summary-total')
 
-            <div class="flex mb-4 gap-2 p-2">
-                <div class="basis-10/12">
-
-                    <select class="select select-sm select-primary w-full ">
-                        <option>Semua</option>
-                        <option>Februari 2025</option>
-                    </select>
-                </div>
-
-                <div class="basis-2/12">
-                    <button class="btn btn-sm btn-primary w-full">Cari</button>
-                </div>
-            </div>
-
-            <table class="table mb-4">
-                <!-- head -->
-                <thead>
-                    <tr>
-                        <th class="text-center w-4/12">Pemasukan</th>
-                        <th class="text-center w-4/12">Peneluaran</th>
-                        <th class="text-center w-4/12">Selisih</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr>
-                        <td class="text-center font-bold text-[16px] text-success">10.000</td>
-                        <td class="text-center font-bold text-[16px] text-error">10.000</td>
-                        <td class="text-center font-bold text-[16px] text-error">10.000</td>
-                    </tr>
-                </tbody>
-            </table>
-
-        </div>
-    </section>
-
+    <div class="divider px-4">***</div>
 
     <section class="bg-base-200 py-2 px-4 m-4 rounded shadow">
         <div class="overflow-x-auto">
@@ -98,6 +61,8 @@
             </table>
         </div>
     </section>
+
+    <div class="divider px-4">***</div>
 
     <section class="bg-base-200 py-2 px-4 m-4 rounded shadow">
         <div class="overflow-x-auto">
