@@ -8,6 +8,7 @@ use App\RepositoryInterface\PeriodRepositoryInterface;
 use Database\Seeders\CreateUserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Collection;
 use Tests\TestCase;
 
 class PeriodRepositoryTest extends TestCase
@@ -67,11 +68,33 @@ class PeriodRepositoryTest extends TestCase
         $month = 11;
         $year = 2000;
 
-        $date = strtotime("$year-$month-01");
-
         $response = $this->periodRepository->findOrCreate($this->user->id, $month, $year);
 
         $this->assertInstanceOf(Period::class, $response);
         $this->assertDatabaseCount('periods', 1);
+    }
+
+    public function test_get_all_success()
+    {
+        $date = strtotime('2024-01-10');
+        Period::create([
+            'user_id' => $this->user->id,
+            'period_date' => $date,
+            'period_name' => date("F Y", $date),
+            'is_close' => false
+        ]);
+
+        $date = strtotime('2024-02-15');
+        Period::create([
+            'user_id' => $this->user->id,
+            'period_date' => $date,
+            'period_name' => date("F Y", $date),
+            'is_close' => false
+        ]);
+
+        $response = $this->periodRepository->getAll($this->user->id);
+
+        $this->assertInstanceOf(Collection::class, $response);
+        $this->assertEquals($response->count(), 2);
     }
 }

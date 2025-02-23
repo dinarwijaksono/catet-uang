@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Models\Period;
 use App\RepositoryInterface\PeriodRepositoryInterface;
+use Illuminate\Support\Collection;
 
 class PeriodRepository implements PeriodRepositoryInterface
 {
@@ -32,5 +33,10 @@ class PeriodRepository implements PeriodRepositoryInterface
         }
 
         return $period;
+    }
+
+    public function getAll(int $userId): ?Collection
+    {
+        return Period::where('user_id', $userId)->get();
     }
 }
