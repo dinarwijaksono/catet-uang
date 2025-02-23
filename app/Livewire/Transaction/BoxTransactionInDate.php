@@ -3,6 +3,7 @@
 namespace App\Livewire\Transaction;
 
 use App\Livewire\Component\AlertSuccess;
+use App\Livewire\Transaction\BoxSummaryIncomeSpending;
 use App\Service\TransactionService;
 use Carbon\Carbon;
 use Livewire\Component;
@@ -47,6 +48,7 @@ class BoxTransactionInDate extends Component
 
         $this->dispatch('do-refresh')->self();
         $this->dispatch('do-show', "Kategori berhasil di hapus.")->to(AlertSuccess::class);
+        $this->dispatch('do-refresh')->to(BoxSummaryIncomeSpending::class);
     }
 
     public function render()

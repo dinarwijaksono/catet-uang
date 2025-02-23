@@ -63,6 +63,7 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->select('date', DB::raw('sum(income) as total_income'), DB::raw('sum(spending) as total_spending'))
             ->where("user_id", $userId)
             ->groupBy('date')
+            ->orderByDesc('date')
             ->limit(40)
             ->get();
     }

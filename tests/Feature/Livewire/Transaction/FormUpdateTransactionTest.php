@@ -3,6 +3,7 @@
 namespace Tests\Feature\Livewire\Transaction;
 
 use App\Livewire\Component\AlertSuccess;
+use App\Livewire\Transaction\BoxSummaryIncomeSpending;
 use App\Livewire\Transaction\BoxTransactionInDate;
 use App\Livewire\Transaction\FormCreateTransaction;
 use App\Livewire\Transaction\FormUpdateTransaction;
@@ -41,7 +42,7 @@ class FormUpdateTransactionTest extends TestCase
             ->assertStatus(200);
     }
 
-    public function test_create_transaction_success()
+    public function test_update_transaction_success()
     {
         $this->seed(CreateTransactionSeeder::class);
         $transaction = Transaction::first();
@@ -55,7 +56,8 @@ class FormUpdateTransactionTest extends TestCase
             ->set('description', "makan siang")
             ->call('save')
             ->assertDispatchedTo(AlertSuccess::class, 'do-show', "Transaksi berhasil diedit.")
-            ->assertDispatchedTo(BoxTransactionInDate::class, 'do-refresh');
+            ->assertDispatchedTo(BoxTransactionInDate::class, 'do-refresh')
+            ->assertDispatchedTo(BoxSummaryIncomeSpending::class, 'do-refresh');
 
         $this->assertDatabaseHas('transactions', [
             'code' => $transaction->code,

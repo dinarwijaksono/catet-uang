@@ -117,6 +117,7 @@ class FormUpdateTransaction extends Component
         if (!is_null($result)) {
             $this->dispatch('do-show', "Transaksi berhasil diedit.")->to(AlertSuccess::class);
             $this->dispatch('do-refresh')->to(BoxTransactionInDate::class);
+            $this->dispatch('do-refresh')->to(BoxSummaryIncomeSpending::class);
         }
     }
 
