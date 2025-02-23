@@ -15,6 +15,8 @@ interface TransactionRepositoryInterface
 
     public function getByDate(int $userId, Carbon $date): ?Collection;
 
+    public function getSummaryIncomeSpending(int $userId): ?Collection;
+
     public function update(TransactionDomain $transaction): ?Transaction;
 
     public function delete(int $userId, string $code): void;
