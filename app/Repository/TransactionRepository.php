@@ -86,6 +86,24 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->get();
     }
 
+    public function getTotalCategoryAllByPeriod(int $userId, int $periodId): ?Collection
+    {
+        return DB::table('transactions')
+            ->join('categories', 'categories.id', '=', 'transactions.category_id')
+            ->select(
+                'transactions.category_id',
+                'categories.name as category_name',
+                DB::raw('sum(transactions.income) as total_income'),
+                DB::raw('sum(transactions.spending) as total_spending')
+            )
+            ->where('transactions.user_id', $userId)
+            ->groupBy(
+                'transactions.category_id',
+                'categories.name'
+            )
+            ->get();
+    }
+
     public function update(TransactionDomain $transaction): ?Transaction
     {
         Transaction::where('code', $transaction->code)

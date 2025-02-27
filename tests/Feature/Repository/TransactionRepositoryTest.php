@@ -144,6 +144,21 @@ class TransactionRepositoryTest extends TestCase
         $this->assertObjectHasProperty('total_spending', $response->first());
     }
 
+    public function test_get_total_category_all_by_period_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+        $transaction = Transaction::first();
+
+        $response = $this->transactionRepository->getTotalCategoryAllByPeriod($this->user->id, $transaction->period_id);
+
+        $this->assertInstanceOf(Collection::class, $response);
+        $this->assertObjectHasProperty('category_name', $response->first());
+        $this->assertObjectHasProperty('total_income', $response->first());
+        $this->assertObjectHasProperty('total_spending', $response->first());
+    }
+
     public function test_update_success()
     {
         $this->seed(CreateTransactionSeeder::class);
