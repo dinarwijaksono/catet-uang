@@ -274,6 +274,35 @@ class TransactionService
         }
     }
 
+    public function getTotalCategoryAllByPeriod(int $userId, int $periodId): ?Collection
+    {
+        try {
+            $start = microtime(true);
+            $transaction = $this->transactionRepository->getTotalCategoryAllByPeriod($userId, $periodId);
+
+            $executionTime = round((microtime(true) - $start) * 1000);
+            if ($executionTime > 2000) {
+                Log::warning("Execution of transactionRepository->getTotalCategoryAllByPeriod is slow", [
+                    'user_id' => $userId,
+                    'execution_time' => $executionTime,
+                ]);
+            }
+
+            Log::info('get total category all by period success', [
+                'user_id' => $userId
+            ]);
+
+            return $transaction;
+        } catch (\Throwable $th) {
+            Log::error('get total category all by period failed', [
+                'user_id' => $userId,
+                'message' => $th->getMessage()
+            ]);
+
+            return null;
+        }
+    }
+
     public function update(int $userId, string $code, int $categoryId, string $date, string $description, int $income, int $spending): ?Transaction
     {
         try {
