@@ -5,62 +5,7 @@
 
     <div class="divider px-4">***</div>
 
-    <section class="bg-base-200 py-2 px-4 m-4 rounded shadow">
-        <div class="overflow-x-auto">
-            <h1 class="text-xl mb-4">Transaksi perperiode</h1>
-
-            <div class="flex mb-4 gap-2 p-2">
-                <div class="basis-10/12">
-
-                    <select class="select select-sm select-primary w-full ">
-                        <option>Januari 2025</option>
-                        <option>Februari 2025</option>
-                    </select>
-                </div>
-
-                <div class="basis-2/12">
-                    <button class="btn btn-sm btn-primary w-full">Cari</button>
-                </div>
-            </div>
-
-            <table class="table mb-4">
-                <!-- head -->
-                <thead>
-                    <tr>
-                        <th class="hidden md:block w-1/12"></th>
-                        <th class="w-5/12">Kategori</th>
-                        <th class="text-right w-3/12">Pemasukan</th>
-                        <th class="text-right w-3/12">Peneluaran</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    <tr class="bg-base-200 hover:bg-base-300">
-                        <td class="text-center">1</td>
-                        <td>Makanan</td>
-                        <td class="text-right text-success">-</td>
-                        <td class="text-right text-error">10.000</td>
-                    </tr>
-
-                    <tr class="bg-base-200 hover:bg-base-300">
-                        <td class="text-center">1</td>
-                        <td>Gaji</td>
-                        <td class="text-right text-success">200.0000.000</td>
-                        <td class="text-right text-error">-</td>
-                    </tr>
-                </tbody>
-
-                <tfoot>
-                    <tr class="text-[14px]">
-                        <td colspan="2" class="text-center text-bold">TOTAL</td>
-                        <td class="text-right text-success">200.0000.000</td>
-                        <td class="text-right text-error">-</td>
-                    </tr>
-                </tfoot>
-
-            </table>
-        </div>
-    </section>
+    @livewire('report.box-summary-by-category')
 
     <div class="divider px-4">***</div>
 

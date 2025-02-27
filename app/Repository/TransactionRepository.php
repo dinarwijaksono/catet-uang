@@ -97,9 +97,11 @@ class TransactionRepository implements TransactionRepositoryInterface
                 DB::raw('sum(transactions.spending) as total_spending')
             )
             ->where('transactions.user_id', $userId)
+            ->where('transactions.period_id', $periodId)
             ->groupBy(
                 'transactions.category_id',
-                'categories.name'
+                'categories.name',
+                'transactions.period_id'
             )
             ->get();
     }
