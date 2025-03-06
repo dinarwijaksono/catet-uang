@@ -24,6 +24,8 @@ interface TransactionRepositoryInterface
 
     public function getTotalCategoryAllByPeriod(int $userId, int $periodId): ?Collection;
 
+    public function getTransactionByPeriod(int $userId, int $periodId): ?Collection;
+
     public function update(TransactionDomain $transaction): ?Transaction;
 
     public function delete(int $userId, string $code): void;

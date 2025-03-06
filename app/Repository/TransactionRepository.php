@@ -122,6 +122,26 @@ class TransactionRepository implements TransactionRepositoryInterface
         return Transaction::where('code', $transaction->code)->first();
     }
 
+    public function getTransactionByPeriod(int $userId, int $periodId): ?Collection
+    {
+        return DB::table('transactions')
+            ->join('categories', 'categories.id', '=', 'transactions.category_id')
+            ->select(
+                'categories.id as category_id',
+                'categories.name as category_name',
+                'transactions.code',
+                'transactions.date',
+                'transactions.description',
+                'transactions.income',
+                'transactions.spending',
+                'transactions.created_at',
+                'transactions.updated_at'
+            )
+            ->where('transactions.user_id', $userId)
+            ->where('transactions.period_id', $periodId)
+            ->get();
+    }
+
     public function delete(int $userId, string $code): void
     {
         Transaction::where('user_id', $userId)
