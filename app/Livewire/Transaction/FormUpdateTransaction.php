@@ -5,6 +5,9 @@ namespace App\Livewire\Transaction;
 use App\Http\Requests\CreateTransactionRequest;
 use App\Livewire\Component\AlertDanger;
 use App\Livewire\Component\AlertSuccess;
+use App\Livewire\Report\BoxSummaryByCategory;
+use App\Livewire\Report\BoxSummaryTotal;
+use App\Livewire\Report\BoxTransactionInPeriod;
 use App\Service\CategoryService;
 use App\Service\TransactionService;
 use Livewire\Component;
@@ -126,6 +129,9 @@ class FormUpdateTransaction extends Component
             $this->dispatch('do-show', "Transaksi berhasil diedit.")->to(AlertSuccess::class);
             $this->dispatch('do-refresh')->to(BoxTransactionInDate::class);
             $this->dispatch('do-refresh')->to(BoxSummaryIncomeSpending::class);
+            $this->dispatch('do-refresh')->to(BoxTransactionInPeriod::class);
+            $this->dispatch('do-refresh')->to(BoxSummaryTotal::class);
+            $this->dispatch('do-refresh')->to(BoxSummaryByCategory::class);
         }
     }
 

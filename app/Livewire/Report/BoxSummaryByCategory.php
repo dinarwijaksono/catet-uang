@@ -30,9 +30,6 @@ class BoxSummaryByCategory extends Component
         if ($listPeriod->count() != 0) {
 
             $this->period = $listPeriod->first()->id;
-
-            $this->listTotalCategory = $this->transactionService->getTotalCategoryAllByPeriod(auth()->user()->id, $this->listPeriod->first()->id)
-                ->sortBy('category_name');
         }
     }
 
@@ -41,6 +38,12 @@ class BoxSummaryByCategory extends Component
         $this->transactionService = app()->make(TransactionService::class);
         $this->listPeriod = $this->transactionService->getAllPeriod(auth()->user()->id)
             ->sortByDesc('period_date');
+
+        if ($this->listPeriod->count() != 0) {
+
+            $this->listTotalCategory = $this->transactionService->getTotalCategoryAllByPeriod(auth()->user()->id, $this->listPeriod->first()->id)
+                ->sortBy('category_name');
+        }
     }
 
     public function doChangePeriod()

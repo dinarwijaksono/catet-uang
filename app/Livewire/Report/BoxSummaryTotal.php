@@ -35,6 +35,13 @@ class BoxSummaryTotal extends Component
         $this->diff = $this->totalIncome - $this->totalSpending;
     }
 
+    public function getListeners()
+    {
+        return [
+            'do-refresh' => 'render'
+        ];
+    }
+
     public function doChangePeriod()
     {
         if ($this->period == 'all') {

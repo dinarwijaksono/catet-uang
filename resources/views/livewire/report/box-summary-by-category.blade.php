@@ -1,6 +1,6 @@
 <section class="bg-base-200 py-2 px-4 m-4 rounded shadow">
     <div class="overflow-x-auto">
-        <h1 class="text-xl mb-4">Transaksi total perkategori {{ $period }}</h1>
+        <h1 class="text-xl mb-4">Transaksi total perkategori</h1>
 
         <div class="flex mb-4 gap-2 p-2">
             <div class="basis-10/12">

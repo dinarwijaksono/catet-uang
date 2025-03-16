@@ -317,7 +317,7 @@ class TransactionService
                 ]);
             }
 
-            Log::error('get transaction by period success', [
+            Log::info('get transaction by period success', [
                 'user_id' => $userId
             ]);
 
