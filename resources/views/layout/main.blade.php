@@ -17,7 +17,7 @@
 
         <div class="flex-none">
             <ul class="menu menu-horizontal px-1">
-                <li class="mr-2"><a class="btn btn-sm">{{ auth()->user()->name }}</a></li>
+                <li class="mr-2"><a href="/profile" class="btn btn-sm">{{ auth()->user()->name }}</a></li>
                 <form action="/logout" method="post">
                     @csrf
                     <li>
