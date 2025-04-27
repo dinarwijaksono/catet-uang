@@ -37,7 +37,9 @@
                             <div class="flex gap-2">
 
                                 <div class="basis-6/12">
-                                    <button type="button" class="btn btn-sm w-full btn-primary">Edit</button>
+                                    <button type="button"
+                                        wire:click="doShowFormUpdateCategory('{{ $category['code'] }}')"
+                                        class="btn btn-sm w-full btn-primary">Edit</button>
                                 </div>
 
                                 <div class="basis-6/12">

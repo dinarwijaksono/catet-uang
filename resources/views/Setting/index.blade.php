@@ -6,5 +6,6 @@
 
     @livewire('category.form-create-category')
 
+    @livewire('category.form-update-category')
     @livewire('category.box-list-category')
 @endsection

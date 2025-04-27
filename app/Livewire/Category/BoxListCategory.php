@@ -32,6 +32,11 @@ class BoxListCategory extends Component
         $this->dispatch('do-show')->to(FormCreateCategory::class);
     }
 
+    public function doShowFormUpdateCategory(string $categoryCode)
+    {
+        $this->dispatch('do-show', $categoryCode)->to(FormUpdateCategory::class);
+    }
+
     public function deleteCategory(string $code)
     {
         $this->dispatch('do-hide')->to(AlertSuccess::class);
