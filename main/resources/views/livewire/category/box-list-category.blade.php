@@ -3,8 +3,12 @@
         <h1 class="text-xl mb-4">List Kategori</h1>
 
         <div class="flex justify-end py-4">
-            <button type="button" wire:click="toShowFormCreateCategory" class="btn btn-sm btn-primary w-2/12">Buat
-                kategori baru</button>
+            <button type="button" wire:click="toShowFormCreateCategory" class="btn btn-sm btn-primary w-2/12">
+                <span wire:loading.remove wire:target="toShowFormCreateCategory">Buat kategori
+                    baru</span>
+
+                <span wire:loading wire:target="toShowFormCreateCategory" class="loading loading-dots loading-md"></span>
+            </button>
         </div>
 
         <table class="table mb-4">
@@ -39,7 +43,14 @@
                                 <div class="basis-6/12">
                                     <button type="button"
                                         wire:click="doShowFormUpdateCategory('{{ $category['code'] }}')"
-                                        class="btn btn-sm w-full btn-primary">Edit</button>
+                                        class="btn btn-sm w-full btn-primary">
+                                        <span wire:loading.remove
+                                            wire:target="doShowFormUpdateCategory('{{ $category['code'] }}')">Edit</span>
+
+                                        <span wire:loading
+                                            wire:target="doShowFormUpdateCategory('{{ $category['code'] }}')"
+                                            class="loading loading-dots loading-md"></span>
+                                    </button>
                                 </div>
 
                                 <div class="basis-6/12">
