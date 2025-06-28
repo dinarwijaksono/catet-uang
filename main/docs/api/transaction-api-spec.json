@@ -3,7 +3,7 @@
     "info": {
         "title": "Aplikasi catet-uang",
         "version": "1.0.0",
-        "description": "API untuk catet-uang, api spec categories"
+        "description": "API untuk catet-uang, api spec transaction"
     },
     "paths": {
         "/api/category": {
@@ -25,17 +25,29 @@
                             "schema": {
                                 "type": "object",
                                 "properties": {
-                                    "name": {
+                                    "date": {
                                         "type": "string"
                                     },
                                     "type": {
                                         "type": "string",
                                         "example": "income"
+                                    },
+                                    "category_id": {
+                                        "type": "integer"
+                                    },
+                                    "value": {
+                                        "type": "integer"
+                                    },
+                                    "description": {
+                                        "type": "string"
                                     }
                                 },
                                 "required": [
-                                    "name",
-                                    "type"
+                                    "date",
+                                    "type",
+                                    "category_id",
+                                    "value",
+                                    "description"
                                 ]
                             }
                         }
@@ -43,7 +55,7 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "kategori berhasil di buat.",
+                        "description": "Transaksi berhasil dibuat.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -55,11 +67,41 @@
                                                 "code": {
                                                     "type": "string"
                                                 },
-                                                "name": {
+                                                "date": {
                                                     "type": "string"
                                                 },
-                                                "type": {
+                                                "category_id": {
+                                                    "type": "integer"
+                                                },
+                                                "category_code": {
                                                     "type": "string"
+                                                },
+                                                "category_name": {
+                                                    "type": "string"
+                                                },
+                                                "category_type": {
+                                                    "type": "string"
+                                                },
+                                                "period_id": {
+                                                    "type": "integer"
+                                                },
+                                                "period_date": {
+                                                    "type": "integer"
+                                                },
+                                                "period_name": {
+                                                    "type": "string"
+                                                },
+                                                "period_is_close": {
+                                                    "type": "boolean"
+                                                },
+                                                "description": {
+                                                    "type": "string"
+                                                },
+                                                "income": {
+                                                    "type": "integer"
+                                                },
+                                                "spending": {
+                                                    "type": "integer"
                                                 },
                                                 "created_at": {
                                                     "type": "string"
@@ -162,7 +204,6 @@
                         }
                     }
                 ],
-                
                 "responses": {
                     "200": {
                         "description": "kategori berhasil di buat.",

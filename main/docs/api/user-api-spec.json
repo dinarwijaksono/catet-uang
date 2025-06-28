@@ -76,11 +76,17 @@
                                     "type": "object",
                                     "properties": {
                                         "errors": {
-                                            "type": "object",
-                                            "properties": {
-                                                "general": {
-                                                    "type": "string",
-                                                    "example": "Email tidak tersedia."
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "general": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "Email tidak tersedia."
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -97,23 +103,38 @@
                                     "type": "object",
                                     "properties": {
                                         "errors": {
-                                            "type": "object",
-                                            "properties": {
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "Pesan error"
-                                                },
-                                                "email": {
-                                                    "type": "string",
-                                                    "example": "Pesan error"
-                                                },
-                                                "password": {
-                                                    "type": "string",
-                                                    "example": "Pesan error"
-                                                },
-                                                "password_confirm": {
-                                                    "type": "string",
-                                                    "example": "Pesan error"
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "name": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "Pesan error."
+                                                        }
+                                                    },
+                                                    "email": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "Pesan error."
+                                                        }
+                                                    },
+                                                    "password": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "Pesan error."
+                                                        }
+                                                    },
+                                                    "password_confirm": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "Pesan error."
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -187,11 +208,17 @@
                                     "type": "object",
                                     "properties": {
                                         "errors": {
-                                            "type": "object",
-                                            "properties": {
-                                                "general": {
-                                                    "type": "string",
-                                                    "example": "Email atau password salah."
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "general": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "Email tidak tersedia."
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -208,15 +235,24 @@
                                     "type": "object",
                                     "properties": {
                                         "errors": {
-                                            "type": "object",
-                                            "properties": {
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "Pesan error"
-                                                },
-                                                "email": {
-                                                    "type": "string",
-                                                    "example": "Pesan error"
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "email": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "Pesan error."
+                                                        }
+                                                    },
+                                                    "password": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "string",
+                                                            "example": "Pesan error."
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -228,8 +264,38 @@
                 }
             }
         },
+        "/api/logout": {
+            "summary": "Logout user",
+            "parameters": [
+                {
+                    "name": "api-token",
+                    "in": "header",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ],
+            "delete": {
+                "responses": {
+                    "204": {
+                        "description": "Logout berhasil"
+                    }
+                }
+            }
+        },
         "/api/user": {
             "summary": "Cari user berdasarkan api-token",
+            "parameters": [
+                {
+                    "name": "api-token",
+                    "in": "header",
+                    "required": true,
+                    "schema": {
+                        "type": "string"
+                    }
+                }
+            ],
             "get": {
                 "responses": {
                     "200": {
@@ -261,42 +327,32 @@
                             }
                         }
                     },
-                    "400": {
+                    "403": {
                         "description": "Cari user berdasarkan token gagal, token sudah expired",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "errors": {
-                                            "type": "object",
-                                            "properties": {
-                                                "general": {
-                                                    "type": "string",
-                                                    "example": "Token sudah expired"
-                                                }
-                                            }
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Token sudah expired"
                                         }
                                     }
                                 }
                             }
                         }
                     },
-                    "422": {
+                    "419": {
                         "description": "Cari user berdasarkan token gagal, token tidak ada di database",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "errors": {
-                                            "type": "object",
-                                            "properties": {
-                                                "general": {
-                                                    "type": "string",
-                                                    "example": "Token tidak valid."
-                                                }
-                                            }
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Token tidak valid."
                                         }
                                     }
                                 }
