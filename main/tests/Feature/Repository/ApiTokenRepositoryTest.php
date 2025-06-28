@@ -48,12 +48,10 @@ class ApiTokenRepositoryTest extends TestCase
             'expired_at' => $expiredAt
         ]);
 
-        $this->assertInstanceOf(stdClass::class, $response);
+        $this->assertInstanceOf(ApiToken::class, $response);
         $this->assertEquals($response->user_id, $user->id);
         $this->assertEquals($response->token, $token);
         $this->assertEquals($response->expired_at, $expiredAt);
-        $this->assertEquals($response->name, $user->name);
-        $this->assertEquals($response->email, $user->email);
     }
 
     public function test_find_by_id_return_success()

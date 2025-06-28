@@ -12,27 +12,13 @@ use stdClass;
 
 class ApiTokenRepository implements ApiTokenRepositoryInterface
 {
-    public function create(int $userId, string $token, Carbon $expiredAt): ?stdClass
+    public function create(int $userId, string $token, Carbon $expiredAt): ?ApiToken
     {
-        $apiToken = ApiToken::create([
+        return ApiToken::create([
             'user_id' => $userId,
             'token' => $token,
             'expired_at' => $expiredAt
         ]);
-
-        return DB::table('api_tokens')
-            ->join('users', 'users.id', '=', 'api_tokens.user_id')
-            ->select(
-                'api_tokens.token',
-                'api_tokens.expired_at',
-                'users.id as user_id',
-                'users.name',
-                'users.email',
-                'users.created_at',
-                'users.updated_at'
-            )
-            ->where('users.id', $apiToken->user_id)
-            ->first();
     }
 
     public function findById(int $userId): ?stdClass
