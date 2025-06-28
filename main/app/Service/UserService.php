@@ -24,40 +24,6 @@ class UserService
         $this->apiTokenRepository = $apiTokenRepository;
     }
 
-    public function registerForApi(string $name, string $email, string $password): ?stdClass
-    {
-        try {
-            DB::beginTransaction();
-
-            $user = $this->userRepository->create($name, $email, $password);
-
-            $token = Str::random(32);
-            $expiredAt = Carbon::now()->addDays(3);
-            $apiToken = $this->apiTokenRepository->create($user->id, $token, $expiredAt);
-
-            DB::commit();
-
-            Log::info('register berhasil', [
-                'user_id' => $apiToken->user_id,
-                'email' => $apiToken->email,
-                'token' => $apiToken->token
-            ]);
-
-            return $apiToken;
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            Log::error('register gagal', [
-                'user_id' => $apiToken->user_id,
-                'email' => $apiToken->email,
-                'token' => $apiToken->token,
-                'message' => $e->getMessage()
-            ]);
-
-            return null;
-        }
-    }
-
     public function register(string $name, string $email, string $password): ?User
     {
         try {

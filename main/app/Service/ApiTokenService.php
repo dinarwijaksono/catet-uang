@@ -36,6 +36,8 @@ class ApiTokenService
                 'user_id' => $userId,
                 'message' => $th->getMessage()
             ]);
+
+            return null;
         }
     }
 }
