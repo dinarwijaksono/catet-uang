@@ -2,8 +2,11 @@
 
 namespace Tests\Feature\Http\Controllers\Api;
 
+use App\Models\ApiToken;
 use App\Models\User;
+use Carbon\Carbon;
 use Database\Seeders\CreateUserSeeder;
+use Database\Seeders\CreateUserWithTokenSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -106,5 +109,47 @@ class AuthControllerApiTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertJsonStructure(['data' => ['api_token', 'expired_token', 'name', 'email']]);
+    }
+
+    public function test_get_user_with_token_but_token_empty()
+    {
+        $response = $this->get('/api/user');
+
+        $response->assertStatus(401);
+        $response->assertJsonPath('message', 'Token tidak valid.');
+    }
+
+    public function test_get_user_with_token_but_token_invalid()
+    {
+        $response = $this->withHeader('api-token', 'token-invalid')->get('/api/user');
+
+        $response->assertStatus(401);
+        $response->assertJsonPath('message', 'Token tidak valid.');
+    }
+
+    public function test_get_user_with_token_but_token_has_expired()
+    {
+        $this->seed(CreateUserWithTokenSeeder::class);
+        $token = ApiToken::first();
+
+        ApiToken::where('token', $token->token)->update([
+            'expired_at' => Carbon::now()->subDays(10)
+        ]);
+
+        $response = $this->withHeader('api-token', $token->token)->get('/api/user');
+
+        $response->assertStatus(419);
+        $response->assertJsonPath('message', 'Token sudah expired.');
+    }
+
+    public function test_get_user_with_token_success()
+    {
+        $this->seed(CreateUserWithTokenSeeder::class);
+        $token = ApiToken::first();
+
+        $response = $this->withHeader('api-token', $token->token)->get('/api/user');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['data' => ['name', 'email', 'created_at']]);
     }
 }

@@ -11,10 +11,4 @@ use Illuminate\Support\Facades\Route;
 // AuthController
 Route::post('/register', [AuthControllerApi::class, 'register'])->middleware(MissingTokenMiddelware::class);
 Route::post('/login', [AuthControllerApi::class, 'login'])->middleware(MissingTokenMiddelware::class);
-Route::get('/user', [AuthController::class, 'findByToken'])->middleware([HasTokenMiddleware::class]);
-
-// CategoryController
-Route::post('/category', [CategoryController::class, 'create'])->middleware([HasTokenMiddleware::class]);
-Route::get('/category/get-all', [CategoryController::class, 'getAll'])->middleware([HasTokenMiddleware::class]);
-Route::put('/category', [CategoryController::class, 'update'])->middleware([HasTokenMiddleware::class]);
-Route::delete('/category', [CategoryController::class, 'delete'])->middleware([HasTokenMiddleware::class]);
+Route::get('/user', [AuthControllerApi::class, 'findByToken'])->middleware([HasTokenMiddleware::class]);

@@ -108,4 +108,18 @@ class AuthControllerApi extends Controller
             ]
         ], 200);
     }
+
+    public function findByToken(Request $request)
+    {
+        $token = $request->header('api-token');
+        $user = $this->userService->findByToken($token);
+
+        return response()->json([
+            'data' => [
+                'name' => $user->name,
+                'email' => $user->email,
+                'created_at' => $user->created_at
+            ]
+        ], 200);
+    }
 }

@@ -25,10 +25,8 @@ class HasTokenMiddleware
             ]);
 
             return response()->json([
-                'errors' => [
-                    'general' => 'Token tidak ada.'
-                ]
-            ], 403);
+                'message' => 'Token tidak valid.'
+            ], 401);
         }
 
         $userService = App::make(UserService::class);
@@ -41,10 +39,8 @@ class HasTokenMiddleware
             ]);
 
             return response()->json([
-                'errors' => [
-                    'general' => 'Token tidak valid.'
-                ]
-            ], 403);
+                'message' => 'Token tidak valid.'
+            ], 401);
         }
 
         if (Carbon::parse($apiToken->expired_at)->diffInSeconds(now()) > 0) {
@@ -53,10 +49,8 @@ class HasTokenMiddleware
             ]);
 
             return response()->json([
-                'errors' => [
-                    'general' => 'Token sudah expired.'
-                ]
-            ], 403);
+                'message' => 'Token sudah expired.'
+            ], 419);
         }
 
         return $next($request);
