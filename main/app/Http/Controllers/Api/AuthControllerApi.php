@@ -33,6 +33,17 @@ class AuthControllerApi extends Controller
                 ], 422);
             }
 
+            $validateEmail = Validator::make($request->all(), [
+                'email' => 'unique:users,email'
+            ]);
+            if ($validateEmail->fails()) {
+                return response()->json([
+                    'errors' => [
+                        'email' => ['Email tidak tersedia.']
+                    ]
+                ], 422);
+            }
+
             DB::beginTransaction();
             $user = $this->userService->register($request->name, $request->email, $request->password);
             $token = $this->apiTokenService->create($user->id);

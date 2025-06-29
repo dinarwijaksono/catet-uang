@@ -158,8 +158,28 @@ class UserService
 
             return $user;
         } catch (\Throwable $th) {
-            Log::info('find by token failed', [
+            Log::error('find by token failed', [
                 'token' => $token,
+                'message' => $th->getMessage()
+            ]);
+
+            return null;
+        }
+    }
+
+    public function findByEmail(string $email): ?User
+    {
+        try {
+            $user = $this->userRepository->findByEmail($email);
+
+            Log::info('find user by email success', [
+                'id' => $user->id
+            ]);
+
+            return $user;
+        } catch (\Throwable $th) {
+            Log::error('find user by email failed', [
+                'email' => $email,
                 'message' => $th->getMessage()
             ]);
 

@@ -121,4 +121,22 @@ class UserServiceTest extends TestCase
 
         $this->assertNull($user);
     }
+
+
+    public function test_find_by_email_but_return_null()
+    {
+        $response = $this->userService->findByEmail('emailIsEmpty@gmail.com');
+
+        $this->assertNull($response);
+    }
+
+    public function test_find_by_email_success()
+    {
+        $this->seed(CreateUserSeeder::class);
+        $user = User::first();
+
+        $response = $this->userService->findByEmail($user->email);
+
+        $this->assertInstanceOf(User::class, $response);
+    }
 }
