@@ -4,6 +4,7 @@ namespace App\Livewire\Auth;
 
 use App\Http\Requests\LoginRequest;
 use App\Service\UserService;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 
 class FormLogin extends Component
@@ -36,6 +37,8 @@ class FormLogin extends Component
 
             return;
         }
+
+        Auth::login($login, true);
 
         return redirect('/');
     }

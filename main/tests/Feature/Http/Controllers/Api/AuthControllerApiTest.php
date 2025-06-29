@@ -60,4 +60,51 @@ class AuthControllerApiTest extends TestCase
             'user_id' => $user->id
         ]);
     }
+
+    public function test_login_but_validate_error()
+    {
+        $response = $this->post('/api/login');
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure(['errors' => ['email', 'password']]);
+    }
+
+    public function test_login_but_email_not_exist()
+    {
+        $response = $this->post('/api/login', [
+            'email' => 'emailNotExist@gmail.com',
+            'password' => 'rahasia'
+        ]);
+
+        $response->assertStatus(400);
+        $response->assertJsonStructure(['errors' => ['general']]);
+        $response->assertJsonPath('errors.general.0', 'Email atau password salah.');
+    }
+
+    public function test_login_but_password_is_wrong()
+    {
+        $this->seed(CreateUserSeeder::class);
+
+        $response = $this->post('/api/login', [
+            'email' => 'test@gmail.com',
+            'password' => 'passwordiswrong'
+        ]);
+
+        $response->assertStatus(400);
+        $response->assertJsonStructure(['errors' => ['general']]);
+        $response->assertJsonPath('errors.general.0', 'Email atau password salah.');
+    }
+
+    public function test_login_success()
+    {
+        $this->seed(CreateUserSeeder::class);
+
+        $response = $this->post('/api/login', [
+            'email' => 'test@gmail.com',
+            'password' => 'rahasia1234'
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['data' => ['api_token', 'expired_token', 'name', 'email']]);
+    }
 }

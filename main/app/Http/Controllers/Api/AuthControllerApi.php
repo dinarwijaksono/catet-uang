@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use App\Service\ApiTokenService;
 use App\Service\UserService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -70,5 +72,40 @@ class AuthControllerApi extends Controller
                 'message' => $th->getMessage()
             ]);
         }
+    }
+
+    public function login(Request $request): ?JsonResponse
+    {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $user = $this->userService->findByEmail($request->email);
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'errors' => [
+                    'general' => ['Email atau password salah.']
+                ]
+            ], 400);
+        }
+
+        $token = $this->apiTokenService->create($user->id);
+
+        return response()->json([
+            'data' => [
+                'api_token' => $token->token,
+                'expired_token' => $token->expired_at,
+                'name' => $user->name,
+                'email' => $user->email
+            ]
+        ], 200);
     }
 }

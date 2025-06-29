@@ -54,28 +54,6 @@ class UserServiceTest extends TestCase
         $this->assertNull(auth()->user());
     }
 
-    public function test_login_for_api_success()
-    {
-        $this->seed(CreateUserSeeder::class);
-        $user = User::first();
-
-        $response = $this->userService->loginForApi($user->email, 'rahasia1234');
-
-        $this->assertInstanceOf(stdClass::class, $response);
-        $this->assertObjectHasProperty('token', $response);
-        $this->assertObjectHasProperty('name', $response);
-    }
-
-    public function test_login_for_api_return_null_because_password_is_wrong()
-    {
-        $this->seed(CreateUserSeeder::class);
-        $user = User::first();
-
-        $response = $this->userService->loginForApi($user->email, 'rahasia');
-
-        $this->assertNull($response);
-    }
-
     public function test_login_success()
     {
         $this->seed(CreateUserSeeder::class);
@@ -84,8 +62,6 @@ class UserServiceTest extends TestCase
         $response = $this->userService->login($user->email, 'rahasia1234');
 
         $this->assertInstanceOf(User::class, $response);
-        $this->assertEquals(auth()->user()->email, $user->email);
-        $this->assertEquals(auth()->user()->name, $user->name);
     }
 
     public function test_login_but_password_is_wrong()
