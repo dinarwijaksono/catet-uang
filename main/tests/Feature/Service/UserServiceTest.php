@@ -115,4 +115,20 @@ class UserServiceTest extends TestCase
 
         $this->assertInstanceOf(User::class, $response);
     }
+
+    public function test_logout_success()
+    {
+        $this->seed(CreateUserWithTokenSeeder::class);
+        $user = ApiToken::first();
+
+        $this->assertDatabaseHas('api_tokens', [
+            'token' => $user->token
+        ]);
+
+        $this->userService->logout($user->token);
+
+        $this->assertDatabaseMissing('api_tokens', [
+            'token' => $user->token
+        ]);
+    }
 }

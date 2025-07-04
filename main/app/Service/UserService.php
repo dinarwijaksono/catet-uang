@@ -159,7 +159,10 @@ class UserService
 
             $this->apiTokenRepository->delete($token);
         } catch (\Throwable $th) {
-            //throw $th;
+            Log::error('logout failed', [
+                'token' => $token,
+                'message' => $th->getMessage()
+            ]);
         }
     }
 }
