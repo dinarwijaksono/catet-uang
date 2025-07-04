@@ -152,4 +152,22 @@ class AuthControllerApiTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonStructure(['data' => ['name', 'email', 'created_at']]);
     }
+
+    public function test_logout_success()
+    {
+        $this->seed(CreateUserWithTokenSeeder::class);
+        $token = ApiToken::first();
+
+        $this->assertDatabaseHas('api_tokens', [
+            'token' => $token->token
+        ]);
+
+        $response = $this->withHeader('api-token', $token->token)->delete('/api/logout');
+
+        $this->assertDatabaseMissing('api_tokens', [
+            'token' => $token->token
+        ]);
+
+        $response->assertStatus(204);
+    }
 }

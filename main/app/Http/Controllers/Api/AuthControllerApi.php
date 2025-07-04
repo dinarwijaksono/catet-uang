@@ -122,4 +122,13 @@ class AuthControllerApi extends Controller
             ]
         ], 200);
     }
+
+    public function logout(Request $request)
+    {
+        $token = $request->header('api-token');
+
+        $this->userService->logout($token);
+
+        return response()->json([], 204);
+    }
 }

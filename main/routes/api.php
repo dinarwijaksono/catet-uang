@@ -12,3 +12,4 @@ use Illuminate\Support\Facades\Route;
 Route::post('/register', [AuthControllerApi::class, 'register'])->middleware(MissingTokenMiddelware::class);
 Route::post('/login', [AuthControllerApi::class, 'login'])->middleware(MissingTokenMiddelware::class);
 Route::get('/user', [AuthControllerApi::class, 'findByToken'])->middleware([HasTokenMiddleware::class]);
+Route::delete('/logout', [AuthControllerApi::class, 'logout'])->middleware(HasTokenMiddleware::class);
