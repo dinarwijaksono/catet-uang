@@ -44,4 +44,17 @@ class CategoryControllerApi extends Controller
             ]
         ], 201);
     }
+
+    public function getAll(Request $request)
+    {
+        $token = $request->header('api-token');
+        $user = $this->userService->findByToken($token);
+
+        $category = $this->categoryService->getAll($user->user_id);
+
+        return response()->json([
+            'data' => $category,
+            'category_count' => $category->count()
+        ], 200);
+    }
 }

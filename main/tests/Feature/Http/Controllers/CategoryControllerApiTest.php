@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers;
 
 use App\Models\ApiToken;
 use App\Models\User;
+use Database\Seeders\CreateCategorySeeder;
 use Database\Seeders\CreateUserWithTokenSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -43,5 +44,28 @@ class CategoryControllerApiTest extends TestCase
         $response->assertStatus(201);
         $response->assertJsonStructure(['data' => ['code', 'name', 'type', 'created_at', 'updated_at']]);
         $response->assertJsonPath('data.name', 'example');
+    }
+
+    public function test_get_all_but_category_null()
+    {
+        $response = $this->withHeader('api-token', $this->token->token)
+            ->get('/api/category/get-all');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['data' => []]);
+        $response->assertJsonPath('category_count', 0);
+    }
+
+    public function test_get_all_success()
+    {
+        $this->seed(CreateCategorySeeder::class);
+        $this->seed(CreateCategorySeeder::class);
+
+        $response = $this->withHeader('api-token', $this->token->token)
+            ->get('/api/category/get-all');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['data' => [['code', 'name', 'type', 'created_at', 'updated_at']]]);
+        $response->assertJsonPath('category_count', 4);
     }
 }
