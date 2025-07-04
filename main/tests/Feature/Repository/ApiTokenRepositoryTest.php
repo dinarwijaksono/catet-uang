@@ -82,4 +82,29 @@ class ApiTokenRepositoryTest extends TestCase
 
         $this->assertInstanceOf(stdClass::class, $response);
     }
+
+    public function test_delete_token_but_token_not_valid()
+    {
+        $this->apiTokenRepository->delete('ini-token-yang-tidak-valid');
+
+        $this->assertDatabaseMissing('api_tokens', [
+            'token' => 'ini-token-yang-tidak-valid'
+        ]);
+    }
+
+    public function test_delte_token_success()
+    {
+        $this->seed(CreateUserWithTokenSeeder::class);
+        $user = ApiToken::first();
+
+        $this->assertDatabaseHas('api_tokens', [
+            'token' => $user->token
+        ]);
+
+        $this->apiTokenRepository->delete($user->token);
+
+        $this->assertDatabaseMissing('api_tokens', [
+            'token' => $user->token
+        ]);
+    }
 }

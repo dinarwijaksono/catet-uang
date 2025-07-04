@@ -54,4 +54,9 @@ class ApiTokenRepository implements ApiTokenRepositoryInterface
             ->where('api_tokens.token', $token)
             ->first();
     }
+
+    public function delete(string $token): void
+    {
+        ApiToken::where('token', $token)->delete();
+    }
 }

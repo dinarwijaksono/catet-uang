@@ -149,4 +149,17 @@ class UserService
             return null;
         }
     }
+
+    public function logout(string $token)
+    {
+        try {
+            Log::info('logout success', [
+                'token' => $token
+            ]);
+
+            $this->apiTokenRepository->delete($token);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
 }

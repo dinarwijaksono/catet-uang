@@ -13,4 +13,6 @@ interface ApiTokenRepositoryInterface
     public function findById(int $userId): ?stdClass;
 
     public function findByToken(string $token): ?stdClass;
+
+    public function delete(string $token): void;
 }
