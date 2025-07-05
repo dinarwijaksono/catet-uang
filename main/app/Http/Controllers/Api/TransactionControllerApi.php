@@ -79,4 +79,35 @@ class TransactionControllerApi extends Controller
             ], 400);
         }
     }
+
+    public function updateTransaction(Request $request): ?JsonResponse
+    {
+        $validator = Validator::make($request->all(), (new CreateTransactionRequest())->rules());
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        $token = $request->header('api-token');
+        $user = $this->userService->findByToken($token);
+
+        $income = $request->type == 'income' ? $request->value : 0;
+        $spending = $request->type == 'spending' ? $request->value : 0;
+
+        $transaction = $this->transactionService->update(
+            $user->user_id,
+            $request->code,
+            $request->category,
+            $request->date,
+            $request->description,
+            $income,
+            $spending
+        );
+
+        return response()->json([
+            'data' => $transaction
+        ], 200);
+    }
 }

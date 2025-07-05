@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers\Api;
 
 use App\Models\ApiToken;
 use App\Models\Category;
+use App\Models\Transaction;
 use App\Models\User;
 use Database\Seeders\CreateCategorySeeder;
 use Database\Seeders\CreateTransactionSeeder;
@@ -96,5 +97,27 @@ class TransactionControllerApiTest extends TestCase
             'transaction_count'
         ]);
         $response->assertJsonPath('transaction_count', 2);
+    }
+
+    public function test_update_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $transaction = Transaction::first();
+
+        $response = $this->withHeader('api-token', $this->token->token)->put("/api/transaction/$transaction->code", [
+            'date' => '2025-07-15',
+            'type' => 'income',
+            'category' => $this->category->where('type', 'income')->first()->id,
+            'value' => 1500,
+            'description' => 'example update'
+        ]);
+
+        $response->assertStatus(200);
+        $this->assertDatabaseHas('transactions', [
+            'code' => $transaction->code,
+            'description' => 'example update',
+            'income' => 1500,
+            'spending' => 0
+        ]);
     }
 }
