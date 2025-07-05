@@ -57,4 +57,22 @@ class CategoryControllerApi extends Controller
             'category_count' => $category->count()
         ], 200);
     }
+
+    public function getCategory(Request $request): ?JsonResponse
+    {
+        $token = $request->header('api-token');
+        $user = $this->userService->findByToken($token);
+
+        $category = $this->categoryService->findByCode($user->user_id, $request->code);
+
+        if (!$category) {
+            return response()->json([
+                'message' => 'Kategori tidak ditemukan.'
+            ], 400);
+        }
+
+        return response()->json([
+            'data' => $category
+        ], 200);
+    }
 }

@@ -18,3 +18,4 @@ Route::delete('/logout', [AuthControllerApi::class, 'logout'])->middleware(HasTo
 // CategoryController
 Route::post('/category', [CategoryControllerApi::class, 'create'])->middleware(HasTokenMiddleware::class);
 Route::get('/category/get-all', [CategoryControllerApi::class, 'getAll'])->middleware(HasTokenMiddleware::class);
+Route::get('/category/{code}', [CategoryControllerApi::class, 'getCategory'])->middleware(HasTokenMiddleware::class);

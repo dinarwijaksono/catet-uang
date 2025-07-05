@@ -3,6 +3,7 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Models\ApiToken;
+use App\Models\Category;
 use App\Models\User;
 use Database\Seeders\CreateCategorySeeder;
 use Database\Seeders\CreateUserWithTokenSeeder;
@@ -44,6 +45,27 @@ class CategoryControllerApiTest extends TestCase
         $response->assertStatus(201);
         $response->assertJsonStructure(['data' => ['code', 'name', 'type', 'created_at', 'updated_at']]);
         $response->assertJsonPath('data.name', 'example');
+    }
+
+    public function test_get_category_but_return_null()
+    {
+        $response = $this->withHeader('api-token', $this->token->token)
+            ->get('/api/category/aaaa');
+
+        $response->assertStatus(400);
+        $response->assertJsonPath('message', 'Kategori tidak ditemukan.');
+    }
+
+    public function test_get_category_success()
+    {
+        $this->seed(CreateCategorySeeder::class);
+        $category = Category::first();
+
+        $response = $this->withHeader('api-token', $this->token->token)
+            ->get("/api/category/$category->code");
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure(['data' => ['id', 'name', 'type', 'created_at', 'updated_at']]);
     }
 
     public function test_get_all_but_category_null()
