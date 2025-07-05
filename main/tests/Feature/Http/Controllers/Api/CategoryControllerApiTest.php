@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers;
+namespace Tests\Feature\Http\Controllers\Api;
 
 use App\Models\ApiToken;
 use App\Models\Category;

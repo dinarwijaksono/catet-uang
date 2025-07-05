@@ -3,7 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AuthControllerApi;
 use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\CategoryControllerApi;
+use App\Http\Controllers\Api\CategoryControllerApi;
 use App\Http\Middleware\HasTokenMiddleware;
 use App\Http\Middleware\MissingTokenMiddelware;
 use Illuminate\Http\Request;
