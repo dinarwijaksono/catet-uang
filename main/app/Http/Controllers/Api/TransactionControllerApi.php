@@ -6,8 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateTransactionRequest;
 use App\Service\TransactionService;
 use App\Service\UserService;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class TransactionControllerApi extends Controller
@@ -49,5 +51,32 @@ class TransactionControllerApi extends Controller
         return response()->json([
             'data' => $transaction
         ], 201);
+    }
+
+    public function getByDate(Request $request): ?JsonResponse
+    {
+        try {
+            $token = $request->header('api-token');
+            $user = $this->userService->findByToken($token);
+
+            $date = Carbon::createFromFormat('Y-m-d', $request->date)->setTime(0, 0, 0, 0);
+
+            $transaction = $this->transactionService->getByDate($user->user_id, $date);
+
+            return response()->json([
+                'data' => $transaction,
+                'transaction_count' => $transaction->count()
+            ], 200);
+        } catch (\Throwable $th) {
+
+            Log::error('get by date error', [
+                'date' => $request->date,
+                'message' => $th->getMessage()
+            ]);
+
+            return response()->json([
+                'message' => 'Permintaan tidak valid.'
+            ], 400);
+        }
     }
 }

@@ -6,6 +6,7 @@ use App\Models\ApiToken;
 use App\Models\Category;
 use App\Models\User;
 use Database\Seeders\CreateCategorySeeder;
+use Database\Seeders\CreateTransactionSeeder;
 use Database\Seeders\CreateUserWithTokenSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -67,5 +68,33 @@ class TransactionControllerApiTest extends TestCase
             'income' => 0,
             'spending' => 20000
         ]);
+    }
+
+
+    public function test_get_by_date_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+
+        $response = $this->withHeader('api-token', $this->token->token)->get("/api/transaction/get-by-date/2024-01-01");
+
+        $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'data' => [
+                [
+                    'category_name',
+                    'period_date',
+                    'period_name',
+                    'code',
+                    'date',
+                    'description',
+                    'income',
+                    'spending'
+                ]
+            ],
+            'transaction_count'
+        ]);
+        $response->assertJsonPath('transaction_count', 2);
     }
 }
