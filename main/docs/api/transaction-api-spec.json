@@ -6,9 +6,9 @@
         "description": "API untuk catet-uang, api spec transaction"
     },
     "paths": {
-        "/api/category": {
+        "/api/transaction": {
             "post": {
-                "summary": "Pembuatan kategori",
+                "summary": "Pembuatan transaksi baru",
                 "parameters": [
                     {
                         "name": "api-token",
@@ -128,7 +128,7 @@
                                             "items": {
                                                 "type": "object",
                                                 "properties": {
-                                                    "nmae": {
+                                                    "description": {
                                                         "type": "array",
                                                         "items": {
                                                             "type": "string",
@@ -149,43 +149,13 @@
                                 }
                             }
                         }
-                    },
-                    "403": {
-                        "description": "Cari user berdasarkan token gagal, token sudah expired",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Token sudah expired"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "419": {
-                        "description": "Cari user berdasarkan token gagal, token tidak ada di database",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Token tidak valid."
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
-            },
+            }
+        },
+        "/api/transaction/{code}": {
             "get": {
-                "summary": "Ambil kategori berdasarkan kode",
+                "summary": "Ambil transaksi berdasarkan kode",
                 "parameters": [
                     {
                         "name": "api-token",
@@ -206,7 +176,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "kategori berhasil di buat.",
+                        "description": "Transaksi berhasil diambil.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -215,6 +185,9 @@
                                         "data": {
                                             "type": "object",
                                             "properties": {
+                                                "category_id": {
+                                                    "type": "integer"
+                                                },
                                                 "code": {
                                                     "type": "string"
                                                 },
@@ -270,47 +243,23 @@
                                 }
                             }
                         }
-                    },
-                    "403": {
-                        "description": "Cari user berdasarkan token gagal, token sudah expired",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Token sudah expired"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "419": {
-                        "description": "Cari user berdasarkan token gagal, token tidak ada di database",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Token tidak valid."
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     }
                 }
             },
             "put": {
-                "summary": "Update kategori",
+                "summary": "Update transaksi",
                 "parameters": [
                     {
                         "name": "api-token",
                         "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "in": "query",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -323,10 +272,20 @@
                             "schema": {
                                 "type": "object",
                                 "properties": {
-                                    "code": {
+                                    "date": {
                                         "type": "string"
                                     },
-                                    "name": {
+                                    "type": {
+                                        "type": "string",
+                                        "example": "income"
+                                    },
+                                    "category_id": {
+                                        "type": "integer"
+                                    },
+                                    "value": {
+                                        "type": "integer"
+                                    },
+                                    "description": {
                                         "type": "string"
                                     }
                                 }
@@ -336,7 +295,7 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "Kategori berhasil di update.",
+                        "description": "Transaksi berhasil di update.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -404,11 +363,19 @@
                 }
             },
             "delete": {
-                "summary": "Hapus kategori",
+                "summary": "Hapus transaksi",
                 "parameters": [
                     {
                         "name": "api-token",
                         "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "code",
+                        "in": "query",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -430,8 +397,8 @@
                     }
                 },
                 "responses": {
-                    "200": {
-                        "description": "kategori berhasil di hapus.",
+                    "204": {
+                        "description": "Transaksi berhasil dihapus.",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -447,34 +414,15 @@
                         }
                     },
                     "400": {
-                        "description": "kategori gagal di hapus, kategori masih digunakan.",
+                        "description": "Transaksi gagal dihapus, kode transaksi tidak valid.",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "data": {
-                                            "type": "object",
-                                            "properties": {
-                                                "code": {
-                                                    "type": "string"
-                                                },
-                                                "name": {
-                                                    "type": "string"
-                                                },
-                                                "type": {
-                                                    "type": "string"
-                                                }
-                                            }
-                                        },
-                                        "errors": {
-                                            "type": "object",
-                                            "properties": {
-                                                "general": {
-                                                    "type": "string",
-                                                    "example": "Pesan kategori masih di gunakan oleh transaksi."
-                                                }
-                                            }
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Kode transaksi tidak valid."
                                         }
                                     }
                                 }
@@ -505,9 +453,9 @@
                 }
             }
         },
-        "/api/category/get-all": {
+        "/api/transaction/get-by-date/{date}": {
             "get": {
-                "summary": "Mengambil semua kategori",
+                "summary": "Mengambil semua transaksi berdasarkan periode",
                 "parameters": [
                     {
                         "name": "api-token",
@@ -515,6 +463,16 @@
                         "required": true,
                         "schema": {
                             "type": "string"
+                        }
+                    },
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "2025-10-07",
+                            "description": "{tahun}-{bulan}-{tanggal}"
                         }
                     }
                 ],
@@ -531,14 +489,26 @@
                                             "items": {
                                                 "type": "object",
                                                 "properties": {
+                                                    "category_id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "category_name": {
+                                                        "type": "string"
+                                                    },
                                                     "code": {
                                                         "type": "string"
                                                     },
-                                                    "name": {
+                                                    "date": {
                                                         "type": "string"
                                                     },
-                                                    "type": {
+                                                    "description": {
                                                         "type": "string"
+                                                    },
+                                                    "income": {
+                                                        "type": "integer"
+                                                    },
+                                                    "spending": {
+                                                        "type": "integer"
                                                     },
                                                     "created_at": {
                                                         "type": "string"
@@ -549,29 +519,66 @@
                                                 }
                                             }
                                         },
-                                        "category_count": {
+                                        "transaction_count": {
                                             "type": "integer"
                                         }
                                     }
                                 }
                             }
                         }
-                    },
-                    "403": {
-                        "description": "gagal Mengambil kategori, error token",
+                    }
+                }
+            }
+        },
+        "/api/transaction/get-period": {
+            "get": {
+                "summary": "Mengambil semua period",
+                "parameters": [
+                    {
+                        "name": "api-token",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Period berhasil diambil",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "type": "object",
                                     "properties": {
-                                        "errors": {
-                                            "type": "object",
-                                            "properties": {
-                                                "general": {
-                                                    "type": "string",
-                                                    "example": "Token sudah expired"
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "period_date": {
+                                                        "type": "integer"
+                                                    },
+                                                    "period_name": {
+                                                        "type": "string"
+                                                    },
+                                                    "is_close": {
+                                                        "type": "boolean"
+                                                    },
+                                                    "created_at": {
+                                                        "type": "string"
+                                                    },
+                                                    "updated_at": {
+                                                        "type": "string"
+                                                    }
                                                 }
                                             }
+                                        },
+                                        "period_count": {
+                                            "type": "integer"
                                         }
                                     }
                                 }
