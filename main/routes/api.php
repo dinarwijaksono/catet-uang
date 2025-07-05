@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AuthControllerApi;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CategoryControllerApi;
+use App\Http\Controllers\Api\TransactionControllerApi;
 use App\Http\Middleware\HasTokenMiddleware;
 use App\Http\Middleware\MissingTokenMiddelware;
 use Illuminate\Http\Request;
@@ -19,3 +20,6 @@ Route::delete('/logout', [AuthControllerApi::class, 'logout'])->middleware(HasTo
 Route::post('/category', [CategoryControllerApi::class, 'create'])->middleware(HasTokenMiddleware::class);
 Route::get('/category/get-all', [CategoryControllerApi::class, 'getAll'])->middleware(HasTokenMiddleware::class);
 Route::get('/category/{code}', [CategoryControllerApi::class, 'getCategory'])->middleware(HasTokenMiddleware::class);
+
+// TransactionCategory
+Route::post('/transaction', [TransactionControllerApi::class, 'create'])->middleware(HasTokenMiddleware::class);
