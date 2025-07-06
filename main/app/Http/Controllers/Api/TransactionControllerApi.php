@@ -110,4 +110,14 @@ class TransactionControllerApi extends Controller
             'data' => $transaction
         ], 200);
     }
+
+    public function delete(Request $request): ?JsonResponse
+    {
+        $token = $request->header('api-token');
+        $user = $this->userService->findByToken($token);
+
+        $this->transactionService->delete($user->user_id, $request->code);
+
+        return response()->json([], 204);
+    }
 }

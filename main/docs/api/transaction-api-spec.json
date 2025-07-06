@@ -382,36 +382,9 @@
                         }
                     }
                 ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "type": "object",
-                                "properties": {
-                                    "code": {
-                                        "type": "string"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
                 "responses": {
                     "204": {
-                        "description": "Transaksi berhasil dihapus.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Kategori berhasil dihapus"
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        "description": "Transaksi berhasil dihapus."
                     },
                     "400": {
                         "description": "Transaksi gagal dihapus, kode transaksi tidak valid.",

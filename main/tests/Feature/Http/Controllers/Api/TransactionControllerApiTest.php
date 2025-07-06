@@ -120,4 +120,17 @@ class TransactionControllerApiTest extends TestCase
             'spending' => 0
         ]);
     }
+
+    public function test_delete_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $transaction = Transaction::first();
+
+        $response = $this->withHeader('api-token', $this->token->token)->delete("/api/transaction/$transaction->code");
+
+        $response->assertStatus(204);
+        $this->assertDatabaseMissing('transactions', [
+            'code' => $transaction->code
+        ]);
+    }
 }

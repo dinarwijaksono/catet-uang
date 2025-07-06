@@ -24,4 +24,5 @@ Route::get('/category/{code}', [CategoryControllerApi::class, 'getCategory'])->m
 // TransactionCategory
 Route::post('/transaction', [TransactionControllerApi::class, 'create'])->middleware(HasTokenMiddleware::class);
 Route::put('/transaction/{code}', [TransactionControllerApi::class, 'updateTransaction'])->middleware(HasTokenMiddleware::class);
+Route::delete('/transaction/{code}', [TransactionControllerApi::class, 'delete'])->middleware(HasTokenMiddleware::class);
 Route::get('/transaction/get-by-date/{date}', [TransactionControllerApi::class, 'getByDate'])->middleware(HasTokenMiddleware::class);
