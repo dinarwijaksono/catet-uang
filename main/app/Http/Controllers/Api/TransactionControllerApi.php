@@ -88,6 +88,19 @@ class TransactionControllerApi extends Controller
         }
     }
 
+    public function getSummaryIncomeSpending(Request $request): ?JsonResponse
+    {
+        $token = $request->header('api-token');
+        $user = $this->userService->findByToken($token);
+
+        $transaction = $this->transactionService->getSummaryIncomeSpending($user->user_id);
+
+        return response()->json([
+            'data' => $transaction,
+            'transaction_count' => $transaction->count()
+        ], 200);
+    }
+
     public function updateTransaction(Request $request): ?JsonResponse
     {
         $validator = Validator::make($request->all(), (new CreateTransactionRequest())->rules());

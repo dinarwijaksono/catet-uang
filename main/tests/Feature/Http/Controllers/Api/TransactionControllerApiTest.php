@@ -124,6 +124,23 @@ class TransactionControllerApiTest extends TestCase
         $response->assertJsonPath('transaction_count', 2);
     }
 
+    public function test_get_summary_income_spending()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+
+        $response = $this->withHeader('api-token', $this->token->token)->get("/api/transaction/get-summary-income-spending");
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                ['date', 'total_income', 'total_spending']
+            ],
+            'transaction_count'
+        ]);
+    }
+
     public function test_update_success()
     {
         $this->seed(CreateTransactionSeeder::class);

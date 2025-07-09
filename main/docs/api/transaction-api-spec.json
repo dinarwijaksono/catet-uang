@@ -503,6 +503,60 @@
                 }
             }
         },
+        "/api/transaction/get-sumamry-income-spending": {
+            "get": {
+                "summary": "Mengambil list pemasukan & pengeluaran setiap tanggal",
+                "parameters": [
+                    {
+                        "name": "api-token",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "sukses",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "date": {
+                                                        "type": "string",
+                                                        "example": "2025-10-03 00:00:00",
+                                                        "description": "year-month-day hourse:minutes:second"
+                                                    },
+                                                    "total_income": {
+                                                        "type": "integer",
+                                                        "example": 10000
+                                                    },
+                                                    "total_spending": {
+                                                        "type": "integer",
+                                                        "example": 200000
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "transaction_count": {
+                                            "type": "integer",
+                                            "example": 10
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/transaction/get-period": {
             "get": {
                 "summary": "Mengambil semua period",
