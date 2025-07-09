@@ -33,6 +33,14 @@ class TransactionControllerApi extends Controller
             ], 400);
         }
 
+        if ($request->value <= 0) {
+            return response()->json([
+                'errors' => [
+                    'value' => ['Value tidak boleh bernilai 0 atau lebih kecil.']
+                ]
+            ], 400);
+        }
+
         $token = $request->header('api-token');
         $user = $this->userService->findByToken($token);
 

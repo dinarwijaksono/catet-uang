@@ -39,6 +39,31 @@ class TransactionControllerApiTest extends TestCase
         $response->assertJsonStructure(['errors' => ['date', 'type', 'category', 'value', 'description']]);
     }
 
+    public function test_create_transaction_but_value_0()
+    {
+        $response = $this->withHeader('api-token', $this->token->token)->post('/api/transaction', [
+            'date' => '2025-07-15',
+            'type' => 'income',
+            'category' => $this->category->where('type', 'income')->first()->id,
+            'value' => 0,
+            'description' => 'example description'
+        ]);
+
+        $response->assertStatus(400);
+        $response->assertJsonPath('errors.value.0', 'Value tidak boleh bernilai 0 atau lebih kecil.');
+
+        $response2 = $this->withHeader('api-token', $this->token->token)->post('/api/transaction', [
+            'date' => '2025-07-15',
+            'type' => 'income',
+            'category' => $this->category->where('type', 'income')->first()->id,
+            'value' => -10,
+            'description' => 'example description'
+        ]);
+
+        $response2->assertStatus(400);
+        $response2->assertJsonPath('errors.value.0', 'Value tidak boleh bernilai 0 atau lebih kecil.');
+    }
+
     public function test_create_success()
     {
         $response = $this->withHeader('api-token', $this->token->token)->post('/api/transaction', [
