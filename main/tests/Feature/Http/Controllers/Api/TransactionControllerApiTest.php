@@ -31,6 +31,22 @@ class TransactionControllerApiTest extends TestCase
         $this->category = Category::all();
     }
 
+    public function test_get_periods_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $this->seed(CreateTransactionSeeder::class);
+
+        $response = $this->withHeader('api-token', $this->token->token)->get('/api/transaction/get-period');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                ['id', 'user_id', 'period_name', 'period_date', 'created_at', 'updated_at']
+            ],
+            'period_count'
+        ]);
+    }
+
     public function test_create_validate_error(): void
     {
         $response = $this->withHeader('api-token', $this->token->token)->post('/api/transaction');

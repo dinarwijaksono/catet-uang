@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AuthControllerApi;
-use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CategoryControllerApi;
 use App\Http\Controllers\Api\TransactionControllerApi;
 use App\Http\Middleware\HasTokenMiddleware;
@@ -27,3 +26,4 @@ Route::put('/transaction/{code}', [TransactionControllerApi::class, 'updateTrans
 Route::delete('/transaction/{code}', [TransactionControllerApi::class, 'delete'])->middleware(HasTokenMiddleware::class);
 Route::get('/transaction/get-by-date/{date}', [TransactionControllerApi::class, 'getByDate'])->middleware(HasTokenMiddleware::class);
 Route::get('/transaction/get-summary-income-spending', [TransactionControllerApi::class, 'getSummaryIncomeSpending'])->middleware(HasTokenMiddleware::class);
+Route::get('/transaction/get-period', [TransactionControllerApi::class, 'getPeriods'])->middleware(HasTokenMiddleware::class);

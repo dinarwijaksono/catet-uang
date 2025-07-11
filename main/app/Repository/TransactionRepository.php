@@ -78,12 +78,17 @@ class TransactionRepository implements TransactionRepositoryInterface
     public function getSummaryIncomeSpending(int $userId): ?Collection
     {
         return DB::table('transactions')
-            ->select('date', DB::raw('sum(income) as total_income'), DB::raw('sum(spending) as total_spending'))
+            ->select('date', DB::raw("sum(income) as total_income"), DB::raw('sum(spending) as total_spending'))
             ->where("user_id", $userId)
             ->groupBy('date')
             ->orderByDesc('date')
             ->limit(40)
-            ->get();
+            ->get()
+            ->map(function ($row) {
+                $row->total_income = (integer) $row->total_income;
+                $row->total_spending = (integer) $row->total_spending;
+                return $row;
+            });
     }
 
     public function getTotalCategoryAllByPeriod(int $userId, int $periodId): ?Collection

@@ -23,6 +23,19 @@ class TransactionControllerApi extends Controller
         $this->transactionService = $transactionService;
     }
 
+    public function getPeriods(Request $request): ?JsonResponse
+    {
+        $token = $request->header('api-token');
+        $user = $this->userService->findByToken($token);
+
+        $periods = $this->transactionService->getAllPeriod($user->user_id);
+
+        return response()->json([
+            'data' => $periods,
+            'period_count' => $periods->count()
+        ], 200);
+    }
+
     public function create(Request $request): ?JsonResponse
     {
         $validator = Validator::make($request->all(), (new CreateTransactionRequest())->rules());
