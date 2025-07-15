@@ -4,7 +4,8 @@
         <div class="flex justify-between">
             <h1 class="mb-8 text-xl text-slate-700">List Kategori</h1>
 
-            <button class="btn btn-xs md:btn-sm btn-primary">Tambah</button>
+            <button type="button" wire:click="openCreateCategoryModal" class="btn btn-xs md:btn-sm btn-primary">Buat
+                kategori</button>
         </div>
 
         <table class="table table-sm md:table-md">

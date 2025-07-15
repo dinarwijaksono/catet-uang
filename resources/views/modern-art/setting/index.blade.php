@@ -44,6 +44,8 @@
 
             @livewire('modern-art.category.category-table')
 
+            @livewire('modern-art.category.create-category-modal')
+
         </section>
 
     </main>
