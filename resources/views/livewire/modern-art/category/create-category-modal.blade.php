@@ -52,6 +52,8 @@
                 icon: 'success',
                 didClose: () => {
                     Livewire.dispatch('set-hide')
+
+                    Livewire.dispatchTo('modern-art.category.category-table', 'do-refresh')
                 }
             })
         })

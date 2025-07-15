@@ -2,10 +2,40 @@
 
 namespace App\Livewire\ModernArt\Category;
 
+use App\Service\CategoryService;
 use Livewire\Component;
 
 class CategoryTable extends Component
 {
+    public $categories;
+
+    private $categoryService;
+
+    public function boot()
+    {
+        $this->categoryService = app()->make(CategoryService::class);
+
+        $this->categories = $this->categoryService->getAll(auth()->user()->id)->sortByDesc('created_at');
+    }
+
+    public function getListeners()
+    {
+        return [
+            'do-refresh' => 'boot',
+            'do-delete' => 'doDelete'
+        ];
+    }
+
+    public function openConfirmDelete($code)
+    {
+        $this->dispatch('open-confirm-delete-category', code: $code);
+    }
+
+    public function doDelete($code)
+    {
+        $this->categoryService->delete(auth()->user()->id, $code);
+    }
+
     public function openCreateCategoryModal()
     {
         $this->dispatch('set-open')->to(CreateCategoryModal::class);
