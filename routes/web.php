@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModernArt\AuthController as ModernArtAuthController;
+use App\Http\Controllers\ModernArt\HomeController as ModernArtHomeController;
 use App\Http\Controllers\ModernArt\SettingController as ModernArtSettingController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SettingController;
@@ -31,6 +32,8 @@ Route::get('/report', [ReportController::class, 'index'])->middleware('auth');
 
 /* theme modern art */
 Route::get('/register/modern-art', [ModernArtAuthController::class, 'register'])->middleware('guest');
+
+Route::get('/modern-art', [ModernArtHomeController::class, 'index'])->middleware('auth');
 
 Route::get('/setting/modern-art', [ModernArtSettingController::class, 'index'])->middleware('auth');
 /* end theme modern art */

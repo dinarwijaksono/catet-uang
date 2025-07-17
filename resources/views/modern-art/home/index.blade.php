@@ -1,0 +1,5 @@
+@extends('modern-art.layout.main')
+
+@section('main-secton')
+    @livewire('modern-art.transaction.transaction-in-date', ['date' => date('Y-m-d', time())])
+@endsection
