@@ -26,7 +26,8 @@
         </table>
 
         <div class="flex justify-center">
-            <router-link to="/transaction/create" class="btn btn-sm btn-primary w-4/12">Tambah Transaksi</router-link>
+            <button type="button" wire:click="hendleShowCreateTransactionModal"
+                class="btn btn-sm btn-primary w-4/12">Tambah Transaksi</button>
         </div>
 
     </section>
