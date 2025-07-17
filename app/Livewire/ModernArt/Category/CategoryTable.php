@@ -33,7 +33,19 @@ class CategoryTable extends Component
 
     public function doDelete($code)
     {
+        $userId = auth()->user()->id;
+
+        $category = $this->categoryService->findByCode($userId, $code);
+
+        if ($this->categoryService->checkIsStillUse($userId, $category->id)) {
+            $this->dispatch('show-delete-category-failed');
+
+            return;
+        }
+
         $this->categoryService->delete(auth()->user()->id, $code);
+
+        $this->dispatch('show-delete-category-success');
     }
 
     public function openCreateCategoryModal()

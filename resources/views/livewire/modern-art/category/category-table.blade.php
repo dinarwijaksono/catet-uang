@@ -63,10 +63,32 @@
                     Livewire.dispatch('do-delete', {
                         code: event.detail.code
                     })
+                }
+            });
+        })
+
+        window.addEventListener('show-delete-category-success', event => {
+            Swal.fire({
+                title: 'Berhasil',
+                text: "Kategori berhasil dihapus",
+                icon: 'success',
+                didClose: () => {
+                    Livewire.dispatch('set-hide')
 
                     Livewire.dispatch('do-refresh')
                 }
-            });
+            })
+        })
+
+        window.addEventListener('show-delete-category-failed', event => {
+            Swal.fire({
+                title: 'Gagal',
+                text: "Kategori gagal dihapus, kategori masih digunakan.",
+                icon: 'error',
+                didClose: () => {
+                    Livewire.dispatch('set-hide')
+                }
+            })
         })
     </script>
 </div>
