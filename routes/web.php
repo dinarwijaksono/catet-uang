@@ -19,7 +19,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 Route::get('/profile', [UserController::class, 'index'])->middleware('auth');
 
 // HomeController
-Route::get('/', [HomeController::class, 'index'])->middleware('auth');
+Route::get('/', [ModernArtHomeController::class, 'index'])->middleware('auth');
 Route::get("/home/detail-transaction/{date}", [HomeController::class, 'detailTransactionInDate'])->middleware('auth');
 
 // SettingController
