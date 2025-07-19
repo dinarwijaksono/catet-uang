@@ -45,7 +45,7 @@
                 </div>
             </nav>
 
-            @yield('main-secton')
+            @yield('main-section')
 
         </section>
 

@@ -32,7 +32,8 @@
                 </div>
 
                 <div class="flex w-2/12 px-2 justify-center items-center">
-                    <a class="btn btn-sm btn-outline btn-success w-full">Detail</a>
+                    <a href="/home/transaction-detail/{{ date('Y-M-d', strtotime($transaction->date)) }}/modern-art"
+                        class="btn btn-sm btn-outline btn-success w-full">Detail</a>
                 </div>
             </div>
         @endforeach

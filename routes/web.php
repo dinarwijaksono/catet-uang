@@ -34,6 +34,7 @@ Route::get('/report', [ReportController::class, 'index'])->middleware('auth');
 Route::get('/register/modern-art', [ModernArtAuthController::class, 'register'])->middleware('guest');
 
 Route::get('/modern-art', [ModernArtHomeController::class, 'index'])->middleware('auth');
+Route::get('/home/transaction-detail/{date}/modern-art', [ModernArtHomeController::class, 'detailTransaction'])->middleware('auth');
 
 Route::get('/setting/modern-art', [ModernArtSettingController::class, 'index'])->middleware('auth');
 /* end theme modern art */
