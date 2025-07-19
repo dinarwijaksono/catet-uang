@@ -99,6 +99,7 @@ class CreateTransactionModal extends Component
 
         if (!is_null($results)) {
             $this->dispatch('show-create-transaction-success');
+            $this->dispatch('do-refresh')->to(DailyTransactionSummary::class);
         }
     }
 
