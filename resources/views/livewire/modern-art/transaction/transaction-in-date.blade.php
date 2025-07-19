@@ -18,7 +18,8 @@
                         ])>
                             {{ number_format($key->income == 0 ? $key->spending : $key->income) }}
                         <td>
-                            <button type="button" class="btn btn-xs btn-error text-white w-full">Hapus</button>
+                            <button type="button" wire:click="hendleButtonDeleteTransaction('{{ $key->code }}')"
+                                class="btn btn-xs btn-error text-white w-full">Hapus</button>
                         </td>
                     </tr>
                 @endforeach
@@ -31,4 +32,32 @@
         </div>
 
     </section>
+
+    <script src="/sweetalert/sweetalert.js"></script>
+    <script>
+        window.addEventListener('open-confirm-delete-transaction', event => {
+            Swal.fire({
+                title: "Kamu yakin ingin menghapus transaksi?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Yes, delete it!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Livewire.dispatch('do-delete', {
+                        code: event.detail.code
+                    })
+                }
+            });
+        })
+
+        window.addEventListener('show-delete-transaction-success', event => {
+            Swal.fire({
+                title: 'Berhasil',
+                text: "Transaksi berhasil dihapus",
+                icon: 'success'
+            })
+        })
+    </script>
 </div>

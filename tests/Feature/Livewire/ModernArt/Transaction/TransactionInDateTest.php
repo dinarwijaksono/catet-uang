@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Livewire\ModernArt\Transaction;
 
+use App\Livewire\ModernArt\Transaction\DailyTransactionSummary;
 use App\Livewire\ModernArt\Transaction\TransactionInDate;
 use App\Models\Transaction;
 use App\Models\User;
@@ -44,5 +45,19 @@ class TransactionInDateTest extends TestCase
 
         Livewire::test(TransactionInDate::class, ['date' => date('Y-m-d', strtotime($transaction->date))])
             ->assertStatus(200);
+    }
+
+    public function test_do_delete_success()
+    {
+        $this->seed(CreateTransactionSeeder::class);
+        $transaction = Transaction::first();
+
+        Livewire::test(TransactionInDate::class, ['date' => date('Y-m-d', strtotime($transaction->date))])
+            ->call('doDelete', $transaction->code)
+            ->assertDispatched('do-refresh');
+
+        $this->assertDatabaseMissing('transactions', [
+            'code' => $transaction->code
+        ]);
     }
 }

@@ -27,13 +27,15 @@ class CreateTransactionModal extends Component
     public function mount()
     {
         $this->valueShow = 0;
+
+        $this->categoryService = app()->make(CategoryService::class);
+
+        $this->categories = $this->categoryService->getAll(auth()->user()->id)->sortBy('name');
     }
 
     public function boot()
     {
         $this->categoryService = app()->make(CategoryService::class);
-
-        $this->categories = $this->categoryService->getAll(auth()->user()->id)->sortBy('name');
     }
 
     public function getRules()
@@ -69,6 +71,7 @@ class CreateTransactionModal extends Component
         $this->type = $type;
 
         $this->categories = $this->categoryService->getAll(auth()->user()->id)->where('type', $type)->sortBy('name');
+        $this->category = '';
     }
 
     public function setValue($value)

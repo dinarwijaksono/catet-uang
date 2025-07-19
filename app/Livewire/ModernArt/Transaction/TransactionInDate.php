@@ -28,13 +28,29 @@ class TransactionInDate extends Component
     public function getListeners()
     {
         return [
-            'do-refresh' => 'boot'
+            'do-refresh' => 'boot',
+            'do-delete' => 'doDelete'
         ];
     }
 
     public function hendleShowCreateTransactionModal()
     {
         $this->dispatch('set-open')->to(CreateTransactionModal::class);
+    }
+
+    public function hendleButtonDeleteTransaction($code)
+    {
+        $this->dispatch('open-confirm-delete-transaction', code: $code);
+    }
+
+    public function doDelete($code)
+    {
+        $this->transactionService->delete(auth()->user()->id, $code);
+
+        $this->dispatch('show-delete-transaction-success');
+
+        $this->dispatch('do-refresh');
+        $this->dispatch('do-refresh')->to(DailyTransactionSummary::class);
     }
 
     public function render()
