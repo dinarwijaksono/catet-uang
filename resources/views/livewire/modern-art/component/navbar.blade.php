@@ -20,7 +20,12 @@
                 'btn btn-sm btn-primary w-4/12',
                 'btn-outline' => $path != 'modern-art',
             ])>Home</a>
-            <a href="/report" class="btn btn-sm btn-primary btn-outline w-4/12">Laporan</a>
+
+            <a href="/report/modern-art" @class([
+                'btn btn-sm btn-primary w-4/12',
+                'btn-outline' => $path != 'report',
+            ])>Laporan</a>
+
             <a href="/setting/modern-art" @class([
                 'btn btn-sm btn-primary w-4/12',
                 'btn-outline' => $path != 'setting',
