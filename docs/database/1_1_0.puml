@@ -64,7 +64,6 @@ entity file_upload {
     * original_name VARCHAR(100)
     * file_name VARCHAR(20) UNIQUE
     * is_generate BOOL
-    * status int
     * messsage VARCHAR(100)
     * created_at DATE
     * updated_at DATE 

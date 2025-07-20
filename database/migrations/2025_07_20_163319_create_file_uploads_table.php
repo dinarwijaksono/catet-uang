@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('original_name', 100);
             $table->string('file_name', 20)->unique();
             $table->boolean('is_generate');
-            $table->integer('status');
             $table->string('message', 100);
             $table->timestamps();
         });
