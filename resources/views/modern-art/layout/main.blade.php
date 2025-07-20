@@ -17,6 +17,13 @@
 
             @livewire('modern-art.component.navbar')
 
+            @if (env('APP_ENV') == 'local')
+                <div class="bg-error text-center p-2">
+                    <p class="text-xs italic underline text-white font-bold">Aplikasi ini berjalan pada mode Testting!!!
+                    </p>
+                </div>
+            @endif
+
             @yield('main-section')
 
         </section>
