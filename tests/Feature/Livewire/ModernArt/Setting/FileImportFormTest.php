@@ -4,6 +4,7 @@ namespace Tests\Feature\Livewire\ModernArt\Setting;
 
 use App\Livewire\ModernArt\Setting\FileImportForm;
 use App\Models\User;
+use Database\Seeders\CreateFileUploadSeeder;
 use Database\Seeders\CreateUserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -27,6 +28,16 @@ class FileImportFormTest extends TestCase
 
     public function test_renders_successfully()
     {
+        Livewire::test(FileImportForm::class)
+            ->assertStatus(200);
+    }
+
+    public function test_renders_with_date_exist()
+    {
+        $this->seed(CreateFileUploadSeeder::class);
+        $this->seed(CreateFileUploadSeeder::class);
+        $this->seed(CreateFileUploadSeeder::class);
+
         Livewire::test(FileImportForm::class)
             ->assertStatus(200);
     }

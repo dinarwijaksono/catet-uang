@@ -17,10 +17,21 @@ class FileImportForm extends Component
 
     public $file;
 
+    public $files;
+
     public function boot()
     {
         $this->fileFormatService = app()->make(FileFormatService::class);
         $this->fileUploadService = app()->make(FileUploadService::class);
+
+        $this->files = $this->fileUploadService->getAll(auth()->user()->id)->sortByDesc('created_at');
+    }
+
+    public function getListeners()
+    {
+        return [
+            'do-refresh' => 'boot'
+        ];
     }
 
     public function doDownload()
@@ -53,6 +64,7 @@ class FileImportForm extends Component
         $this->file->storeAs('file_for_import', $upload->file_name, 'public-custom');
 
         $this->dispatch('show-alert-upload-success');
+        $this->dispatch('do-refresh');
 
         $this->file = '';
     }

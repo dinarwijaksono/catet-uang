@@ -28,23 +28,31 @@
 
                 <li class="p-4 pb-2 text-sm tracking-wide opacity-60 italic">File hasil upload</li>
 
-                @for ($i = 0; $i < 10; $i++)
+                @foreach ($files as $key)
                     <li class="list-row flex gap-2 border border-slate-300 mb-2">
                         <div class="basis-10/12">
-                            <div class="text-md font-semibold">File upload</div>
-                            <div class="text-sm italic text-primary">File belum digenerate</div>
-                            <div class="text-xs opacity-70 italic">Diupload pada 13:11, 10 januari 2024</div>
+                            <div class="text-md font-semibold">{{ $key->original_name }}</div>
+                            <div @class([
+                                'text-sm italic text-error',
+                                'text-primary' => $key->message == 'Belum digenerate',
+                                'test-success' => $key->message == 'Generate success',
+                            ])>{{ $key->message }}</div>
+                            <div class="text-xs opacity-70 italic">Diupload pada
+                                {{ date('H:i, d F Y', strtotime($key->created_at)) }}</div>
                         </div>
 
                         <div class="basis-1/12 flex justify-center items-end">
-                            <button class="btn btn-xs btn-info w-full">Download</button>
+                            <button class="btn btn-xs btn-info w-full btn-disabled">Download</button>
                         </div>
 
                         <div class="basis-1/12 flex justify-center items-end">
-                            <button class="btn btn-xs btn-primary w-full">Generate</button>
+                            <button @class([
+                                'btn btn-xs btn-success w-full',
+                                'btn-disabled' => $key->is_generate,
+                            ])>Generate</button>
                         </div>
                     </li>
-                @endfor
+                @endforeach
             </ul>
         </div>
 
