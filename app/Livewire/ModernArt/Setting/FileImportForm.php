@@ -3,16 +3,24 @@
 namespace App\Livewire\ModernArt\Setting;
 
 use App\Service\FileFormatService;
+use App\Service\FileUploadService;
 use Illuminate\Support\Facades\Storage;
+use Livewire\WithFileUploads;
 use Livewire\Component;
 
 class FileImportForm extends Component
 {
+    use WithFileUploads;
+
     protected $fileFormatService;
+    protected $fileUploadService;
+
+    public $file;
 
     public function boot()
     {
         $this->fileFormatService = app()->make(FileFormatService::class);
+        $this->fileUploadService = app()->make(FileUploadService::class);
     }
 
     public function doDownload()
@@ -25,6 +33,28 @@ class FileImportForm extends Component
         }
 
         return Storage::disk('public-custom')->download($path, 'format file ' . date('d-m-Y') . '.csv');
+    }
+
+    public function getRules()
+    {
+        return [
+            'file' => 'required|extensions:csv|max:3072'
+        ];
+    }
+
+    public function doUpload()
+    {
+        $this->validate();
+
+        $originalName = $this->file->getClientOriginalName();
+
+        $upload = $this->fileUploadService->create(auth()->user()->id, $originalName);
+
+        $this->file->storeAs('file_for_import', $upload->file_name, 'public-custom');
+
+        $this->dispatch('show-alert-upload-success');
+
+        $this->file = '';
     }
 
     public function render()

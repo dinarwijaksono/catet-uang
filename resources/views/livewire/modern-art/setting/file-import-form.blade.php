@@ -9,13 +9,16 @@
         </ul>
 
         <div class="mb-4">
-            <input type="file" class="file-input w-full input-sm md:input-md" />
+            <input type="file" wire:model="file" class="file-input w-full input-sm md:input-md" />
+            @error('file')
+                <p class="text-error italic">{{ $message }}</p>
+            @enderror
         </div>
 
         <div class="mb-4 flex justify-end gap-2">
             <button type="button" wire:click="doDownload" class="btn btn-sm btn-info">Download file format</button>
 
-            <button class="btn btn-sm btn-primary">Upload</button>
+            <button type="button" wire:click="doUpload" class="btn btn-sm btn-primary">Upload</button>
         </div>
 
         <div class="divider divider-sm"></div>
@@ -45,5 +48,15 @@
             </ul>
         </div>
 
+        <script src="/sweetalert/sweetalert.js"></script>
+        <script>
+            window.addEventListener('show-alert-upload-success', event => {
+                Swal.fire({
+                    title: 'Berhasil',
+                    text: "File berhasil diupload",
+                    icon: 'success'
+                })
+            })
+        </script>
     </section>
 </div>
