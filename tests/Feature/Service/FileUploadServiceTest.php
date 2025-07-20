@@ -5,7 +5,9 @@ namespace Tests\Feature\Service;
 use App\Models\FileUpload;
 use App\Models\User;
 use App\Service\FileUploadService;
+use Database\Seeders\CreateFileUploadSeeder;
 use Database\Seeders\CreateUserSeeder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -39,5 +41,17 @@ class FileUploadServiceTest extends TestCase
             'is_generate' => false,
             'message' => 'Belum digenerate'
         ]);
+    }
+
+    public function test_get_all()
+    {
+        $this->seed(CreateFileUploadSeeder::class);
+        $this->seed(CreateFileUploadSeeder::class);
+        $this->seed(CreateFileUploadSeeder::class);
+
+        $response = $this->fileUploadService->getAll($this->user->id);
+
+        $this->assertInstanceOf(Collection::class, $response);
+        $this->assertEquals(3, $response->count());
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Models\FileUpload;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -32,6 +33,28 @@ class FileUploadService
             ]);
 
             return null;
+        }
+    }
+
+    public function getAll(int $userId): Collection
+    {
+        try {
+
+            $file = FileUpload::where('user_id', $userId)->get();
+
+            Log::info('get all file upload success', [
+                'user_id' => $userId
+            ]);
+
+            return $file;
+        } catch (\Throwable $th) {
+
+            Log::error('get all file upload failed', [
+                'user_id' => $userId,
+                'message' => $th->getMessage()
+            ]);
+
+            return collect();
         }
     }
 }
