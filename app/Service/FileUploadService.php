@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Models\FileUpload;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
@@ -55,6 +56,30 @@ class FileUploadService
             ]);
 
             return collect();
+        }
+    }
+
+    public function update(int $userId, string $fileName, string $message): void
+    {
+        try {
+            FileUpload::where('user_id', $userId)
+                ->where('file_name', $fileName)
+                ->update([
+                    'is_generate' => true,
+                    'message' => $message,
+                    'updated_at' => Carbon::now()
+                ]);
+
+            Log::info('generate success', [
+                'user_id' => $userId,
+                'file_name' => $fileName,
+            ]);
+        } catch (\Throwable $th) {
+            Log::error('generate failed', [
+                'user_id' => $userId,
+                'file_name' => $fileName,
+                'message' => $th->getMessage()
+            ]);
         }
     }
 }

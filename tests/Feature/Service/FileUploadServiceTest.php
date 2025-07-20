@@ -54,4 +54,20 @@ class FileUploadServiceTest extends TestCase
         $this->assertInstanceOf(Collection::class, $response);
         $this->assertEquals(3, $response->count());
     }
+
+    public function test_update_success()
+    {
+        $this->seed(CreateFileUploadSeeder::class);
+
+        $data = FileUpload::first();
+
+        $this->fileUploadService->update($this->user->id, $data->file_name, 'data kurang');
+
+        $this->assertDatabaseHas('file_uploads', [
+            'user_id' => $this->user->id,
+            'file_name' => $data->file_name,
+            'message' => 'data kurang',
+            'is_generate' => true
+        ]);
+    }
 }
