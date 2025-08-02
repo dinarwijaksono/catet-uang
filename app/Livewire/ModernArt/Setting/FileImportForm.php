@@ -69,6 +69,27 @@ class FileImportForm extends Component
         $this->file = '';
     }
 
+    public function doGenerate(string $fileName)
+    {
+        if (!Storage::disk('public-custom')->exists('file_for_import/' . $fileName)) {
+            $this->fileUploadService->update(auth()->user()->id, $fileName, "File rusak.");
+            $this->dispatch('do-refresh');
+
+            return;
+        }
+
+        $data = $this->fileUploadService->parseCsvToArray(Storage::disk('public-custom')->get('file_for_import/' . $fileName));
+
+        if (!empty($data['errors'])) {
+            $this->fileUploadService->update(auth()->user()->id, $fileName, $data['errors'][0]);
+            $this->dispatch('do-refresh');
+
+            return;
+        }
+
+        return dd($data['result']);
+    }
+
     public function render()
     {
         return view('livewire.modern-art.setting.file-import-form');

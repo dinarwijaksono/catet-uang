@@ -46,10 +46,11 @@
                         </div>
 
                         <div class="basis-1/12 flex justify-center items-end">
-                            <button @class([
-                                'btn btn-xs btn-success w-full',
-                                'btn-disabled' => $key->is_generate,
-                            ])>Generate</button>
+                            <button type="button" wire:click="doGenerate('{{ $key->file_name }}')"
+                                @class([
+                                    'btn btn-xs btn-success w-full',
+                                    'btn-disabled' => $key->is_generate,
+                                ])>Generate</button>
                         </div>
                     </li>
                 @endforeach

@@ -82,4 +82,62 @@ class FileUploadService
             ]);
         }
     }
+
+    public function parseCsvToArray(string $csvString): array
+    {
+
+        $lines = preg_split('/\r\n?|\n/', trim($csvString));
+        $result = [];
+        $errors = [];
+
+        str_getcsv(array_shift($lines));
+
+        $line = 0;
+
+        foreach ($lines as $key) {
+            $line++;
+
+            $columns = explode(';', $key);
+
+            if (count($columns) < 8) {
+                $errrs[] = "Baris $line tidak memiliki cukup kolom.";
+                continue;
+            }
+
+            [$no, $day, $month, $year, $type, $category, $description, $value] = $columns;
+
+            if (!(int) $day || !(int) $month || !(int) $year || !(int) $value) {
+                $errors[] = "Baris $line kolom tanggal/bulan/tahun/nilai bukan merupakan angka.";
+                continue;
+            }
+
+            if (empty($category)) {
+                $errors[] = "Baris $line kolom kategori kosong.";
+                continue;
+            }
+
+            if (empty($description)) {
+                $errors[] = "Baris $line kolom deskripsi kosong.";
+                continue;
+            }
+
+            if (empty($type || in_array(trim($type), ['in', 'out']))) {
+                $errors[] = "Baris $line kolom type tidak sesuai format.";
+                continue;
+            }
+
+            $result[] = [
+                'date' => "$year-$month-$day",
+                'category' => trim($category),
+                'description' => trim($description),
+                'type' => trim($type) == 'in' ? "income" : "spending",
+                'value' => (int) $value
+            ];
+        }
+
+        return [
+            'errors' => $errors,
+            'result' => $result
+        ];
+    }
 }

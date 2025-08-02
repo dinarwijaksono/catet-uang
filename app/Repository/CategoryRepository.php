@@ -45,6 +45,22 @@ class CategoryRepository implements CategoryRepositoryInterface
             ->first();
     }
 
+    public function findByName(int $userId, string $name, string $type): ?Category
+    {
+        return Category::select(
+            'id',
+            'code',
+            'name',
+            'type',
+            'created_at',
+            'updated_at'
+        )
+            ->where('user_id', $userId)
+            ->where('name', $name)
+            ->where('type', $type)
+            ->first();
+    }
+
     public function getAll(int $userId): Collection
     {
         return Category::select(

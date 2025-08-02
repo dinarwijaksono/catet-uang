@@ -103,6 +103,23 @@ class CategoryRepositoryTest extends TestCase
         $this->assertInstanceOf(Category::class, $response);
     }
 
+    public function test_find_by_name_but_category_noting_in_db()
+    {
+        $response = $this->categoryRepository->findByName($this->user->id, 'category-nothing', 'spending');
+
+        $this->assertNull($response);
+    }
+
+    public function test_find_by_name_success()
+    {
+        $this->seed(CreateCategorySeeder::class);
+        $category = Category::first();
+
+        $response = $this->categoryRepository->findByName($this->user->id, $category->name, 'income');
+
+        $this->assertInstanceOf(Category::class, $response);
+    }
+
     public function test_find_by_code_return_null()
     {
         $response = $this->categoryRepository->findByCode($this->user->id, 'categorynull');
