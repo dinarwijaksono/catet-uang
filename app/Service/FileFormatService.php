@@ -10,7 +10,7 @@ class FileFormatService
     public function createFileImport(): void
     {
         try {
-            $content = "NO;TANGGAL;BULAN;TAHUN;TYPE;KATEGORI;DESKRIPSI;NILAI";
+            $content = "NO,TANGGAL,BULAN,TAHUN,TYPE,KATEGORI,DESKRIPSI,NILAI";
 
             Storage::disk('public-custom')->put('format_import/file_format_for_import.csv', $content);
 

@@ -97,7 +97,7 @@ class FileUploadService
         foreach ($lines as $key) {
             $line++;
 
-            $columns = explode(';', $key);
+            $columns = explode(',', $key);
 
             if (count($columns) < 8) {
                 $errrs[] = "Baris $line tidak memiliki cukup kolom.";
