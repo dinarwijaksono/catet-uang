@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Domain\TransactionDomain;
 use App\Models\Transaction;
+use App\Repository\CategoryRepository;
 use App\RepositoryInterface\PeriodRepositoryInterface;
 use App\RepositoryInterface\TransactionRepositoryInterface;
 use Carbon\Carbon;
@@ -15,11 +16,16 @@ use stdClass;
 
 class TransactionService
 {
+    protected $categoryRepository;
     protected $periodRepository;
     protected $transactionRepository;
 
-    public function __construct(PeriodRepositoryInterface $periodRepository, TransactionRepositoryInterface $transactionRepository)
-    {
+    public function __construct(
+        CategoryRepository $categoryRepository,
+        PeriodRepositoryInterface $periodRepository,
+        TransactionRepositoryInterface $transactionRepository
+    ) {
+        $this->categoryRepository = $categoryRepository;
         $this->periodRepository = $periodRepository;
         $this->transactionRepository = $transactionRepository;
     }
@@ -93,6 +99,37 @@ class TransactionService
             ]);
 
             return null;
+        }
+    }
+
+    public function createFromArray(int $userId, array $data): void
+    {
+        try {
+            DB::beginTransaction();
+
+            foreach ($data as $key) {
+                $category = $this->categoryRepository->findByName($userId, $key['category'], $key['type']);
+
+                if (is_null($category)) {
+                    $code = Str::random(10);
+                    $category = $this->categoryRepository->create($userId, $code, $key['category'], $key['type']);
+                }
+
+                $in = $key['type'] == 'income' ? $key['value'] : 0;
+                $out = $key['type'] == 'spending' ? $key['value'] : 0;
+
+                self::create($userId, $category->id, $key['date'], $key['description'], $in, $out);
+            }
+
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            Log::error('create from array failed', [
+                'user_id' => $userId,
+                'message' => $th->getMessage()
+            ]);
         }
     }
 

@@ -35,7 +35,7 @@
                             <div @class([
                                 'text-sm italic text-error',
                                 'text-primary' => $key->message == 'Belum digenerate',
-                                'test-success' => $key->message == 'Generate success',
+                                'text-success' => $key->message == 'Generate success',
                             ])>{{ $key->message }}</div>
                             <div class="text-xs opacity-70 italic">Diupload pada
                                 {{ date('H:i, d F Y', strtotime($key->created_at)) }}</div>

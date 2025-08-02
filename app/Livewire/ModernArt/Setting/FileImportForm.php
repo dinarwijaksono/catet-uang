@@ -4,6 +4,7 @@ namespace App\Livewire\ModernArt\Setting;
 
 use App\Service\FileFormatService;
 use App\Service\FileUploadService;
+use App\Service\TransactionService;
 use Illuminate\Support\Facades\Storage;
 use Livewire\WithFileUploads;
 use Livewire\Component;
@@ -87,7 +88,12 @@ class FileImportForm extends Component
             return;
         }
 
-        return dd($data['result']);
+        $transactionService = app()->make(TransactionService::class);
+
+        $transactionService->createFromArray(auth()->user()->id, $data['result']);
+        $this->fileUploadService->update(auth()->user()->id, $fileName, 'Generate success');
+
+        $this->dispatch('do-refresh');
     }
 
     public function render()

@@ -54,6 +54,91 @@ class TransactionServiceTest extends TestCase
         ]);
     }
 
+    public function test_creat_from_array_but_category_is_exist()
+    {
+        $data = [
+            [
+                'date' => '2025-11-10',
+                'category' => $this->category->name,
+                'description' => 'makan siang',
+                'type' => $this->category->type,
+                'value' => 10000
+            ],
+            [
+                'date' => '2025-11-11',
+                'category' => $this->category->name,
+                'description' => 'bonus',
+                'type' => $this->category->type,
+                'value' => 100_000
+            ]
+        ];
+
+        $this->transactionService->createFromArray($this->user->id, $data);
+        $this->assertDatabaseHas('categories', [
+            'name' => $this->category->name,
+            'user_id' => $this->user->id,
+            'type' => $this->category->type,
+        ]);
+
+        $this->assertDatabaseHas('transactions', [
+            'user_id' => $this->user->id,
+            'date' => Carbon::createFromFormat('Y-m-d', '2025-11-10')->setTime(0, 0, 0, 0),
+            'description' => 'makan siang',
+        ]);
+
+        $this->assertDatabaseHas('transactions', [
+            'user_id' => $this->user->id,
+            'date' => Carbon::createFromFormat('Y-m-d', '2025-11-11')->setTime(0, 0, 0, 0),
+            'description' => 'bonus',
+        ]);
+    }
+
+    public function test_create_from_array_category_is_not_exist()
+    {
+        $data = [
+            [
+                'date' => '2025-11-10',
+                'category' => 'makanan',
+                'description' => 'makan siang',
+                'type' => 'spending',
+                'value' => 10000
+            ],
+            [
+                'date' => '2025-11-11',
+                'category' => 'bonus',
+                'description' => 'bonus',
+                'type' => 'income',
+                'value' => 100_000
+            ]
+        ];
+
+        $this->transactionService->createFromArray($this->user->id, $data);
+        $this->assertDatabaseHas('categories', [
+            'name' => 'makanan',
+            'user_id' => $this->user->id,
+            'type' => 'spending'
+        ]);
+        $this->assertDatabaseHas('categories', [
+            'name' => 'bonus',
+            'user_id' => $this->user->id,
+            'type' => 'income'
+        ]);
+
+        $this->assertDatabaseHas('transactions', [
+            'user_id' => $this->user->id,
+            'description' => 'makan siang',
+            'income' => 0,
+            'spending' => 10000
+        ]);
+
+        $this->assertDatabaseHas('transactions', [
+            'user_id' => $this->user->id,
+            'description' => 'bonus',
+            'income' => 100_000,
+            'spending' => 0
+        ]);
+    }
+
     public function test_create_income_success()
     {
         $response = $this->transactionService->create($this->user->id, $this->category->id, "2024-05-28", "Gaji", 2000000, 0);
