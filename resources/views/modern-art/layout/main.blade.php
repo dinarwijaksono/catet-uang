@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ env('APP_NAME') }}</title>
 
-    @if (env('APP_ENV') == 'prodaction')
+    @if (env('APP_ENV') == 'production')
         <link rel="stylesheet" href="/tailwind/style.css">
     @else
         @vite('resources/css/app.css')
