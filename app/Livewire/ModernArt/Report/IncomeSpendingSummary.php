@@ -25,7 +25,7 @@ class IncomeSpendingSummary extends Component
     public function boot()
     {
         $this->transactionService = app()->make(TransactionService::class);
-        $this->periods = $this->transactionService->getAllPeriod(auth()->user()->id);
+        $this->periods = $this->transactionService->getAllPeriod(auth()->user()->id)->sortByDesc('period_date');
     }
 
     public function hendleButtonSearchByPeriod()

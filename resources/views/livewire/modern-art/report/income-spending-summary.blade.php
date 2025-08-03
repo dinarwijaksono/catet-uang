@@ -3,7 +3,8 @@
 
         <div class="flex mb-4">
             <div class="w-10/12 p-2">
-                <select wire:model="periodSelect" class="select bg-slate-200 w-full">
+                <select wire:model="periodSelect"
+                    class="select bg-slate-200 w-full ring-0 outline-0 focus:outline-none focus:ring-0 focus:shadow-none focus:border-success">
                     <option value="all">semua periode</option>
 
                     @foreach ($periods as $key)
