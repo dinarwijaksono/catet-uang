@@ -1,11 +1,11 @@
 <div class="m-4 mb-3 flex justify-center">
-    <section class="bg-base-100 w-full md:w-9/12 p-4 shadow shadow-slate-500">
-        <p class="text-slate-700 text-sm mb-4">{{ date('d F Y', strtotime($date)) }}</p>
+    <section class="bg-white w-full md:w-9/12 p-4 shadow shadow-slate-500">
+        <p class="text-slate-800 text-sm mb-4">{{ date('d F Y', strtotime($date)) }}</p>
 
         <table class="table table-sm md:table-md mb-4">
             <tbody>
                 @foreach ($transactions as $key)
-                    <tr v-for="key in transactions" class="border-b border-slate-300 hover:bg-base-200">
+                    <tr v-for="key in transactions" class="border-b border-slate-300 hover:bg-slate-100">
                         <td>
                             <a href="#" class="no-underline text-primary">{{ $key->category_name }}</a> -
                             {{ $key->description }}

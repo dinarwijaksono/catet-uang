@@ -9,7 +9,7 @@
             <a href="/login/modern-art" class="btn btn-sm btn-link no-underline">Sudah punya akun.</a>
 
         </div>
-        <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+        <div class="card bg-white w-full max-w-sm shrink-0 shadow-2xl">
             <div class="card-body">
                 <fieldset class="fieldset">
                     <label class="label">Name</label>

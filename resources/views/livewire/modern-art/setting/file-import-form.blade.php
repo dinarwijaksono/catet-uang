@@ -1,5 +1,5 @@
 <div class="m-4 mb-3 flex justify-center">
-    <section class="bg-base-100 w-full md:w-9/12 p-4 shadow shadow-slate-500 ">
+    <section class="bg-white w-full md:w-9/12 p-4 shadow shadow-slate-500 ">
         <h1 class="mb-6 text-xl text-slate-700">Import file</h1>
 
         <ul class="mb-4 list text-success italic pl-4">
@@ -24,7 +24,7 @@
         <div class="divider divider-sm"></div>
 
         <div>
-            <ul class="list bg-base-100 rounded-box shadow-md">
+            <ul class="list bg-white rounded-box shadow-md">
 
                 <li class="p-4 pb-2 text-sm tracking-wide opacity-60 italic">File hasil upload</li>
 

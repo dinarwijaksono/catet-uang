@@ -3,7 +3,7 @@
     'flex' => $isOpen,
     'hidden' => !$isOpen,
 ])>
-    <section class="bg-base-100 w-full mx-4 md:w-6/12 p-4 md:px-8 md:py-4 shadow shadow-slate-500 rounded">
+    <section class="bg-white w-full mx-4 md:w-6/12 p-4 md:px-8 md:py-4 shadow shadow-slate-500 rounded">
 
         <h1 class="text-center text-xl font-medium">Buat Transaksi</h1>
 

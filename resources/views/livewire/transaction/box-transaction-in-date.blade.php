@@ -1,5 +1,5 @@
-<section class="bg-base-200 py-2 px-4 m-4 rounded shadow-xl">
-    <p class="text-end text-sm">{{ date('j F Y', strtotime($date)) }}</p>
+<section class="bg-red-500 py-2 px-4 m-4 rounded shadow-xl">
+    <p class="text-end text-sm">{{ date(' F Y', strtotime($date)) }}</p>
 
     <div class="overflow-x-auto mb-4">
         <table class="table">

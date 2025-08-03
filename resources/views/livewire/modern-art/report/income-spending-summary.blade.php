@@ -1,5 +1,5 @@
 <div class="m-4 mb-3 flex justify-center">
-    <section class="bg-base-100 w-full md:w-9/12 p-4 shadow shadow-slate-500 ">
+    <section class="bg-white w-full md:w-9/12 p-4 shadow shadow-slate-500 ">
 
         <div class="flex mb-4">
             <div class="w-10/12 p-2">

@@ -1,8 +1,8 @@
 <div class="m-4 mb-3 flex justify-center">
-    <section class="bg-base-100 w-full md:w-9/12 p-4 shadow shadow-slate-500">
+    <section class="bg-white w-full md:w-9/12 p-4 shadow shadow-slate-500">
 
         @foreach ($dailyTransaction as $transaction)
-            <div class="flex w-full border-b border-slate-300 hover:bg-base-300 mb-2">
+            <div class="flex w-full border-b border-slate-300 hover:bg-slate-100 mb-2">
                 <div class="bg-green-500 text-slate-800 p-2 text-[13px] md:text-[14px] text-center items-center w-3/12">
                     {{ $nameDays[date('N', strtotime($transaction->date))] }}
                     <br>

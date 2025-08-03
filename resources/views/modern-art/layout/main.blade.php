@@ -14,7 +14,7 @@
 <body>
     <main class="bg-slate-300 h-screen w-full flex justify-center">
 
-        <section class="bg-base-200 w-full min-h-screen overflow-scroll">
+        <section class="bg-slate-200 w-full min-h-screen overflow-scroll">
 
             @livewire('modern-art.component.navbar')
 

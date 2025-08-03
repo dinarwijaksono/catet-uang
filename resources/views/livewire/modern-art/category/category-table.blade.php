@@ -1,5 +1,5 @@
 <div class="m-4 mb-3 flex justify-center">
-    <section class="bg-base-100 w-full md:w-9/12 p-4 shadow shadow-slate-500">
+    <section class="bg-white w-full md:w-9/12 p-4 shadow shadow-slate-500">
 
         <div class="flex justify-between">
             <h1 class="mb-8 text-xl text-slate-700">List Kategori</h1>
@@ -21,7 +21,7 @@
 
             <tbody>
                 @foreach ($categories as $key)
-                    <tr class="hover:bg-base-200 border-b last:border-0 border-slate-300">
+                    <tr class="hover:bg-slate-100 border-b last:border-0 border-slate-300">
                         <td class="text-center hidden md:table-cell">{{ $loop->iteration }}</td>
                         <td>{{ $key->name }}</td>
                         <td class="text-center">
