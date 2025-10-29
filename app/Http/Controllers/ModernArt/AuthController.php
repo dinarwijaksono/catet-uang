@@ -11,4 +11,9 @@ class AuthController extends Controller
     {
         return view('modern-art.auth.register');
     }
+
+    public function login()
+    {
+        return view('modern-art.auth.login');
+    }
 }

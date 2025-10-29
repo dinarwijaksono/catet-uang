@@ -12,7 +12,7 @@ use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 // AuthController
-Route::get('/login', [AuthController::class, 'login'])->name('login')->middleware('guest');
+Route::get('/login', [ModernArtAuthController::class, 'login'])->middleware('guest')->name('login');
 Route::get('/register', [AuthController::class, 'register'])->middleware('guest');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
@@ -33,6 +33,7 @@ Route::get('/report', [ReportController::class, 'index'])->middleware('auth');
 
 /* theme modern art */
 Route::get('/register/modern-art', [ModernArtAuthController::class, 'register'])->middleware('guest');
+Route::get('/login/modern-art', [ModernArtAuthController::class, 'login'])->middleware('guest');
 
 Route::get('/modern-art', [ModernArtHomeController::class, 'index'])->middleware('auth');
 Route::get('/home/transaction-detail/{date}/modern-art', [ModernArtHomeController::class, 'detailTransaction'])->middleware('auth');
