@@ -8,7 +8,6 @@ use App\Http\Requests\CreateCategoryRequest;
 use App\Service\CategoryService;
 use App\Service\UserService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Validator;
 
 class CategoryControllerApi extends Controller
 {
@@ -21,17 +20,10 @@ class CategoryControllerApi extends Controller
         $this->categoryService = $categoryService;
     }
 
-    public function create(Request $request): ?JsonResponse
+    public function create(CreateCategoryRequest $request): ?JsonResponse
     {
         $token = $request->header('api-token');
         $user = $this->userService->findByToken($token);
-
-        $validator = Validator::make($request->all(), (new CreateCategoryRequest())->rules());
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
-        }
 
         $category = $this->categoryService->create($user->user_id, $request->name, $request->type);
 
