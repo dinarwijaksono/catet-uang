@@ -68,4 +68,28 @@ class CategoryControllerApi extends Controller
             'data' => $category
         ], 200);
     }
+
+    public function delete(Request $request)
+    {
+        $token = $request->header('api-token');
+        $user = $this->userService->findByToken($token);
+
+        $category = $this->categoryService->findByCode($user->user_id, $request->code);
+
+        if (!$category) {
+            return response()->json([
+                'message' => 'Kategori tidak ditemukan.'
+            ], 400);
+        }
+
+        if ($this->categoryService->checkIsStillUse($user->user_id, $category->id)) {
+            return response()->json([
+                'message' => 'Tidak bisa menghapus kategori yang masih digunakan.'
+            ], 400);
+        }
+
+        $this->categoryService->delete($user->user_id, $request->code);
+
+        return response()->json([], 204);
+    }
 }

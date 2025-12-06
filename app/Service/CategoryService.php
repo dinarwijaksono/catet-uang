@@ -59,18 +59,7 @@ class CategoryService
     public function checkIsStillUse(int $userId, int $categoryId): bool
     {
         try {
-            $start = microtime(true);
-
             $result = $this->categoryRepository->checkIsStillUse($userId, $categoryId);
-
-            $executionTime = round((microtime(true) - $start) * 1000);
-
-            if ($executionTime > 2000) {
-                Log::warning("Execution of CategoryRepository->checkIsStillUse is slow", [
-                    'user_id' => $userId,
-                    'execution_time' => $executionTime
-                ]);
-            }
 
             Log::info('check is still use success', [
                 'user_id' => $userId
@@ -170,17 +159,7 @@ class CategoryService
     public function delete(int $userId, string $code): void
     {
         try {
-            $start = microtime(true);
             $this->categoryRepository->delete($userId, $code);
-
-            $executionTime = round((microtime(true) - $start) * 1000);
-            if ($executionTime > 2000) {
-                Log::warning("Execution of CategoryRepository->delete is slow", [
-                    'user_id' => $userId,
-                    'category_code' => $code,
-                    'execution_time' => $executionTime
-                ]);
-            }
 
             Log::info('delete category success', [
                 'user_id' => $userId,

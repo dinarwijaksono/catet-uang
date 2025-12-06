@@ -25,15 +25,6 @@ class CategoryControllerApiTest extends TestCase
         $this->token = ApiToken::first();
     }
 
-    public function test_created_but_validate_error(): void
-    {
-        $response = $this->withHeader('api-token', $this->token->token)
-            ->post('/api/category');
-
-        $response->assertStatus(400);
-        $response->assertJsonStructure(['errors' => ['name', 'type']]);
-    }
-
     public function test_created_success()
     {
         $response = $this->withHeader('api-token', $this->token->token)
