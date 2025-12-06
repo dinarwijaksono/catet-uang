@@ -30,7 +30,7 @@ class TransactionService
         $this->transactionRepository = $transactionRepository;
     }
 
-    public function create(int $userId, int $categoryId, string $date, string $description, int $income, int $spending): ?Transaction
+    public function create(int $userId, string $categoryId, string $date, string $description, int $income, int $spending): ?Transaction
     {
         try {
             DB::beginTransaction();

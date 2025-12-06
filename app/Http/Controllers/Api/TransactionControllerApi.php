@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateTransactionRequest;
+use App\Http\Resources\TransactionResource;
+use App\Service\CategoryService;
 use App\Service\TransactionService;
 use App\Service\UserService;
 use Carbon\Carbon;
@@ -15,11 +17,16 @@ use Illuminate\Support\Facades\Validator;
 class TransactionControllerApi extends Controller
 {
     public $userService;
+    public $categoryService;
     public $transactionService;
 
-    public function __construct(UserService $userService, TransactionService $transactionService)
-    {
+    public function __construct(
+        UserService $userService,
+        CategoryService $categoryService,
+        TransactionService $transactionService
+    ) {
         $this->userService = $userService;
+        $this->categoryService = $categoryService;
         $this->transactionService = $transactionService;
     }
 
@@ -36,33 +43,36 @@ class TransactionControllerApi extends Controller
         ], 200);
     }
 
-    public function create(Request $request): ?JsonResponse
+    public function create(CreateTransactionRequest $request): ?JsonResponse
     {
-        $validator = Validator::make($request->all(), (new CreateTransactionRequest())->rules());
-
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
-        }
-
         if ($request->value <= 0) {
             return response()->json([
                 'errors' => [
                     'value' => ['Value tidak boleh bernilai 0 atau lebih kecil.']
                 ]
-            ], 400);
+            ], 422);
         }
 
         $token = $request->header('api-token');
         $user = $this->userService->findByToken($token);
+
+        $category = $this->categoryService->findByCode($user->user_id, $request->category);
+
+        if ($request->type != $category->type) {
+            return response()->json([
+                'errors' => [
+                    'type' => ['Type tidak sesuai.'],
+                    'category' => ['Kategori tidak sesuai dengan type.']
+                ]
+            ], 422);
+        }
 
         $income = $request->type == 'income' ? $request->value : 0;
         $spending = $request->type == 'spending' ? $request->value : 0;
 
         $transaction = $this->transactionService->create(
             $user->user_id,
-            $request->category,
+            $category->id,
             $request->date,
             $request->description,
             $income,
@@ -70,7 +80,7 @@ class TransactionControllerApi extends Controller
         );
 
         return response()->json([
-            'data' => $transaction
+            'data' => new TransactionResource($transaction)
         ], 201);
     }
 
