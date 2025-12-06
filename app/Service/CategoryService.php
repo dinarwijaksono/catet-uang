@@ -105,6 +105,28 @@ class CategoryService
         }
     }
 
+    public function getByType(int $userId, string $type): ?Collection
+    {
+        try {
+            $category = Category::where('user_id', $userId)
+                ->where('type', $type)
+                ->get();
+
+            Log::info('get category by type success', [
+                'user_id' => $userId
+            ]);
+
+            return $category;
+        } catch (\Throwable $th) {
+            Log::error('get category by type failed', [
+                'user_id' => $userId,
+                'error' => $th->getMessage()
+            ]);
+
+            return null;
+        }
+    }
+
     public function getAll(int $userId): Collection
     {
         try {

@@ -39,19 +39,6 @@ class CategoryControllerApi extends Controller
         ], 201);
     }
 
-    public function getAll(Request $request)
-    {
-        $token = $request->header('api-token');
-        $user = $this->userService->findByToken($token);
-
-        $category = $this->categoryService->getAll($user->user_id);
-
-        return response()->json([
-            'data' => CategoryResource::collection($category->sortBy('name')),
-            'category_count' => $category->count()
-        ], 200);
-    }
-
     public function getCategory(Request $request): ?JsonResponse
     {
         $token = $request->header('api-token');
@@ -67,6 +54,32 @@ class CategoryControllerApi extends Controller
 
         return response()->json([
             'data' => new CategoryResource($category)
+        ], 200);
+    }
+
+    public function getByType(Request $request): ?JsonResponse
+    {
+        $token = $request->header('api-token');
+        $user = $this->userService->findByToken($token);
+
+        $category = $this->categoryService->getByType($user->user_id, $request->type);
+
+        return response()->json([
+            'data' => CategoryResource::collection($category->sortBy('name')),
+            'category_count' => $category->count()
+        ], 200);
+    }
+
+    public function getAll(Request $request)
+    {
+        $token = $request->header('api-token');
+        $user = $this->userService->findByToken($token);
+
+        $category = $this->categoryService->getAll($user->user_id);
+
+        return response()->json([
+            'data' => CategoryResource::collection($category->sortBy('name')),
+            'category_count' => $category->count()
         ], 200);
     }
 
