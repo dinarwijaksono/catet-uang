@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateCategoryRequest;
+use App\Http\Resources\CategoryResource;
 use App\Service\CategoryService;
 use App\Service\UserService;
 use Illuminate\Http\JsonResponse;
@@ -46,7 +47,7 @@ class CategoryControllerApi extends Controller
         $category = $this->categoryService->getAll($user->user_id);
 
         return response()->json([
-            'data' => $category,
+            'data' => CategoryResource::collection($category->sortBy('name')),
             'category_count' => $category->count()
         ], 200);
     }
@@ -65,7 +66,7 @@ class CategoryControllerApi extends Controller
         }
 
         return response()->json([
-            'data' => $category
+            'data' => new CategoryResource($category)
         ], 200);
     }
 
