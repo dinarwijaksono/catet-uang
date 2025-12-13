@@ -3,11 +3,14 @@
 namespace App\Service;
 
 use App\Domain\TransactionDomain;
+use App\Models\Category;
 use App\Models\Transaction;
 use App\Repository\CategoryRepository;
 use App\RepositoryInterface\PeriodRepositoryInterface;
 use App\RepositoryInterface\TransactionRepositoryInterface;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
@@ -415,62 +418,44 @@ class TransactionService
         }
     }
 
-    public function update(int $userId, string $code, int $categoryId, string $date, string $description, int $income, int $spending): ?Transaction
+    public function update(int $userId, $transaction): ?Transaction
     {
         try {
-            DB::beginTransaction();
-
-            $dateCarbon = Carbon::createFromFormat('Y-m-d', $date)->setTime(0, 0, 0, 0);
+            $dateCarbon = Carbon::createFromFormat('Y-m-d', $transaction->date)->setTime(0, 0, 0, 0);
 
             $period = $this->periodRepository->findOrCreate($userId, $dateCarbon->month, $dateCarbon->year);
+            $category = Category::where('code', $transaction->category)->first();
 
-            $update = new TransactionDomain();
-            $update->userId = $userId;
-            $update->code = $code;
-            $update->periodId = $period->id;
-            $update->categoryId = $categoryId;
-            $update->date = $dateCarbon;
-            $update->description = $description;
-            $update->income = $income;
-            $update->spending = $spending;
-
-            $start = microtime(true);
-            $transaction = $this->transactionRepository->update($update);
-
-            $executionTime = round((microtime(true) - $start) * 1000);
-            if ($executionTime > 2000) {
-                Log::warning("Execution of transactionRepository->update is slow", [
-                    'user_id' => $userId,
-                    'execution_time' => $executionTime,
-                ]);
+            if ($category->type != $transaction->type) {
+                throw new Exception("transaction type is invalid");
             }
 
-            DB::commit();
+            $income = $transaction->type == 'income' ? $transaction->value : 0;
+            $spending = $transaction->type == 'spending' ? $transaction->value : 0;
+
+            $transactionModel = Transaction::where('code', $transaction->code)->first();
+
+            if (!$transactionModel) {
+                throw new ModelNotFoundException("transaction with code $transaction->code not found");
+            }
+
+            $transactionModel->update([
+                'period_id' => $period->id,
+                'category_id' => $category->id,
+                'date' => $dateCarbon,
+                'description' => $transaction->description,
+                'income' => $income,
+                'spending' => $spending
+            ]);
 
             Log::info('update transacrion success', [
                 'user_id' => $userId,
-                'data' => [
-                    'category_id' => $categoryId,
-                    'date' => $date,
-                    'description' => $description,
-                    'income' => $income,
-                    'spending' => $spending
-                ],
             ]);
 
-            return $transaction;
+            return $transactionModel;
         } catch (\Throwable $th) {
-            DB::rollBack();
-
             Log::error('update transaction failed', [
                 'user_id' => $userId,
-                'data' => [
-                    'category_id' => $categoryId,
-                    'date' => $date,
-                    'description' => $description,
-                    'income' => $income,
-                    'spending' => $spending
-                ],
                 'message' => $th->getMessage()
             ]);
 

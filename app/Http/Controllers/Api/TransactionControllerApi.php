@@ -148,34 +148,24 @@ class TransactionControllerApi extends Controller
         ], 200);
     }
 
-    public function updateTransaction(Request $request): ?JsonResponse
+    public function updateTransaction(CreateTransactionRequest $request): ?JsonResponse
     {
-        $validator = Validator::make($request->all(), (new CreateTransactionRequest())->rules());
-
-        if ($validator->fails()) {
-            return response()->json([
-                'errors' => $validator->errors()
-            ], 400);
-        }
-
         $token = $request->header('api-token');
         $user = $this->userService->findByToken($token);
 
-        $income = $request->type == 'income' ? $request->value : 0;
-        $spending = $request->type == 'spending' ? $request->value : 0;
+        $transaction = $this->transactionService->update($user->user_id, $request);
 
-        $transaction = $this->transactionService->update(
-            $user->user_id,
-            $request->code,
-            $request->category,
-            $request->date,
-            $request->description,
-            $income,
-            $spending
-        );
+        if (is_null($transaction)) {
+            return response()->json([
+                'errors' => [
+                    'category' => ['type kategori harus sama dengan type.'],
+                    'type' => ["Type tidak valid."],
+                ]
+            ], 400);
+        }
 
         return response()->json([
-            'data' => $transaction
+            'data' => new TransactionResource($transaction)
         ], 200);
     }
 
