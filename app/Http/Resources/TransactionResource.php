@@ -19,7 +19,7 @@ class TransactionResource extends JsonResource
         return [
             'code' => $this->code,
             'period' => new PeriodResource(Period::find($this->period_id)),
-            'date' => $this->created_at->format('d-m-Y'),
+            'date' => $this->created_at->format('j F Y'),
             'income' => $this->income,
             'spending' => $this->spending,
             'description' => $this->description,

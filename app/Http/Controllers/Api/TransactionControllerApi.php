@@ -58,6 +58,15 @@ class TransactionControllerApi extends Controller
 
         $category = $this->categoryService->findByCode($user->user_id, $request->category);
 
+        if (is_null($category)) {
+            return response()->json([
+                'errors' => [
+                    'type' => ['Type tidak sesuai.'],
+                    'category' => ['Kategori tidak ditemukan.']
+                ]
+            ], 422);
+        }
+
         if ($request->type != $category->type) {
             return response()->json([
                 'errors' => [
