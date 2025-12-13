@@ -466,24 +466,20 @@ class TransactionService
     public function delete(int $userId, string $code): void
     {
         try {
-            $start = microtime(true);
-            $this->transactionRepository->delete($userId, $code);
-            $executionTime = round((microtime(true) - $start) * 1000);
-            if ($executionTime > 2000) {
-                Log::warning("Execution of transactionRepository->delete is slow", [
-                    'user_id' => $userId,
-                    'execution_time' => $executionTime,
-                ]);
+            $transaction = Transaction::where('code', $code)->first();
+
+            if (!$transaction) {
+                throw new ModelNotFoundException("transaction with code $code not found");
             }
 
             Log::info('delete transaction success', [
                 'user_id' => $userId,
-                'code' => $code
             ]);
+
+            $transaction->delete();
         } catch (\Throwable $th) {
             Log::error('delete transaction failed', [
                 'user_id' => $userId,
-                'code' => $code,
                 'message' => $th->getMessage()
             ]);
         }

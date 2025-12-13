@@ -361,11 +361,3 @@ Status code: 401 Unauthorized
     "Message": "Token tidak valid."
 } 
 ```
-
-Status code: 422 Unprocesssable Content
-- jika kode transaksi tidak ada di database
-```json
-{
-    "message": "Transaksi tidak ditemukan."
-} 
-```
