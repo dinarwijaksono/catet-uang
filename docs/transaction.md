@@ -199,7 +199,7 @@ Status code: 401 Unauthorized
 ```
 
 
-### `GET /api/transaction/all-transactions/{page}`
+### `GET /api/transaction/all/{page}`
 Mengambil semua transaksi tetapi di paging 50 transaksi.
 
 **Contoh Request:**

@@ -133,6 +133,21 @@ class TransactionControllerApi extends Controller
         ], 200);
     }
 
+    public function getAllPaging(Request $request)
+    {
+        $token = $request->header('api-token');
+        $user = $this->userService->findByToken($token);
+
+        $transaction = $this->transactionService->getAllPaging($user->user_id, $request->page);
+        $amountTransaction = $this->transactionService->amountTransaction($user->user_id);
+
+        return response()->json([
+            'data' => TransactionResource::collection($transaction),
+            'current_page' => $request->page,
+            'total_pages' => ceil($amountTransaction / 50)
+        ], 200);
+    }
+
     public function updateTransaction(Request $request): ?JsonResponse
     {
         $validator = Validator::make($request->all(), (new CreateTransactionRequest())->rules());

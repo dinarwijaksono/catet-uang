@@ -17,13 +17,13 @@ class TransactionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'code' => $this->code,
             'period' => new PeriodResource(Period::find($this->period_id)),
+            'category' => new CategoryResource(Category::find($this->category_id)),
+            'code' => $this->code,
             'date' => $this->created_at->format('j F Y'),
             'income' => $this->income,
             'spending' => $this->spending,
             'description' => $this->description,
-            'category' => new CategoryResource(Category::find($this->category_id)),
             'created_at' => $this->created_at->format('H:i, j F Y'),
             'updated_at' => $this->updated_at->format('H:i, j F Y')
         ];

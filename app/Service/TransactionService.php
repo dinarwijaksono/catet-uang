@@ -133,6 +133,26 @@ class TransactionService
         }
     }
 
+    public function amountTransaction(int $userId): int
+    {
+        try {
+            $amount = Transaction::where('user_id', $userId)->count();
+
+            Log::info('count transaction success', [
+                'user_id' => $userId
+            ]);
+
+            return $amount;
+        } catch (\Throwable $th) {
+            Log::error('count transaction failed', [
+                'user_id' => $userId,
+                'message' => $th->getMessage()
+            ]);
+
+            return 0;
+        }
+    }
+
     public function getAllPeriod(int $userId): ?Collection
     {
         try {
@@ -361,6 +381,32 @@ class TransactionService
             return $transaction;
         } catch (\Throwable $th) {
             Log::error('get transaction by period failed', [
+                'user_id' => $userId,
+                'message' => $th->getMessage()
+            ]);
+
+            return null;
+        }
+    }
+
+    public function getAllPaging(int $userId, int $page): ?Collection
+    {
+        try {
+            $skip = $page * 50 - 50;
+
+            $transaction = Transaction::where('user_id', $userId)
+                ->limit(50)
+                ->offset($skip)
+                ->orderByDesc('date')
+                ->get();
+
+            Log::info('get transaction by all paging success', [
+                'user_id' => $userId
+            ]);
+
+            return $transaction;
+        } catch (\Throwable $th) {
+            Log::error('get transaction by all paging failed', [
                 'user_id' => $userId,
                 'message' => $th->getMessage()
             ]);
