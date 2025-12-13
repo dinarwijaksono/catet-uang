@@ -160,7 +160,7 @@ class TransactionControllerApi extends Controller
 
         return response()->json([
             'data' => TransactionResource::collection($transaction),
-            'current_page' => $request->page,
+            'current_page' => ceil($request->page),
             'total_pages' => ceil($amountTransaction / 50)
         ], 200);
     }

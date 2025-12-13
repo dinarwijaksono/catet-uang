@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\Category;
 use App\Models\Period;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +21,7 @@ class TransactionResource extends JsonResource
             'period' => new PeriodResource(Period::find($this->period_id)),
             'category' => new CategoryResource(Category::find($this->category_id)),
             'code' => $this->code,
-            'date' => $this->created_at->format('j F Y'),
+            'date' => date('j F Y', strtotime($this->date)),
             'income' => $this->income,
             'spending' => $this->spending,
             'description' => $this->description,
