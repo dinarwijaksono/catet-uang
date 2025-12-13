@@ -189,27 +189,20 @@ class TransactionService
     public function findByCode(int $userId, string $code): ?Transaction
     {
         try {
-            $start = microtime(true);
-            $transaction = $this->transactionRepository->findByCode($userId, $code);
+            $transaction = Transaction::where('code', $code)->first();
 
-            $executionTime = round((microtime(true) - $start) * 1000);
-            if ($executionTime > 2000) {
-                Log::warning("Execution of transactionRepository->findByCode is slow", [
-                    'user_id' => $userId,
-                    'execution_time' => $executionTime,
-                ]);
+            if (!$transaction) {
+                throw new ModelNotFoundException("transaction with code $code not found");
             }
 
-            Log::info('find by code transaction success', [
-                'user_id' => $userId,
-                'code' => $code
+            Log::info('find by code success', [
+                'user_id' => $userId
             ]);
 
             return $transaction;
         } catch (\Throwable $th) {
-            Log::error('find by code transaction failed', [
+            Log::error('find by code failed', [
                 'user_id' => $userId,
-                'code' => $code,
                 'message' => $th->getMessage()
             ]);
 

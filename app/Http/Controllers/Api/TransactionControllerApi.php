@@ -92,6 +92,24 @@ class TransactionControllerApi extends Controller
         ], 201);
     }
 
+    public function getByCode(Request $request): ?JsonResponse
+    {
+        $token = $request->header('api-token');
+        $user = $this->userService->findByToken($token);
+
+        $transaction = $this->transactionService->findByCode($user->user_id, $request->code);
+
+        if (is_null($transaction)) {
+            return response()->json([
+                'message' => 'Transaksi tidak ditemukan.'
+            ], 422);
+        }
+
+        return response()->json([
+            'data' => new TransactionResource($transaction)
+        ], 200);
+    }
+
     public function getByDate(Request $request): ?JsonResponse
     {
         try {
