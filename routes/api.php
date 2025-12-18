@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthControllerApi;
 use App\Http\Controllers\Api\CategoryControllerApi;
+use App\Http\Controllers\Api\FileFormatControllerApi;
 use App\Http\Controllers\Api\TransactionControllerApi;
 use App\Http\Middleware\HasTokenMiddleware;
 use App\Http\Middleware\MissingTokenMiddelware;
@@ -29,3 +30,6 @@ Route::get('/transaction/all/{page}', [TransactionControllerApi::class, 'getAllP
 Route::get('/transaction/{code}', [TransactionControllerApi::class, 'getByCode'])->middleware(HasTokenMiddleware::class);
 Route::put('/transaction/{code}', [TransactionControllerApi::class, 'updateTransaction'])->middleware(HasTokenMiddleware::class);
 Route::delete('/transaction/{code}', [TransactionControllerApi::class, 'delete'])->middleware(HasTokenMiddleware::class);
+
+// FileFormat
+Route::post('/file/csv-format-download', [FileFormatControllerApi::class, 'downloadCsv'])->middleware(HasTokenMiddleware::class);
