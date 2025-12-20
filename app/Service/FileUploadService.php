@@ -37,6 +37,19 @@ class FileUploadService
         }
     }
 
+    public function findById(int $id): ?FileUpload
+    {
+        try {
+            Log::info('find by id file upload success');
+
+            return FileUpload::find($id);
+        } catch (\Throwable $th) {
+            Log::error('find by id file upload failed', [
+                'message' => $th->getMessage()
+            ]);
+        }
+    }
+
     public function getAll(int $userId): Collection
     {
         try {

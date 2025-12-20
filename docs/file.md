@@ -103,7 +103,7 @@ Status code: 401 Unauthorized
 ```
 
 
-### `PUT /api/file/csv-generate/{file-name}`
+### `PUT /api/file/csv-generate/{id-file}`
 parsing data dari csv yang sudah diupload ke db.
 
 **Contoh Request:**

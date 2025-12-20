@@ -64,13 +64,20 @@ class UploadFileControllerApi extends Controller
         ], 200);
     }
 
-    public function generatCsv(Request $request)
+    public function generatCsv(Request $request, int $fileId)
     {
         $api = $request->header('api-token');
         $token = $this->userService->findByToken($api);
 
+        $fileUpload = $this->fileUploadService->findById($fileId);
+        if (!$fileUpload) {
+            return response()->json([
+                'message' => "File rusak."
+            ], 400);
+        }
+
         $storage = Storage::disk('public-custom');
-        $path = 'file_for_import/' . $request->file_name;
+        $path = 'file_for_import/' . $fileUpload->file_name;
 
         if (!$storage->exists($path)) {
             return response()->json([
@@ -78,24 +85,30 @@ class UploadFileControllerApi extends Controller
             ], 400);
         }
 
+        if ($fileUpload->is_generate) {
+            return response()->json([
+                'message' => "File sudah digenerate."
+            ], 400);
+        }
+
         $transaction = $this->fileUploadService->parseCsvToArray($storage->get($path));
 
         if (!empty($transaction['errors'])) {
-            $this->fileUploadService->update($token->user_id, $request->file_name, $transaction['errors'][0]);
+            $this->fileUploadService->update($token->user_id, $fileUpload->file_name, $transaction['errors'][0]);
             return response()->json([
                 'message' => $transaction['errors'][0]
             ], 422);
         }
 
         if (empty($transaction['result'])) {
-            $this->fileUploadService->update($token->user_id, $request->file_name, "isi file kosong");
+            $this->fileUploadService->update($token->user_id, $fileUpload->file_name, "isi file kosong");
             return response()->json([
                 'message' => "Isi file kosong."
             ], 422);
         }
 
         $this->transactionService->createFromArray($token->user_id, $transaction['result']);
-        $this->fileUploadService->update($token->user_id, $request->file_name, "Generate success");
+        $this->fileUploadService->update($token->user_id, $fileUpload->file_name, "Generate success");
 
         return response()->json([
             'message' => "File berhasil digenerate."
