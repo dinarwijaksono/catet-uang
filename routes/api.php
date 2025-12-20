@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthControllerApi;
 use App\Http\Controllers\Api\CategoryControllerApi;
 use App\Http\Controllers\Api\FileFormatControllerApi;
 use App\Http\Controllers\Api\TransactionControllerApi;
+use App\Http\Controllers\Api\UploadFileControllerApi;
 use App\Http\Middleware\HasTokenMiddleware;
 use App\Http\Middleware\MissingTokenMiddelware;
 use Illuminate\Support\Facades\Route;
@@ -33,3 +34,4 @@ Route::delete('/transaction/{code}', [TransactionControllerApi::class, 'delete']
 
 // FileFormat
 Route::post('/file/csv-format-download', [FileFormatControllerApi::class, 'downloadCsv'])->middleware(HasTokenMiddleware::class);
+Route::post('/file/csv-upload', [UploadFileControllerApi::class, 'uploadCsv'])->middleware(HasTokenMiddleware::class);
