@@ -118,6 +118,22 @@ Status code: 200 Ok
 }
 ```
 
+Status code: 422 validate error
+Format tidak sesuai
+```json
+{
+    "Message": "[-isi-error-]"
+} 
+```
+
+Status code: 400 Bad Request
+File tidak ada di storage
+```json
+{
+    "Message": "File rusak."
+} 
+```
+
 Status code: 401 Unauthorized
 ```json
 {
