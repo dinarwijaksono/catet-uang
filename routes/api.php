@@ -35,3 +35,4 @@ Route::delete('/transaction/{code}', [TransactionControllerApi::class, 'delete']
 // FileFormat
 Route::post('/file/csv-format-download', [FileFormatControllerApi::class, 'downloadCsv'])->middleware(HasTokenMiddleware::class);
 Route::post('/file/csv-upload', [UploadFileControllerApi::class, 'uploadCsv'])->middleware(HasTokenMiddleware::class);
+Route::get('/file/get-all', [UploadFileControllerApi::class, 'getAll'])->middleware(HasTokenMiddleware::class);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\FileResource;
 use App\Service\FileUploadService;
 use App\Service\UserService;
 use Illuminate\Http\Request;
@@ -43,5 +44,17 @@ class UploadFileControllerApi extends Controller
         return response()->json([
             'message' => "File berhasil diupload."
         ], 201);
+    }
+
+    public function getAll(Request $request): ?JsonResponse
+    {
+        $token = $request->header('api-token');
+        $user = $this->userService->findByToken($token);
+
+        $file = $this->fileUploadService->getAll($user->user_id);
+
+        return response()->json([
+            "data" => FileResource::collection($file)
+        ], 200);
     }
 }

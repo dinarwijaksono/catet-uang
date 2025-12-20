@@ -41,7 +41,9 @@ class FileUploadService
     {
         try {
 
-            $file = FileUpload::where('user_id', $userId)->get();
+            $file = FileUpload::where('user_id', $userId)
+                ->orderByDesc('created_at')
+                ->get();
 
             Log::info('get all file upload success', [
                 'user_id' => $userId
