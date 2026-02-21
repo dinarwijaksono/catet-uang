@@ -278,6 +278,49 @@ Status code: 401 Unauthorized
 
 
 
+
+### `GET /api/transaction/get-summary-income-spending/{page}`
+Mengambil rincian transaksi tetapi di paging 30 transaksi
+
+**Contoh Request:**
+http header
+    "api-token": "[string-random]"
+
+**Contoh Respon:** 
+Status code: 200 Ok
+```json
+{
+    "data": {
+        [
+            {
+                "date": "2026-01-27",
+                "total_income": 1000,
+                "total_spending": 5000
+            }
+        ],
+        [
+            {
+                "date": "2026-01-27",
+                "total_income": 1000,
+                "total_spending": 5000
+            }
+        ]
+    },
+    "current_page": 1,
+    "total_pages": 2
+}
+```
+
+Status code: 401 Unauthorized
+```json
+{
+    "Message": "Token tidak valid."
+} 
+```
+
+
+
+
 ### `PUT /api/transaction/{code}`
 update transaksi berdasarkan kodenya.
 

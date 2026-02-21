@@ -26,6 +26,7 @@ Route::delete('/category/{code}', [CategoryControllerApi::class, 'delete'])->mid
 Route::post('/transaction', [TransactionControllerApi::class, 'create'])->middleware(HasTokenMiddleware::class);
 Route::get('/transaction/get-by-date/{date}', [TransactionControllerApi::class, 'getByDate'])->middleware(HasTokenMiddleware::class);
 Route::get('/transaction/get-summary-income-spending', [TransactionControllerApi::class, 'getSummaryIncomeSpending'])->middleware(HasTokenMiddleware::class);
+Route::get('/transaction/get-summary-income-spending/{page}', [TransactionControllerApi::class, 'getSummaryIncomeSpending'])->middleware(HasTokenMiddleware::class);
 Route::get('/transaction/get-period', [TransactionControllerApi::class, 'getPeriods'])->middleware(HasTokenMiddleware::class);
 Route::get('/transaction/all/{page}', [TransactionControllerApi::class, 'getAllPaging'])->middleware(HasTokenMiddleware::class);
 Route::get('/transaction/{code}', [TransactionControllerApi::class, 'getByCode'])->middleware(HasTokenMiddleware::class);

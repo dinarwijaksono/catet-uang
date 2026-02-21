@@ -297,26 +297,42 @@ class TransactionService
         }
     }
 
-    public function getSummaryIncomeSpending(int $userId): ?Collection
+    public function getSummaryIncomeSpending(int $userId, int $page = 1): ?Object
     {
         try {
 
-            $start = microtime(true);
-            $result = $this->transactionRepository->getSummaryIncomeSpending($userId);
+            $skip = $page == 1 ? 0 : ($page - 1) * 30;
 
-            $executionTime = round((microtime(true) - $start) * 1000);
-            if ($executionTime > 2000) {
-                Log::warning("Execution of transactionRepository->getSummaryIncomeSpending is slow", [
-                    'user_id' => $userId,
-                    'execution_time' => $executionTime,
-                ]);
-            }
+            $transaction = new stdClass();
+            $transaction->data = DB::table('transactions')
+                ->select('date', DB::raw("sum(income) as total_income"), DB::raw('sum(spending) as total_spending'))
+                ->where("user_id", $userId)
+                ->groupBy('date')
+                ->orderByDesc('date')
+                ->skip($skip)
+                ->limit(30)
+                ->get()
+                ->map(function ($row) {
+                    $row->total_income = (int) $row->total_income;
+                    $row->total_spending = (int) $row->total_spending;
+                    return $row;
+                });
+
+            $count = DB::table('transactions')
+                ->select('date', DB::raw("sum(income) as total_income"), DB::raw('sum(spending) as total_spending'))
+                ->where("user_id", $userId)
+                ->groupBy('date')
+                ->get()
+                ->count();
+
+            $transaction->count = $count;
+            $transaction->total_page = (int) ceil($count / 30);
 
             Log::info('get summary income spending success', [
                 'user_id' => $userId
             ]);
 
-            return $result;
+            return $transaction;
         } catch (\Throwable $th) {
             Log::error('get summary income spending failed', [
                 'user_id' => $userId,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateTransactionRequest;
 use App\Http\Resources\TransactionResource;
+use App\Http\Resources\TransactionSummaryIncomeSpendingResource;
 use App\Service\CategoryService;
 use App\Service\TransactionService;
 use App\Service\UserService;
@@ -142,11 +143,17 @@ class TransactionControllerApi extends Controller
         $token = $request->header('api-token');
         $user = $this->userService->findByToken($token);
 
-        $transaction = $this->transactionService->getSummaryIncomeSpending($user->user_id);
+        if (isset($request->page)) {
+            $transaction = $this->transactionService->getSummaryIncomeSpending($user->user_id, $request->page);
+        } else {
+            $transaction = $this->transactionService->getSummaryIncomeSpending($user->user_id);
+        }
 
         return response()->json([
-            'data' => $transaction,
-            'transaction_count' => $transaction->count()
+            'data' => TransactionSummaryIncomeSpendingResource::collection($transaction->data),
+            'current_page' => isset($request->page) ? $request->page : 1,
+            'total_page' => $transaction->total_page,
+            'total_transaction' => $transaction->count
         ], 200);
     }
 
