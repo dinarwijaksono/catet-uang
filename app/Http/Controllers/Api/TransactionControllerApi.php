@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateTransactionRequest;
 use App\Http\Resources\TransactionResource;
 use App\Http\Resources\TransactionSummaryIncomeSpendingResource;
+use App\Models\Transaction;
 use App\Service\CategoryService;
 use App\Service\TransactionService;
 use App\Service\UserService;
@@ -122,7 +123,7 @@ class TransactionControllerApi extends Controller
             $transaction = $this->transactionService->getByDate($user->user_id, $date);
 
             return response()->json([
-                'data' => $transaction,
+                'data' => TransactionResource::collection($transaction),
                 'transaction_count' => $transaction->count()
             ], 200);
         } catch (\Throwable $th) {

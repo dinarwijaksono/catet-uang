@@ -85,8 +85,8 @@ class TransactionRepository implements TransactionRepositoryInterface
             ->limit(40)
             ->get()
             ->map(function ($row) {
-                $row->total_income = (integer) $row->total_income;
-                $row->total_spending = (integer) $row->total_spending;
+                $row->total_income = (int) $row->total_income;
+                $row->total_spending = (int) $row->total_spending;
                 return $row;
             });
     }

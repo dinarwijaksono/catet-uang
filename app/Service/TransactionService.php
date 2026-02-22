@@ -213,16 +213,10 @@ class TransactionService
     public function getByDate(int $userId, Carbon $date): ?Collection
     {
         try {
-            $start = microtime(true);
-            $transaction = $this->transactionRepository->getByDate($userId, $date->setTime(0, 0, 0, 0));
 
-            $executionTime = round((microtime(true) - $start) * 1000);
-            if ($executionTime > 2000) {
-                Log::warning("Execution of transactionRepository->getByDate is slow", [
-                    'user_id' => $userId,
-                    'execution_time' => $executionTime,
-                ]);
-            }
+            $transaction = Transaction::where('date', $date)
+                ->where('user_id', $userId)
+                ->get();
 
             Log::info('get by date transaction success', [
                 'user_id' => $userId
