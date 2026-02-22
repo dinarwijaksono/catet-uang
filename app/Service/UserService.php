@@ -116,7 +116,7 @@ class UserService
 
             Log::info('find by token success', [
                 'token' => $token,
-                'email' => $user->email
+                // 'email' => $user->email
             ]);
 
             return $user;
