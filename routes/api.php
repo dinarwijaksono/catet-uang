@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthControllerApi;
 use App\Http\Controllers\Api\CategoryControllerApi;
 use App\Http\Controllers\Api\FileFormatControllerApi;
+use App\Http\Controllers\Api\PeriodControllerApi;
 use App\Http\Controllers\Api\ReportControllerApi;
 use App\Http\Controllers\Api\TransactionControllerApi;
 use App\Http\Controllers\Api\UploadFileControllerApi;
@@ -40,6 +41,14 @@ Route::post('/file/csv-format-download', [FileFormatControllerApi::class, 'downl
 Route::post('/file/csv-upload', [UploadFileControllerApi::class, 'uploadCsv'])->middleware(HasTokenMiddleware::class);
 Route::get('/file/get-all', [UploadFileControllerApi::class, 'getAll'])->middleware(HasTokenMiddleware::class);
 Route::post('/file/csv-generate/{fileId}', [UploadFileControllerApi::class, 'generatCsv'])->middleware(HasTokenMiddleware::class);
+
+// period
+Route::controller(PeriodControllerApi::class)
+    ->prefix('period')
+    ->middleware(HasTokenMiddleware::class)
+    ->group(function () {
+        Route::get('/get-all', 'getAll');
+    });
 
 // Report
 Route::controller(ReportControllerApi::class)
