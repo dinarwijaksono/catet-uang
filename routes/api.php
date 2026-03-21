@@ -56,4 +56,5 @@ Route::controller(ReportControllerApi::class)
     ->middleware(HasTokenMiddleware::class)
     ->group(function () {
         Route::get('/total-income-spending', 'getTotalIncomeSpending');
+        Route::get('/total-income-spending-every-period', 'getTotalIncomeSpendingEveryPeriod');
     });

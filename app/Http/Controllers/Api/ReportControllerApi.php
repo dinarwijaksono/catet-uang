@@ -49,4 +49,31 @@ class ReportControllerApi extends Controller
             ], 400);
         }
     }
+
+    public function getTotalIncomeSpendingEveryPeriod(Request $request)
+    {
+        try {
+            $user = $this->userService->findByToken($request->header('api-token'));
+            $monthlyTotal = $this->reportService->getTotalIncomeSpendingEveryPeriod($user->user_id);
+
+            Log::info('get total income spending by period success', [
+                'token' => $request->header('api-token')
+            ]);
+
+            return response()->json([
+                'data' => $monthlyTotal
+            ], 200);
+        } catch (\Throwable $th) {
+            Log::error('get total income spending failed', [
+                'token' => $request->header('api-token'),
+                'file' => $th->getFile(),
+                'line' => $th->getLine(),
+                'message' => $th->getMessage()
+            ]);
+
+            return response()->json([
+                'message' => $th->getMessage()
+            ], 400);
+        }
+    }
 }
