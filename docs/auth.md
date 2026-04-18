@@ -14,33 +14,35 @@ Mendaftarkan pengguna baru.
 }
 ```
 
-**Contoh Respon:**
+Status code: 201 Created
+**Contoh Response:**
 ```json
 {
     "data": {
-        "api_token": "[string-random]",
-        "expired_token": "2025-12-14T14:43:36.721133Z",
         "name": "John Doe",
-        "email": "budi@gmail.com"
-    }
-}
-```
-<!-- PR -->
-<!-- ```json
-{
-    "data": {
-        "name": "John Doe",
-        "email": "budi@gmail.com"
+        "email": "budi@gmail.com",
         "created_at": "10:11, 01-10-2025",
         "updated_at": "10:11, 01-10-2025",
     },
     "token": {
         "api_token": "[string-random]",
         "expired_token": "2025-12-14T14:43:36.721133Z",
+        "created_at": "10:11, 01-10-2025",
+        "updated_at": "10:11, 01-10-2025",
     }
 }
-``` -->
-Status code: 201 Created
+```
+
+Status code: 422
+**Contoh Response:**
+```json
+{
+    "errors": {
+        "name": ["<pesan-error>"],
+        "email": ["<pesan-error>"]
+    }
+}
+```
 
 
 

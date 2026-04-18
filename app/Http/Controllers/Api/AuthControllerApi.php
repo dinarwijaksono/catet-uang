@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\TokenResource;
+use App\Http\Resources\UserResource;
 use App\Service\ApiTokenService;
 use App\Service\UserService;
 use Illuminate\Http\JsonResponse;
@@ -58,12 +60,8 @@ class AuthControllerApi extends Controller
             DB::commit();
 
             return response()->json([
-                'data' => [
-                    'api_token' => $token->token,
-                    'expired_token' => $token->expired_at,
-                    'name' => $user->name,
-                    'email' => $user->email
-                ]
+                'data' => new UserResource($user),
+                'token' => new TokenResource($token)
             ], 201);
         } catch (\Throwable $th) {
             DB::rollBack();
