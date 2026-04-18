@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\TokenResource;
 use App\Http\Resources\UserResource;
@@ -72,39 +73,55 @@ class AuthControllerApi extends Controller
         }
     }
 
-    public function login(Request $request): ?JsonResponse
+    public function login(LoginRequest $request): ?JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required',
-            'password' => 'required'
-        ]);
+        try {
+            $user = $this->userService->findByEmail($request->email);
 
-        if ($validator->fails()) {
+            if (!$user) {
+                Log::warning('login failed, email does not exist.');
+
+                return response()->json([
+                    'errors' => [
+                        'general' => ['Email atau password salah.']
+                    ]
+                ], 400);
+            }
+
+            if (!Hash::check($request->password, $user->password)) {
+                Log::warning('login failed, password is wrong.', [
+                    'user_id' => $user->id
+                ]);
+
+                return response()->json([
+                    'errors' => [
+                        'general' => ['Email atau password salah.']
+                    ]
+                ], 400);
+            }
+
+            $token = $this->apiTokenService->create($user->id);
+
+            Log::info('login success', [
+                'user_id' => $user->id,
+                'token_id' => $token->id
+            ]);
+
             return response()->json([
-                'errors' => $validator->errors()
-            ], 422);
-        }
+                'data' => new UserResource($user),
+                'token' => new TokenResource($token)
+            ], 200);
+        } catch (\Throwable $th) {
+            Log::error('login failed.', [
+                'message' => $th->getMessage()
+            ]);
 
-        $user = $this->userService->findByEmail($request->email);
-
-        if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'errors' => [
-                    'general' => ['Email atau password salah.']
+                    'general' => ['Terdapat kesalahan.']
                 ]
             ], 400);
         }
-
-        $token = $this->apiTokenService->create($user->id);
-
-        return response()->json([
-            'data' => [
-                'api_token' => $token->token,
-                'expired_token' => $token->expired_at,
-                'name' => $user->name,
-                'email' => $user->email
-            ]
-        ], 200);
     }
 
     public function findByToken(Request $request)

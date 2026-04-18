@@ -46,6 +46,7 @@ Status code: 422
 
 
 
+
 ### `POST /api/login`
 Login.
 
@@ -57,20 +58,9 @@ Login.
 }
 ```
 
-**Contoh Respon:**
+Status code: 200 Success
+**Contoh Response:**
 ```json
-{
-    "data": {
-        "api_token": "[string-random]",
-        "expired_token": "2025-12-14T14:43:36.721133Z",
-        "name": "John Doe",
-        "email": "budi@gmail.com"
-    }
-} 
-```
-
-<!-- PR -->
-<!-- ```json
 {
     "data": {
         "name": "John Doe",
@@ -80,11 +70,36 @@ Login.
     },
     "token": {
         "api_token": "[string-random]",
-        "expired_at": "10:11, 01-10-2025",
+        "expired_token": "2025-12-14T14:43:36.721133Z",
+        "created_at": "10:11, 01-10-2025",
+        "updated_at": "10:11, 01-10-2025",
     }
-} 
-``` -->
-<!-- Status code: 201 Created -->
+}
+```
+
+Status code: 400
+**Contoh Response:**
+```json
+{
+    "errors": {
+        "general": ["<Email atau password salah.>"],
+    }
+}
+```
+
+Status code: 422
+**Contoh Response:**
+```json
+{
+    "errors": {
+        "name": ["<pesan-error>"],
+        "email": ["<pesan-error>"]
+    }
+}
+```
+
+
+
 
 
 
