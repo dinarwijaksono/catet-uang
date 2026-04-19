@@ -173,6 +173,46 @@ class TransactionControllerApi extends Controller
         ], 200);
     }
 
+    public function getByPeriod(Request $request, int $periodId)
+    {
+        try {
+            $user = $this->userService->findByToken($request->header('api-token'));
+
+            $transaction = Transaction::where('period_id', $periodId)
+                ->where('user_id', $user->user_id)
+                ->orderBy('date')
+                ->get();
+
+            if ($transaction->isEmpty()) {
+                Log::warning('get transaction by period failed, is wrong', [
+                    'user_id' => $user->user_id
+                ]);
+
+                return response()->json([
+                    'errors' => [
+                        'general' => 'Transaksi tidak ditemukan.'
+                    ]
+                ], 400);
+            }
+
+            return response()->json([
+                'data' => TransactionResource::collection($transaction)
+            ], 200);
+        } catch (\Throwable $th) {
+
+            Log::error('get transaction by period failed', [
+                'messge' => $th->getMessage(),
+                'user_id' => $user->user_id
+            ]);
+
+            return response()->json([
+                'errors' => [
+                    'general' => 'terdapat kesalahan.'
+                ]
+            ], 400);
+        }
+    }
+
     public function updateTransaction(CreateTransactionRequest $request): ?JsonResponse
     {
         $token = $request->header('api-token');

@@ -277,6 +277,58 @@ Status code: 401 Unauthorized
 ```
 
 
+### `GET /api/transaction/get-by-period/{period-id}`
+Mengambil semua transaksi berdasarkan period.
+
+**Contoh Request:**
+http header
+    "api-token": "[string-random]"
+
+**Contoh Respon:** 
+Status code: 200 Ok
+```json
+{
+    "data": [
+        {
+            "transaksi": {
+                "code": "[string-random]",
+                "date": "1 Desember 2025",
+                "income": 10000,
+                "spending": 0,
+                "description": "dikasih",
+                "created_at": "10:11, 01-01-2025",
+                "updated_at": "10:11, 01-01-2025",
+            },
+            "category": {
+                "code": "[string-random]",
+                "name": "dikasih",
+                "type": "income",
+                "created_at": "10:11, 01-01-2025",
+                "updated_at": "10:11, 01-01-2025",
+            }
+        },
+        {
+            "transaksi": {
+                "code": "[string-random]",
+                "date": "1 Desember 2025",
+                "income": 10000,
+                "spending": 0,
+                "description": "dikasih",
+                "created_at": "10:11, 01-01-2025",
+                "updated_at": "10:11, 01-01-2025",
+            },
+            "category": {
+                "code": "[string-random]",
+                "name": "dikasih",
+                "type": "income",
+                "created_at": "10:11, 01-01-2025",
+                "updated_at": "10:11, 01-01-2025",
+            }
+        },
+    ]
+}
+```    
+
 
 
 ### `GET /api/transaction/get-summary-income-spending/{page}`

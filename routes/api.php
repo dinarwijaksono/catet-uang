@@ -25,7 +25,14 @@ Route::get('/category/get-by-type/{type}', [CategoryControllerApi::class, 'getBy
 Route::get('/category/get-all', [CategoryControllerApi::class, 'getAll'])->middleware(HasTokenMiddleware::class);
 Route::delete('/category/{code}', [CategoryControllerApi::class, 'delete'])->middleware(HasTokenMiddleware::class);
 
-// TransactionCategory
+// TransactionControler
+Route::controller(TransactionControllerApi::class)
+    ->prefix('transaction')
+    ->middleware(HasTokenMiddleware::class)
+    ->group(function () {
+        Route::get("/get-by-period/{periodId}", 'getByPeriod');
+    });
+
 Route::post('/transaction', [TransactionControllerApi::class, 'create'])->middleware(HasTokenMiddleware::class);
 Route::get('/transaction/get-by-date/{date}', [TransactionControllerApi::class, 'getByDate'])->middleware(HasTokenMiddleware::class);
 Route::get('/transaction/get-summary-income-spending', [TransactionControllerApi::class, 'getSummaryIncomeSpending'])->middleware(HasTokenMiddleware::class);
