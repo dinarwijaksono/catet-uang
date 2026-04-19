@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PeriodResource;
+use App\Http\Resources\ReportMonthlyTotal;
 use App\Http\Resources\ReportTotalIncomeSpendingResource;
 use App\Service\ReportService;
 use App\Service\UserService;
@@ -60,9 +62,7 @@ class ReportControllerApi extends Controller
                 'token' => $request->header('api-token')
             ]);
 
-            return response()->json([
-                'data' => $monthlyTotal
-            ], 200);
+            return response()->json(ReportMonthlyTotal::collection($monthlyTotal), 200);
         } catch (\Throwable $th) {
             Log::error('get total income spending failed', [
                 'token' => $request->header('api-token'),

@@ -29,14 +29,14 @@ class ReportService
             ->where('periods.user_id', $userId)
             ->select(
                 'periods.period_date',
-                'periods.period_name',
+                'periods.id as period',
                 DB::raw('sum(transactions.income) as total_income'),
                 DB::raw('sum(transactions.spending) as total_spending')
             )
             ->groupBy(
-                'periods.user_id',
+                'period',
                 'periods.period_date',
-                'periods.period_name',
+                'periods.user_id',
             )
             ->orderBy('periods.period_date')
             ->get()

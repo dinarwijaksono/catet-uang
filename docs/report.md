@@ -35,7 +35,7 @@ Status code: 419
 
 
 
-### `GET /api/report/total-income-spending-by-period`
+### `GET /api/report/ttotal-income-spending-every-period`
 Mengembil total pemasukan (total_income) dan total pengeluaran (total_spending) perbulan (period).
 
 **Contoh Request:**
@@ -48,16 +48,32 @@ Status code: 200 success
 {
     "data": {[
         {
-            "period_date": 1234565,
-            "period_name": "januari 2026", 
-            "total_income": 10000,
-            "total_spending": 1000
+            "period": {
+                "id": 1234,
+                "period_name": "januari 2026",
+                "i_close": false,
+                "created_at": "10:11, 01-10-2025",
+                "updated_at": "10:11, 01-10-2025",
+            },
+            "data": {
+                "total_income": 1234,
+                "total_spending": 1234,
+                "difference": 1234
+            }
         }, 
         {
-            "period_date": 1234565,
-            "period_name": "januari 2026", 
-            "total_income": 10000,
-            "total_spending": 1000
+            "period": {
+                "id": 1234,
+                "period_name": "Februari 2026",
+                "i_close": false,
+                "created_at": "10:11, 01-10-2025",
+                "updated_at": "10:11, 01-10-2025",
+            },
+            "data": {
+                "total_income": 1234,
+                "total_spending": 1234,
+                "difference": 1234
+            }
         } 
     ]}
 }
