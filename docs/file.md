@@ -122,7 +122,7 @@ Status code: 422 validate error
 Format tidak sesuai
 ```json
 {
-    "Message": "[-isi-error-]"
+    "errors": [{"general": ["Isi file kosong."]}]
 } 
 ```
 
@@ -130,7 +130,7 @@ Status code: 400 Bad Request
 File tidak ada di storage
 ```json
 {
-    "Message": "File rusak."
+    "errors": [{"general": ["File rusak."]}]
 } 
 ```
 

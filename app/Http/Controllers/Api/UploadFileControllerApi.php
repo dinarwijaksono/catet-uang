@@ -72,7 +72,7 @@ class UploadFileControllerApi extends Controller
         $fileUpload = $this->fileUploadService->findById($fileId);
         if (!$fileUpload) {
             return response()->json([
-                'message' => "File rusak."
+                'errors' => ["general" => ["File rusak."]]
             ], 400);
         }
 
@@ -81,13 +81,13 @@ class UploadFileControllerApi extends Controller
 
         if (!$storage->exists($path)) {
             return response()->json([
-                'message' => "File rusak."
+                'errors' => ["general" => ["File rusak."]]
             ], 400);
         }
 
         if ($fileUpload->is_generate) {
             return response()->json([
-                'message' => "File sudah digenerate."
+                'errors' => ["general" => ["File sudah digenerate."]]
             ], 400);
         }
 
@@ -103,7 +103,7 @@ class UploadFileControllerApi extends Controller
         if (empty($transaction['result'])) {
             $this->fileUploadService->update($token->user_id, $fileUpload->file_name, "isi file kosong");
             return response()->json([
-                'message' => "Isi file kosong."
+                'errors' => ["general" => ["Isi file kosong."]]
             ], 422);
         }
 

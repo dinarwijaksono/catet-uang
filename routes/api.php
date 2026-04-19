@@ -36,11 +36,21 @@ Route::get('/transaction/{code}', [TransactionControllerApi::class, 'getByCode']
 Route::put('/transaction/{code}', [TransactionControllerApi::class, 'updateTransaction'])->middleware(HasTokenMiddleware::class);
 Route::delete('/transaction/{code}', [TransactionControllerApi::class, 'delete'])->middleware(HasTokenMiddleware::class);
 
+// UploadFIle
+Route::controller(UploadFileControllerApi::class)
+    ->middleware(HasTokenMiddleware::class)
+    ->group(function () {
+        Route::post('/file/csv-upload', 'uploadCsv');
+        Route::get('/file/get-all', 'getAll');
+        Route::post('/file/csv-generate/{fileId}', 'generatCsv');
+    });
+
 // FileFormat
-Route::post('/file/csv-format-download', [FileFormatControllerApi::class, 'downloadCsv'])->middleware(HasTokenMiddleware::class);
-Route::post('/file/csv-upload', [UploadFileControllerApi::class, 'uploadCsv'])->middleware(HasTokenMiddleware::class);
-Route::get('/file/get-all', [UploadFileControllerApi::class, 'getAll'])->middleware(HasTokenMiddleware::class);
-Route::post('/file/csv-generate/{fileId}', [UploadFileControllerApi::class, 'generatCsv'])->middleware(HasTokenMiddleware::class);
+Route::controller(FileFormatControllerApi::class)
+    ->middleware(HasTokenMiddleware::class)
+    ->group(function () {
+        Route::post('/file/csv-format-download', 'downloadCsv');
+    });
 
 // period
 Route::controller(PeriodControllerApi::class)
