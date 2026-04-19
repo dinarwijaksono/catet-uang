@@ -57,6 +57,7 @@ Route::controller(PeriodControllerApi::class)
     ->prefix('period')
     ->middleware(HasTokenMiddleware::class)
     ->group(function () {
+        Route::get('/get-by-id/{id}', 'getById');
         Route::get('/get-all', 'getAll');
     });
 
