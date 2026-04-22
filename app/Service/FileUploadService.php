@@ -47,6 +47,8 @@ class FileUploadService
             Log::error('find by id file upload failed', [
                 'message' => $th->getMessage()
             ]);
+
+            return null;
         }
     }
 
@@ -115,29 +117,45 @@ class FileUploadService
             $columns = explode(',', $key);
 
             if (count($columns) < 8) {
-                $errrs[] = "Baris $line tidak memiliki cukup kolom.";
+                $l = $line + 1;
+                $errrs[] = "No $l format salah";
                 continue;
             }
 
             [$no, $day, $month, $year, $type, $category, $description, $value] = $columns;
 
-            if (!(int) $day || !(int) $month || !(int) $year || !(int) $value) {
-                $errors[] = "Baris $line kolom tanggal/bulan/tahun/nilai bukan merupakan angka.";
+            if (!is_numeric($day)) {
+                $errors[] = "No $no kolom tanggal bukan angka";
+                continue;
+            }
+
+            if (!is_numeric($month)) {
+                $errors[] = "No $no kolom bulan bukan angka";
+                continue;
+            }
+
+            if (!is_numeric($year)) {
+                $errors[] = "No $no kolom tahun bukan angka";
+                continue;
+            }
+
+            if (!is_numeric($value)) {
+                $errors[] = "No $no kolom nilai bukan angka";
                 continue;
             }
 
             if (empty($category)) {
-                $errors[] = "Baris $line kolom kategori kosong.";
+                $errors[] = "No $no kolom kategori kosong";
                 continue;
             }
 
             if (empty($description)) {
-                $errors[] = "Baris $line kolom deskripsi kosong.";
+                $errors[] = "No $no kolom deskripsi kosong";
                 continue;
             }
 
             if (empty($type || in_array(trim($type), ['in', 'out']))) {
-                $errors[] = "Baris $line kolom type tidak sesuai format.";
+                $errors[] = "No $no kolom type tidak sesuai format";
                 continue;
             }
 
@@ -145,7 +163,7 @@ class FileUploadService
                 'date' => "$year-$month-$day",
                 'category' => trim($category),
                 'description' => trim($description),
-                'type' => trim($type) == 'in' ? "income" : "spending",
+                'type' => in_array(strtolower(trim($type)), ['in', 'income', 'pemasukan', 'masuk', 'pendapatan']) ? "income" : "spending",
                 'value' => (int) $value
             ];
         }

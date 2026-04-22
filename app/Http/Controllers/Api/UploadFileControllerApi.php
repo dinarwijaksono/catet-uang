@@ -9,6 +9,7 @@ use App\Service\TransactionService;
 use App\Service\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -93,11 +94,15 @@ class UploadFileControllerApi extends Controller
 
         $transaction = $this->fileUploadService->parseCsvToArray($storage->get($path));
 
+        $error = '';
         if (!empty($transaction['errors'])) {
-            $this->fileUploadService->update($token->user_id, $fileUpload->file_name, $transaction['errors'][0]);
-            return response()->json([
-                'message' => $transaction['errors'][0]
-            ], 422);
+            foreach ($transaction['errors'] as $text) {
+                $error .= $text . "; ";
+            }
+
+            $error .= '.';
+
+            $this->fileUploadService->update($token->user_id, $fileUpload->file_name, $error);
         }
 
         if (empty($transaction['result'])) {
@@ -108,7 +113,10 @@ class UploadFileControllerApi extends Controller
         }
 
         $this->transactionService->createFromArray($token->user_id, $transaction['result']);
-        $this->fileUploadService->update($token->user_id, $fileUpload->file_name, "Generate success");
+
+        if ($error == '') {
+            $this->fileUploadService->update($token->user_id, $fileUpload->file_name, "Generate success");
+        }
 
         return response()->json([
             'message' => "File berhasil digenerate."
