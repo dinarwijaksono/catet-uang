@@ -38,7 +38,7 @@ class ReportService
                 'periods.period_date',
                 'periods.user_id',
             )
-            ->orderBy('periods.period_date')
+            ->orderByDesc('periods.period_date')
             ->get()
             ->map(function ($row) {
                 $row->total_income = (int) $row->total_income;
