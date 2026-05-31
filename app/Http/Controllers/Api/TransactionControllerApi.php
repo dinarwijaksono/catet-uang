@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class TransactionControllerApi extends Controller
 {
@@ -92,6 +93,43 @@ class TransactionControllerApi extends Controller
         return response()->json([
             'data' => new TransactionResource($transaction)
         ], 201);
+    }
+
+    public function createFromText(Request $request)
+    {
+        try {
+            $token = $request->header('api-token');
+            $user = $this->userService->findByToken($token);
+
+            $validate = Validator::make($request->all(), [
+                'text' => 'required'
+            ]);
+
+            if ($validate->fails()) {
+                return response()->json([
+                    'message' => "Transaksi gagal disimpan."
+                ], 422);
+            }
+
+            $this->transactionService->createFromText($user->user_id, $request->text);
+
+            Log::info('Create transaction from text success.', [
+                'user_id' => $user->user_id
+            ]);
+
+            return response()->json([
+                'message' => "Transaksi behasil disimpan."
+            ], 201);
+        } catch (\Throwable $th) {
+            Log::error('Create transaction from text gagal.', [
+                'user_id' => $user->user_id,
+                'message' => $th->getMessage()
+            ]);
+
+            return response()->json([
+                'message' => "Transaksi gagal disimpan."
+            ], 400);
+        }
     }
 
     public function getByCode(Request $request): ?JsonResponse

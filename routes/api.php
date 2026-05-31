@@ -31,6 +31,7 @@ Route::controller(TransactionControllerApi::class)
     ->middleware(HasTokenMiddleware::class)
     ->group(function () {
         Route::get("/get-by-period/{periodId}", 'getByPeriod');
+        Route::post('/create-from-text', 'createFromText');
     });
 
 Route::post('/transaction', [TransactionControllerApi::class, 'create'])->middleware(HasTokenMiddleware::class);

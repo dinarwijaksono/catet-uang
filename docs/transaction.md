@@ -2,7 +2,7 @@
 Berikut adalah dokumentasi untuk API bagian transaksi.
 
 ### `POST /api/transaction`
-Membuat transaksi baru.
+Membuat 1 transaksi baru.
 
 **Contoh Request:**
 http header
@@ -65,6 +65,45 @@ Status code: 422 Unprocesssable Content
         }
 } 
 ```
+
+### `POST /api/transaction/add-by-text`
+Membuat 1 atau banyak transaksi baru dari text.
+
+**Contoh Request:**
+http header
+    "api-token": "[string-random]"
+```json
+{
+    "data": "
+    dd/mm/yyyy | Spending | makanan | makan siang | 15000,
+    dd/mm/yyyy | Spending | makanan | makan malam | 20000,
+    "
+}
+```
+
+**Contoh Respon:** 
+Status code: 201 created
+```json
+{
+    "message": "Transaksi berhasil disimpan."
+}
+```
+
+Status code: 422 Unprocesssable Content
+- jika kode transaksi yang dikirim tidak ada di database
+```json
+{
+    "Message": "Transaksi gagal disimpan."
+} 
+```
+
+Status code: 401 Unauthorized
+```json
+{
+    "Message": "Token tidak valid."
+} 
+```
+
 
 
 
