@@ -9,7 +9,7 @@ Artisan::command('inspire', function () {
 
 Artisan::command('migrate:fresh-test', function () {
 
-    config(['database.default' => 'mysql-test']);
+    config(['database.default' => 'sqlite-test']);
 
     Artisan::call('migrate:fresh');
 
