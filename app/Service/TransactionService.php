@@ -136,6 +136,45 @@ class TransactionService
         }
     }
 
+    public function createFromText(int $userId, string $text): void
+    {
+        $rows = explode(',', trim($text));
+
+        $data = [];
+        foreach ($rows as $row) {
+            if ($row != "") {
+                $data[] = explode('|', trim($row));
+            }
+        }
+
+        $transaction = [];
+        foreach ($data as $item) {
+            $category = $this->categoryRepository->findByName($userId, trim($item[2]), trim($item[1]));
+
+            if (!$category) {
+                $category = $this->categoryRepository->create($userId, Str::random(10), trim($item[2]), trim($item[1]));
+            }
+
+            $date = Carbon::createFromFormat('d/m/Y', trim($item[0]))->setTime(0, 0, 0, 0);
+            $period = $this->periodRepository->findOrCreate($userId, $date->month, $date->year);
+
+            $transaction[] = [
+                'user_id' => $userId,
+                'period_id' => $period->id,
+                'category_id' => $category->id,
+                'code' => Str::random(10),
+                'date' => $date,
+                'description' => trim($item[3]),
+                'income' => trim($item[1]) == 'income' ? trim($item[4]) : 0,
+                'spending' => trim($item[1]) == 'spending' ? trim($item[4]) : 0,
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+        }
+
+        Transaction::insert($transaction);
+    }
+
     public function amountTransaction(int $userId): int
     {
         try {

@@ -139,6 +139,30 @@ class TransactionServiceTest extends TestCase
         ]);
     }
 
+    public function test_create_from_text_success()
+    {
+        $text = "
+            10/11/2025 | income | gaji | gaji bulanan | 2000000,
+            10/11/2025 | spending | makanan | makan siang | 10000,
+            10/11/2025 | spending | makanan | makan sore | 15000,
+            10/11/2025 | spending | transportasi | bensin | 12000,
+        ";
+
+        $this->transactionService->createFromText($this->user->id, $text);
+
+        $this->assertDatabaseHas('transactions', [
+            'description' => 'gaji bulanan',
+            'income' => 2000000,
+            'spending' => 0
+        ]);
+
+        $this->assertDatabaseHas('transactions', [
+            'description' => 'makan sore',
+            'income' => 0,
+            'spending' => 15000
+        ]);
+    }
+
     public function test_create_income_success()
     {
         $response = $this->transactionService->create($this->user->id, $this->category->id, "2024-05-28", "Gaji", 2000000, 0);
